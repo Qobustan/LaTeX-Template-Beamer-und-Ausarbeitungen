@@ -9,6 +9,7 @@
 \input{header.tex}
 \usepackage[utf8]{inputenc}
 
+% ANLEITUNG: Passen Sie die Sprache an Ihre Bedürfnisse an (z.B. english statt ngerman)
 \usepackage[ngerman]{babel}
 \usepackage[backend=bibtex, style=alphabetic]{biblatex}
 \addbibresource{Ausarbeitung.bib}
@@ -26,13 +27,18 @@
 
 \maketitle
 
-\section{Einleitung \& Motivation}
-
 \ifshowtext
 % Inhaltsverzeichnis erzeugen
 \tableofcontents
 \fi
 
+% ============================================================
+% BEISPIELINHALT: Nichtparametrische Dichteschätzung
+% ANLEITUNG: Ersetzen Sie den folgenden Inhalt mit Ihrer eigenen Ausarbeitung.
+%            Dieser Inhalt dient als Beispiel für die Verwendung der Vorlage.
+% ============================================================
+
+\section{Einleitung \& Motivation}
 		
 \subsection*{Warum nichtparametrisch?}
 	Klassische parametrische Verfahren (z.\,B. unter Annahme einer Normalverteilung) sind oft zu starr. Wenn die wahre Verteilung unbekannt ist, liefert die nichtparametrische Schätzung der Dichtefunktion $f$ oft bessere Einblicke in die Datenstruktur (z.\,B. Schiefe, Multimodalität) als die reine Verteilungsfunktion $F$.
@@ -135,5 +141,9 @@ Selbst wenn wir einen linearen Trend ($Y = \alpha + \beta X$) vermuten, ist die 
 % Referenzen
 \printbibliography
 \fi
+
+% ============================================================
+% ENDE DES BEISPIELINHALTS
+% ============================================================
 	
 \end{document}
