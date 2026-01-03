@@ -36,10 +36,10 @@ updates:
     # Update schedule
     schedule:
       # Dependabot checks for updates once per week
-      interval: "weekly"
+      interval: "daily"
 
     # Optional quality-of-life settings
-    open-pull-requests-limit: 5
+    open-pull-requests-limit: 99999
 
     # Labels added to Dependabot pull requests
     labels:
