@@ -1,0 +1,43 @@
+name: Kompiliere die LateX-Ausarbeitung und den Beamer-Vortrag
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+jobs:
+  build-latex:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build Ausarbeitung
+        uses: xu-cheng/latex-action@v4
+        with:
+          root_file: Ausarbeitung.tex
+          working_directory: Ausarbeitung
+          args: -pdf
+
+      - name: Build Vortrag
+        uses: xu-cheng/latex-action@v4
+        with:
+          root_file: Vortrag.tex
+          working_directory: Vortrag
+          args: -pdf
+
+      - name: List generated PDFs
+        run: |
+          echo "Ausarbeitung:"
+          ls -lh Ausarbeitung/*.pdf || true
+          echo "Vortrag:"
+          ls -lh Vortrag/*.pdf || true
+
+      - name: Upload PDFs
+        uses: actions/upload-artifact@v4
+        with:
+          name: latex-pdfs
+          path: |
+            Ausarbeitung/*.pdf
+            Vortrag/*.pdf

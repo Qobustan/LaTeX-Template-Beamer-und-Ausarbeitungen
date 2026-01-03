@@ -1,0 +1,31 @@
+name: Format LaTeX
+
+on:
+  workflow_dispatch:   # nur manuell starten
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Installiere Abhängigkeiten
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y perl
+          sudo apt-get install -y texlive
+          sudo apt-get install -y texlive-latex-extra
+          sudo apt-get install -y git  # Git installieren, falls es noch nicht vorhanden ist
+
+      - name: Lade latexindent herunter
+        run: |
+          git clone https://github.com/cmhughes/latexindent.pl.git
+          cd latexindent.pl
+          sudo perl Makefile.PL
+          sudo make
+          sudo make install  # Installiert latexindent direkt aus dem GitHub-Repository
+
+      - name: Führe latexindent aus
+        run: |
+          shopt -s globstar
+          latexindent -w **/*.tex  # Führt latexindent auf allen .tex-Dateien aus

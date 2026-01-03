@@ -1,0 +1,92 @@
+# -----------------------
+# LaTeX auxiliary files
+# -----------------------
+# Note: These files are currently checked into the repository but are listed
+# here as information for users. They can be cleaned using cleanup scripts.
+# Uncomment these lines if you want to ignore these files in your local repo.
+#
+# *.aux
+# *.lof
+# *.log
+# *.lot
+# *.fls
+# *.out
+# *.toc
+# *.fmt
+# *.fot
+# *.cb
+# *.cb2
+# *.bbl
+# *.blg
+# *.bcf
+# *.brf
+# *.idx
+# *.ilg
+# *.ind
+# *.glo
+# *.gls
+# *.ist
+# *.acr
+# *.alg
+# *.nav
+# *.snm
+# *.synctex.gz
+# *.fdb_latexmk
+# *.run.xml
+# *.auxlock
+
+# -----------------------
+# Output / build folders
+# -----------------------
+build/
+out/
+dist/
+# *.zip
+
+# If you don't want to track generated PDFs in the repo:
+# seminar_skript.pdf
+# seminar_presentation.pdf
+# # *.pdf
+
+# -----------------------
+# Images / binaries that may be large
+# -----------------------
+# *.eps~
+# *.svg~
+# *.ai~
+# *.psd
+# *.xcf
+
+# -----------------------
+# Gradle / Java artifacts
+# -----------------------
+.gradle/
+.gradle-cache/
+gradle-app.setting
+/.settings/
+# keep gradle wrapper files in repo (gradlew, gradle/wrapper/# *# *)
+
+# -----------------------
+# Editors / OS
+# -----------------------
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+# *.iml
+# *.swp
+
+# TeXstudio specific
+# *.txs-profile
+# *.txs-undo
+legacy/debug
+
+# -----------------------
+# Python
+# -----------------------
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
