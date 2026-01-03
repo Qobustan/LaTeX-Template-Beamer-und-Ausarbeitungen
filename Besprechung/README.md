@@ -125,7 +125,7 @@ These templates are particularly useful for:
 Edit the `header.tex` file in either template:
 ```latex
 \author{Your Name}
-\title{Your Document Title}
+\title{Your Title}  % "Your Document Title" for Ausarbeitung, "Your Presentation Title" for Vortrag
 \subject{Your Subject}
 \def \vorlesung {Your Course/Meeting Name}
 \def \semester {Date/Semester}
@@ -140,18 +140,18 @@ Change the presentation theme in `Vortrag.tex`:
 
 ## Relationship to Main Templates
 
-The templates in `Besprechung/Material/` are variants of the main templates found in:
-- **Main Written Elaboration**: `../../Ausarbeitung/`
-- **Main Beamer Presentation**: `../../Vortrag/`
+The templates in `Besprechung/Material/` are variants of the main templates found in the repository root:
+- **Main Written Elaboration**: `Ausarbeitung/` (from repository root)
+- **Main Beamer Presentation**: `Vortrag/` (from repository root)
 
 These variants maintain the same structure and features but can be customized independently for meeting-specific needs without affecting the main templates.
 
 ## Additional Resources
 
 For more detailed information about LaTeX compilation, features, and customization:
-- [Main Project README](../../README.md)
-- [Ausarbeitung Template Documentation](../../Ausarbeitung/README.md)
-- [Vortrag Template Documentation](../../Vortrag/README.md)
+- [Main Project README](../README.md) (in repository root)
+- [Ausarbeitung Template Documentation](../Ausarbeitung/README.md) (in repository root)
+- [Vortrag Template Documentation](../Vortrag/README.md) (in repository root)
 - [Project Wiki](https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen/wiki)
 
 ## Cleanup
@@ -160,17 +160,19 @@ After compilation, temporary LaTeX files (`.aux`, `.log`, `.toc`, etc.) can be r
 
 **Linux/macOS:**
 ```bash
-../../cleanup/Remove_Junk_Linux.sh
+# From repository root
+./cleanup/Remove_Junk_Linux.sh
 ```
 
 **Windows:**
 ```batch
-..\..\cleanup\Remove_Junk_Windows.bat
+REM From repository root
+.\cleanup\Remove_Junk_Windows.bat
 ```
 
 ## Support
 
 For questions, issues, or contributions, please refer to:
-- [Contributing Guidelines](../../CONTRIBUTING.md)
+- [Contributing Guidelines](../CONTRIBUTING.md) (in repository root)
 - [Project Issues](https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen/issues)
 - [Project Wiki](https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen/wiki)
