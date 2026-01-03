@@ -1,10 +1,10 @@
-# Seminar: Angewandte Statistik 2025 - Wiki
+# LaTeX Template: Beamer and Elaborations - Wiki
 
-Welcome to the project wiki for the "Angewandte Statistik" seminar (2025).
+Welcome to the project wiki for the LaTeX Template repository.
 
 ## Quick Navigation
 
-- **[Getting Started](Getting-Started.md)** - Quick start guide for new contributors
+- **[Getting Started](Getting-Started.md)** - Quick start guide for using the templates
 - **[Project Structure](Project-Structure.md)** - Detailed overview of the repository structure
 - **[Building PDFs](Building-PDFs.md)** - How to compile LaTeX documents locally and via CI/CD
 - **[CI/CD Workflows](CI-CD-Workflows.md)** - GitHub Actions automation documentation
@@ -15,20 +15,22 @@ Welcome to the project wiki for the "Angewandte Statistik" seminar (2025).
 
 ## About This Project
 
-This repository contains materials for the "Angewandte Statistik" seminar (2025), including:
+This repository provides comprehensive LaTeX templates for creating professional presentations and written documents, including:
 
-- LaTeX sources for written elaboration (`Ausarbeitung/`)
-- LaTeX sources for presentation slides (`Vortrag/`)
-- Meeting notes and discussions (`Besprechung/`)
+- LaTeX Beamer presentation template with example content (`Vortrag/`)
+- LaTeX article template for written elaborations with example content (`Ausarbeitung/`)
+- Additional template variants (`Besprechung/Material/`)
 - Automated CI/CD pipelines for PDF generation
-- Comprehensive documentation and archived historical branches
+- Comprehensive documentation and build scripts
 
 ## Key Features
 
+- ✅ **Professional Templates**: Ready-to-use Beamer and KOMA-Script templates
+- ✅ **Example Content**: Complete examples showing best practices
 - ✅ **Automated PDF Building**: GitHub Actions workflows automatically build PDFs on every push
-- ✅ **Comprehensive Documentation**: Extensive guides for LaTeX installation, building, and contribution
-- ✅ **Branch Management**: Well-documented branch history and consolidation
+- ✅ **Comprehensive Documentation**: Extensive guides for LaTeX installation, building, and customization
 - ✅ **Quality Assurance**: Automated linting, spell-checking, and format validation
+- ✅ **Multi-Language Support**: Easy to switch between German and English
 
 ## Getting Help
 
@@ -44,4 +46,4 @@ We welcome contributions! Please read our [Contributing Guidelines](Contributing
 
 ---
 
-**Project Status**: [![Build all LaTeX projects](https://github.com/Qobustan/Seminar-Angewandte-Statistik-2025/actions/workflows/build-and-publish-pdfs.yml/badge.svg)](https://github.com/Qobustan/Seminar-Angewandte-Statistik-2025/actions/workflows/build-and-publish-pdfs.yml)
+**Project Status**: [![Build all LaTeX projects](https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen/actions/workflows/build-and-publish-pdfs.yml/badge.svg)](https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen/actions/workflows/build-and-publish-pdfs.yml)
