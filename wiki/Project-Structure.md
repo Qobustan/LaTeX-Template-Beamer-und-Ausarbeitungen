@@ -1,29 +1,33 @@
 # Project Structure
 
-This document provides a comprehensive overview of the repository organization.
+This document provides a comprehensive overview of the repository organization for the LaTeX template project.
 
 ## Directory Structure
 
 ```
-Seminar-Angewandte-Statistik-2025/
+LaTeX-Template-Beamer-und-Ausarbeitungen/
 ├── .github/                    # GitHub configuration and workflows
 │   ├── ISSUE_TEMPLATE/        # Issue templates
 │   ├── workflows/             # GitHub Actions CI/CD workflows
 │   ├── dependabot.yml         # Dependency update automation
 │   └── labeler.yml            # Automatic PR labeling
 │
-├── Ausarbeitung/              # Written elaboration (main paper)
-│   ├── Ausarbeitung.tex       # Main LaTeX document
+├── Ausarbeitung/              # Written elaboration template
+│   ├── Ausarbeitung.tex       # Main LaTeX document (with example content)
 │   ├── header.tex             # LaTeX preamble and packages
-│   └── Ausarbeitung.bib       # Bibliography file
+│   ├── Ausarbeitung.bib       # Bibliography file (example)
+│   └── README.md              # Template usage guide
 │
-├── Vortrag/                   # Presentation slides
-│   ├── Vortrag.tex            # Main presentation document
+├── Vortrag/                   # Beamer presentation template
+│   ├── Vortrag.tex            # Main presentation document (with example)
 │   ├── header.tex             # Beamer configuration
-│   └── Vortrag.bib            # Bibliography file
+│   ├── Vortrag.bib            # Bibliography file (example)
+│   └── README.md              # Template usage guide
 │
-├── Besprechung/               # Meeting notes and discussions
-│   └── Material/              # Historical meeting materials
+├── Besprechung/               # Additional template variants
+│   └── Material/              # Alternative template configurations
+│       ├── Ausarbeitung/      # Alternative elaboration template
+│       └── Vortrag/           # Alternative presentation template
 │
 ├── scripts/                   # Utility scripts
 │   ├── generatePdf.sh         # PDF generation script
@@ -41,18 +45,17 @@ Seminar-Angewandte-Statistik-2025/
 │   ├── Remove_Junk_Linux.sh   # Linux cleanup script
 │   └── Remove_Junk_Windows.bat # Windows cleanup script
 │
+├── latex_install/             # Installation guides
+│   ├── LaTeX-Install.md       # LaTeX installation guide (English)
+│   └── LaTeX-Install.de.md    # LaTeX installation guide (German)
+│
 ├── archive/                   # Historical documentation
 │   ├── README.md              # Archive overview
 │   ├── CONSOLIDATION-SUMMARY.md # Branch consolidation summary
 │   ├── branch-snapshots/      # Historical branch documentation
-│   │   ├── 01-template-fork.md
-│   │   ├── 02-development-milestones.md
-│   │   └── 03-copilot-branches.md
 │   └── unique-content/        # Preserved unique configurations
 │
 ├── legacy/                    # Legacy code and historical files
-│   ├── build.sh               # Old build script
-│   ├── debug.sh               # Old debug script
 │   └── README.md              # Legacy documentation
 │
 ├── wiki/                      # Project documentation wiki
@@ -67,56 +70,54 @@ Seminar-Angewandte-Statistik-2025/
 ├── editorconfig.txt           # Editor configuration
 ├── DISCLAIMER.txt             # Project disclaimer
 ├── SECURITY.md                # Security policy
-├── LaTeX-Install.md           # LaTeX installation guide (English)
-├── LaTeX-Install.de.md        # LaTeX installation guide (German)
 └── README.md                  # Main repository documentation
 ```
 
 ## Key Directories Explained
 
-### Active Development Directories
+### Template Directories
 
-#### `Ausarbeitung/` - Written Elaboration
+#### `Ausarbeitung/` - Written Elaboration Template
 
-Contains the main LaTeX sources for the written paper/thesis:
-- **Purpose**: Academic paper or thesis document
+Complete template for academic papers and written documents:
+- **Purpose**: Template for articles, papers, theses, and written assignments
 - **Main file**: `Ausarbeitung.tex`
+- **Example content**: Kernel density estimation (shows best practices)
 - **Build output**: `Ausarbeitung.pdf`
-- **Structure**: Single-document format with sections
+- **Features**: KOMA-Script class, theorem environments, TikZ support
+- **Documentation**: See `Ausarbeitung/README.md`
 
-#### `Vortrag/` - Presentation
+#### `Vortrag/` - Beamer Presentation Template
 
-Contains LaTeX Beamer sources for presentation slides:
-- **Purpose**: Presentation slides for seminar talks
+Professional presentation template with Beamer:
+- **Purpose**: Template for seminar presentations and talks
 - **Main file**: `Vortrag.tex`
+- **Example content**: Statistical methods presentation (shows best practices)
 - **Build output**: `Vortrag.pdf`
-- **Structure**: Beamer presentation with frames
+- **Features**: Madrid theme, automatic ToC, TikZ diagrams, pause commands
+- **Documentation**: See `Vortrag/README.md`
 
-#### `Besprechung/` - Meeting Notes
+#### `Besprechung/Material/` - Alternative Templates
 
-Discussion notes, meeting minutes, and collaboration materials:
-- **Purpose**: Track project discussions and decisions
-- **Contents**: Historical materials and meeting records
+Additional template variants for different use cases:
+- **Purpose**: Alternative configurations and layouts
+- **Contents**: Similar templates with different settings
 
 ### Automation and Scripts
 
 #### `.github/workflows/` - CI/CD Pipelines
 
 GitHub Actions workflows for automation:
-- **`build-and-publish-pdfs.yml`**: Builds and publishes PDFs to `pdfs` branch
-- **`spellcheck.yml`**: Runs spell-checking on LaTeX and markdown files
-- **`bibcheck.yml`**: Validates BibTeX references
-- **`format.yml`**: Checks code formatting
-- **`lint.yml`**: Runs linting checks
-- **`summary.yml`**: Generates project summary
-- **`stale.yml`**: Manages stale issues and PRs
+- **`build-and-publish-pdfs.yml`**: Builds PDFs automatically
+- **`publish-wiki.yml`**: Syncs wiki documentation
+- Other quality assurance workflows
 
 See [CI/CD Workflows](CI-CD-Workflows.md) for detailed documentation.
 
 #### `scripts/` - Build and Utility Scripts
 
 Helper scripts for common tasks:
-- **`generatePdf.sh`**: Automated PDF generation
+- **`generatePdf.sh`**: Automated PDF generation for all templates
 - **`abkuerzung.sh`**: Abbreviation management
 
 #### `task_skripts/` - Specialized Tools
@@ -127,78 +128,72 @@ Collection of Perl and Bash scripts for LaTeX processing:
 - Document statistics and word counting
 - Glossary generation
 
-### Documentation and Archives
+#### `cleanup/` - Maintenance Scripts
 
-#### `archive/` - Historical Documentation
+Scripts to clean up temporary LaTeX files:
+- **`Remove_Junk_Linux.sh`**: Linux/macOS cleanup
+- **`Remove_Junk_Windows.bat`**: Windows cleanup
 
-Comprehensive documentation of repository history:
-- **Branch snapshots**: Detailed analysis of historical branches
-- **Unique content**: Preserved configurations and code
-- **Consolidation summary**: Branch management decisions
+### Documentation and Resources
 
-See the [Archive README](../archive/README.md) for complete details.
+#### `latex_install/` - Installation Guides
 
-#### `legacy/` - Legacy Code
-
-Preserved historical code and scripts:
-- Old build scripts
-- Previous documentation versions
-- Historical workflows
+Comprehensive LaTeX installation instructions:
+- **`LaTeX-Install.md`**: English installation guide
+- **`LaTeX-Install.de.md`**: German installation guide
 
 #### `wiki/` - Project Wiki
 
-This wiki documentation you're currently reading:
+Detailed documentation (synced to GitHub Wiki):
 - Getting started guides
-- Detailed documentation
+- Building and customization instructions
 - FAQs and troubleshooting
+
+#### `archive/` - Historical Documentation
+
+Documentation of repository history:
+- Branch snapshots and consolidation
+- Preserved configurations
+- Development history
 
 ## Configuration Files
 
 ### Version Control
 
-- **`.gitignore`**: Excludes build artifacts, temporary files, and dependencies
-- **`.gitattributes`**: Configures Git behavior for different file types
+- **`.gitignore`**: Excludes build artifacts, temporary files
+- **`.gitattributes`**: Git behavior for different file types
 
 ### Code Quality
 
-- **`cspell.json`**: Spell-checking dictionary and configuration
+- **`cspell.json`**: Spell-checking configuration
   - Custom dictionary for technical terms
   - LaTeX-specific exclusions
-  - German and English word lists
+  - Multi-language support
 
-- **`editorconfig.txt`**: Editor configuration for consistent code style
-  - Indentation rules
-  - Line ending preferences
-  - Character encoding
+- **`editorconfig.txt`**: Editor configuration
+  - Consistent code style
+  - Indentation and line endings
 
 ### Build Environment
 
 - **`Dockerfile`**: Containerized LaTeX build environment
   - TeX Live installation
   - Required packages
-  - Build automation
+  - Automated building
 
-### Documentation
-
-- **`README.md`**: Main repository documentation
-- **`SECURITY.md`**: Security policy and vulnerability reporting
-- **`LaTeX-Install.md`**: Installation instructions (English)
-- **`LaTeX-Install.de.md`**: Installation instructions (German)
-- **`DISCLAIMER.txt`**: Legal disclaimer
-
-## File Naming Conventions
+## File Types
 
 ### LaTeX Files
 
-- Main documents: `Ausarbeitung.tex`, `Vortrag.tex`
+- Main documents: `*.tex`
 - Headers/preambles: `header.tex`
-- Bibliography: `*.bib` files
+- Bibliography: `*.bib`
 
-### Generated Files (Git Ignored)
+### Generated Files (Excluded from Git)
 
 - PDFs: `*.pdf`
-- LaTeX auxiliary: `*.aux`, `*.log`, `*.out`, `*.toc`, etc.
-- BibTeX files: `*.bbl`, `*.blg`, `*.bcf`
+- LaTeX auxiliary: `*.aux`, `*.log`, `*.out`, `*.toc`
+- BibTeX: `*.bbl`, `*.blg`, `*.bcf`
 - Temporary: `*.synctex.gz`, `*.nav`, `*.snm`
 
 ### Scripts
@@ -207,35 +202,22 @@ This wiki documentation you're currently reading:
 - Batch files: `*.bat` (Windows)
 - Perl scripts: `*.pl`
 
-## Branch Structure
+## How to Use the Templates
 
-### Active Branches
+1. **Choose a template** from `Vortrag/` or `Ausarbeitung/`
+2. **Read the local README** in that directory
+3. **Edit `header.tex`** with your metadata
+4. **Replace example content** in the main `.tex` file
+5. **Update bibliography** in the `.bib` file
+6. **Build** using your preferred method
 
-- **`main`**: Primary development branch (default)
-- **`pdfs`**: Automatically updated with built PDFs
-- **Template branch**: Preserved for future reference (not to be merged)
-
-### Historical Branches
-
-All development and feature branches have been consolidated and documented in the `archive/` directory. See [Archive Documentation](../archive/README.md) for details.
-
-## Build Artifacts
-
-Build artifacts are automatically excluded from Git via `.gitignore`:
-
-- PDF outputs
-- LaTeX auxiliary files
-- Bibliography intermediates
-- Index and glossary files
-- Temporary build files
-
-These are regenerated during the build process or by CI/CD workflows.
+See [Getting Started](Getting-Started.md) for detailed instructions.
 
 ## Next Steps
 
 - Learn how to [Build PDFs](Building-PDFs.md)
 - Understand [CI/CD Workflows](CI-CD-Workflows.md)
-- Read [Contributing Guidelines](Contributing.md)
+- Read [Getting Started](Getting-Started.md) guide
 
 ---
 
