@@ -272,6 +272,19 @@ Contributions are welcome! Please see our [Contributing Guidelines](CONTRIBUTING
 
 For detailed guidelines on LaTeX conventions, quality checks, and the PR process, see [CONTRIBUTING.md](CONTRIBUTING.md).
 
+### Using This as a Template for Your Project
+
+If you're using this as a starting point for your own project:
+
+1. Fork or clone the repository
+2. Update the repository name and URLs in:
+   - README.md (badges and links)
+   - Wiki files (if you keep the wiki)
+   - GitHub Actions workflows (if you customize them)
+3. Update metadata in `header.tex` files with your information
+4. Replace example content with your own
+5. Customize the templates to your needs
+
 ---
 
 ## Important Notices
