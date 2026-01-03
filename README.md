@@ -1,11 +1,10 @@
-# Seminar: Angewandte Statistik 2025
+# LaTeX Template: Beamer Presentations and Written Elaborations
 
-A comprehensive LaTeX project repository for the Applied Statistics seminar, Wintersemester 2025/26.
+A comprehensive LaTeX template repository for creating professional Beamer presentations and written elaborations. Perfect for academic seminars, research papers, theses, and technical documentation.
 
 **Author:** Yavuzâlp Dal
-**Semester:** Wintersemester 2025/26
 
-📚 **[Visit our Wiki](https://github.com/Qobustan/Seminar-Angewandte-Statistik-2025/wiki)** for comprehensive documentation and guides.
+📚 **[Visit our Wiki](https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen/wiki)** for comprehensive documentation and guides.
 
 ---
 
@@ -48,9 +47,9 @@ A comprehensive LaTeX project repository for the Applied Statistics seminar, Win
 
 ### Directory Descriptions
 
-- **`Ausarbeitung/`** - Contains LaTeX source files for the written elaboration (Ausarbeitung.tex, header.tex, bibliography)
-- **`Vortrag/`** - Contains LaTeX source files for the Beamer presentation (Vortrag.tex)
-- **`Besprechung/`** - Meeting notes, discussion materials, and related documents
+- **`Ausarbeitung/`** - Template for written elaborations/papers (contains example: introduction to kernel density estimation)
+- **`Vortrag/`** - Template for Beamer presentations (contains example: statistical methods presentation)
+- **`Besprechung/`** - Additional template materials for meetings and discussions
 - **`scripts/`** - Utility scripts for PDF generation (`generatePdf.sh`, `generatePdf.bat`)
 - **`cleanup/`** - Scripts to remove temporary LaTeX auxiliary files (`Remove_Junk_*.sh|bat`)
 - **`task_skripts/`** - Task-specific scripts organized by language (bash, perl)
@@ -162,11 +161,6 @@ The repository includes comprehensive GitHub Actions workflows in `.github/workf
   - Syncs markdown files from `wiki/` directory to the repository's GitHub Wiki
   - Uses pinned commit SHA to avoid firewall issues
 
-- **`lint.yml`** - LaTeX linting with chktex
-- **`spellcheck.yml`** - Spell checking with cspell
-- **`format.yml`** - Code formatting checks
-- **`bibcheck.yml`** - Bibliography validation
-
 ### Accessing Generated PDFs
 
 After a successful build:
@@ -258,17 +252,17 @@ For information about supported versions and reporting vulnerabilities, see [SEC
 
 ### Wiki Documentation
 
-The `wiki/` directory contains additional documentation that is automatically synced to the [GitHub Wiki](https://github.com/Qobustan/Seminar-Angewandte-Statistik-2025/wiki):
-- [Getting Started Guide](https://github.com/Qobustan/Seminar-Angewandte-Statistik-2025/wiki/Getting-Started)
-- [Building PDFs](https://github.com/Qobustan/Seminar-Angewandte-Statistik-2025/wiki/Building-PDFs)
-- [CI/CD Workflows](https://github.com/Qobustan/Seminar-Angewandte-Statistik-2025/wiki/CI-CD-Workflows)
-- [Contributing Guidelines](https://github.com/Qobustan/Seminar-Angewandte-Statistik-2025/wiki/Contributing)
-- [FAQ](https://github.com/Qobustan/Seminar-Angewandte-Statistik-2025/wiki/FAQ)
-- [Troubleshooting](https://github.com/Qobustan/Seminar-Angewandte-Statistik-2025/wiki/Troubleshooting)
-- [Project Structure](https://github.com/Qobustan/Seminar-Angewandte-Statistik-2025/wiki/Project-Structure)
+The `wiki/` directory contains additional documentation that is automatically synced to the [GitHub Wiki](https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen/wiki):
+- [Getting Started Guide](https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen/wiki/Getting-Started)
+- [Building PDFs](https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen/wiki/Building-PDFs)
+- [CI/CD Workflows](https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen/wiki/CI-CD-Workflows)
+- [Contributing Guidelines](https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen/wiki/Contributing)
+- [FAQ](https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen/wiki/FAQ)
+- [Troubleshooting](https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen/wiki/Troubleshooting)
+- [Project Structure](https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen/wiki/Project-Structure)
 
 **Note:** Changes to files in the `wiki/` directory are automatically synced to the GitHub Wiki when pushed to the main branch.
 
 ---
 
-[![Build all LaTeX projects](https://github.com/Qobustan/Seminar-Angewandte-Statistik-2025/actions/workflows/build-and-publish-pdfs.yml/badge.svg)](https://github.com/Qobustan/Seminar-Angewandte-Statistik-2025/actions/workflows/build-and-publish-pdfs.yml)
+[![Build all LaTeX projects](https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen/actions/workflows/build-and-publish-pdfs.yml/badge.svg)](https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen/actions/workflows/build-and-publish-pdfs.yml)
