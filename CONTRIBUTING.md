@@ -1,6 +1,11 @@
-# Contributing to Seminar: Angewandte Statistik 2025
+# Contributing to the Latex Template project (based on the Seminar: Angewandte Statistik 2025).
+# (An generalized template with workflows and a good worked out project template with a presentation and a script.)
 
-Thank you for your interest in contributing to this project! This document provides guidelines and information for contributors.
+(We decided not to take the full document here, since it would make the repository too heavy to be able to use it correctly.
+So this is supposed to get provided in an other repository.)
+
+Thank you for your interest in contributing to this new template project effort!
+This document provides guidelines and information for contributors.
 
 ## Table of Contents
 
@@ -10,7 +15,6 @@ Thank you for your interest in contributing to this project! This document provi
 - [Quality Checks](#quality-checks)
 - [Pull Request Process](#pull-request-process)
 - [Commit Message Guidelines](#commit-message-guidelines)
-- [Code of Conduct](#code-of-conduct)
 
 ## Getting Started
 
@@ -231,25 +235,9 @@ docs: update README with Docker build instructions
 fix: correct bibtex citation format in bibliography
 ```
 
-## Code of Conduct
-
-### Our Standards
-
-- Be respectful and inclusive
-- Provide constructive feedback
-- Focus on what is best for the project and community
-- Show empathy towards other contributors
-
-### Unacceptable Behavior
-
-- Harassment or discriminatory language
-- Personal attacks or insults
-- Publishing others' private information
-- Other conduct inappropriate in a professional setting
-
 ### Reporting
 
-If you experience or witness unacceptable behavior, please contact the repository maintainers through GitHub.
+If you experience or witness unacceptable behavior, please contact the repository maintainer through GitHub.
 
 ## Questions?
 
@@ -267,4 +255,4 @@ If you have questions about contributing:
 
 ---
 
-Thank you for contributing to Seminar: Angewandte Statistik 2025! 🎓
+Thank you for being part and contributing to this new template project effort!
