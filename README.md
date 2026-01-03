@@ -11,6 +11,7 @@ A comprehensive LaTeX template repository for creating professional Beamer prese
 ## Table of Contents
 
 - [Repository Structure](#repository-structure)
+- [Getting Started](#getting-started)
 - [Prerequisites](#prerequisites)
 - [Building the PDFs](#building-the-pdfs)
   - [Manual Compilation](#manual-compilation)
@@ -56,6 +57,55 @@ A comprehensive LaTeX template repository for creating professional Beamer prese
 - **`legacy/`** - Archived files and historical code no longer actively used
 - **`archive/`** - Historical branch documentation and unique content preservation
 - **`.github/workflows/`** - GitHub Actions workflows for automated building, linting, and testing
+
+---
+
+## Getting Started
+
+This template provides two main document types:
+
+### 1. Beamer Presentation (`Vortrag/`)
+
+A professional Beamer presentation template with example content about statistical methods.
+
+**To use this template:**
+1. Navigate to the `Vortrag/` directory
+2. Edit `header.tex` to update metadata (author, title, course, etc.)
+3. Edit `Vortrag.tex` to replace the example content with your own
+4. Edit `Vortrag.bib` to add your references
+5. Compile the document (see [Building the PDFs](#building-the-pdfs))
+
+**Key features:**
+- Madrid theme (easily customizable)
+- Automatic table of contents at section starts
+- TikZ support for diagrams
+- Bibliography support with BibTeX
+- Pause command control for incremental reveals
+- German language support (easily changed to English)
+
+### 2. Written Elaboration (`Ausarbeitung/`)
+
+A KOMA-Script article template for academic papers and written assignments, with example content about kernel density estimation.
+
+**To use this template:**
+1. Navigate to the `Ausarbeitung/` directory
+2. Edit `header.tex` to update metadata (author, title, course, etc.)
+3. Edit `Ausarbeitung.tex` to replace the example content with your own
+4. Edit `Ausarbeitung.bib` to add your references
+5. Compile the document (see [Building the PDFs](#building-the-pdfs))
+
+**Key features:**
+- KOMA-Script scrartcl class (professional German document standards)
+- Comprehensive package setup for mathematics, algorithms, and code listings
+- Custom theorem environments (Satz, Lemma, Definition, Bemerkung, etc.)
+- TikZ support for diagrams
+- Bibliography support with BibTeX
+- Table of contents toggle
+- German language support (easily changed to English)
+
+### 3. Additional Templates (`Besprechung/Material/`)
+
+The `Besprechung/` directory contains additional template variants for meetings and discussions.
 
 ---
 
