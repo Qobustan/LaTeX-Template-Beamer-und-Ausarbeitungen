@@ -1,10 +1,132 @@
-# Normalize line endings
-* text=auto
+# ==============================================================================
+# .gitattributes
+# Controls how Git handles line endings, diff, and merge for different files.
+# ==============================================================================
 
-# Mark PDFs as binary
-*.pdf binary
+# ──────────────────────────────────────────────────────────────────────────────
+# Default: normalize line endings to LF on commit
+# ──────────────────────────────────────────────────────────────────────────────
+* text=auto eol=lf
 
-# Ensure LaTeX files are treated as text
-*.tex text
-*.sty text
-*.cls text
+# ──────────────────────────────────────────────────────────────────────────────
+# LaTeX source files (always LF)
+# ──────────────────────────────────────────────────────────────────────────────
+*.tex       text eol=lf linguist-language=TeX
+*.sty       text eol=lf linguist-language=TeX
+*.cls       text eol=lf linguist-language=TeX
+*.dtx       text eol=lf
+*.ins       text eol=lf
+*.bib       text eol=lf
+*.bst       text eol=lf
+*.latexmkrc text eol=lf
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Shell scripts (always LF)
+# ──────────────────────────────────────────────────────────────────────────────
+*.sh        text eol=lf
+*.bash      text eol=lf
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Windows batch/script files (CRLF on Windows, LF on Unix)
+# ──────────────────────────────────────────────────────────────────────────────
+*.bat       text eol=crlf
+*.cmd       text eol=crlf
+*.ps1       text eol=crlf
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Source code (always LF)
+# ──────────────────────────────────────────────────────────────────────────────
+*.py        text eol=lf
+*.pl        text eol=lf
+*.pm        text eol=lf
+*.rb        text eol=lf
+*.js        text eol=lf
+*.ts        text eol=lf
+*.java      text eol=lf
+*.c         text eol=lf
+*.h         text eol=lf
+*.cpp       text eol=lf
+*.go        text eol=lf
+*.rs        text eol=lf
+*.lua       text eol=lf
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Configuration / data files (LF)
+# ──────────────────────────────────────────────────────────────────────────────
+*.json      text eol=lf
+*.yml       text eol=lf
+*.yaml      text eol=lf
+*.toml      text eol=lf
+*.ini       text eol=lf
+*.cfg       text eol=lf
+*.conf      text eol=lf
+*.env       text eol=lf
+*.editorconfig text eol=lf
+.gitignore  text eol=lf
+.gitattributes text eol=lf
+Dockerfile  text eol=lf
+.dockerignore text eol=lf
+Makefile    text eol=lf
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Markup / documentation (LF)
+# ──────────────────────────────────────────────────────────────────────────────
+*.md        text eol=lf
+*.rst       text eol=lf
+*.txt       text eol=lf
+*.html      text eol=lf
+*.xml       text eol=lf
+*.css       text eol=lf
+*.svg       text eol=lf
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Binary files (no line ending conversion, no diff)
+# ──────────────────────────────────────────────────────────────────────────────
+*.pdf       binary
+*.png       binary
+*.jpg       binary
+*.jpeg      binary
+*.gif       binary
+*.bmp       binary
+*.ico       binary
+*.tiff      binary
+*.tif       binary
+*.eps       binary
+*.ps        binary
+*.dvi       binary
+*.zip       binary
+*.tar       binary
+*.gz        binary
+*.bz2       binary
+*.xz        binary
+*.7z        binary
+*.ttf       binary
+*.otf       binary
+*.woff      binary
+*.woff2     binary
+*.eot       binary
+*.pyc       binary
+
+# ──────────────────────────────────────────────────────────────────────────────
+# LaTeX-generated / auxiliary files (treated as binary to avoid noise)
+# ──────────────────────────────────────────────────────────────────────────────
+*.synctex.gz  binary
+*.fdb_latexmk binary
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Linguist overrides (for GitHub language statistics)
+# ──────────────────────────────────────────────────────────────────────────────
+# Exclude auto-generated and auxiliary files from language stats
+*.aux       linguist-generated=true
+*.log       linguist-generated=true
+*.bbl       linguist-generated=true
+*.blg       linguist-generated=true
+*.toc       linguist-generated=true
+*.out       linguist-generated=true
+*.fls       linguist-generated=true
+*.fdb_latexmk linguist-generated=true
+
+# Treat legacy and archive directories as documentation
+legacy/     linguist-documentation=true
+archive/    linguist-documentation=true
+

@@ -1,0 +1,76 @@
+# ==============================================================================
+# .dockerignore
+# Specifies files and directories to exclude from Docker build context.
+# ==============================================================================
+
+# Version control
+.git
+.gitignore
+.gitattributes
+
+# CI/CD
+.github/
+
+# Generated LaTeX artifacts (not needed in Docker build context)
+**/*.aux
+**/*.log
+**/*.toc
+**/*.bbl
+**/*.blg
+**/*.bcf
+**/*.out
+**/*.nav
+**/*.snm
+**/*.synctex.gz
+**/*.run.xml
+**/*.fls
+**/*.fdb_latexmk
+**/*.lof
+**/*.lot
+**/*.idx
+**/*.ind
+**/*.ilg
+**/*.glo
+**/*.gls
+**/*.glg
+
+# Generated PDFs (they will be generated during build)
+Ausarbeitung/*.pdf
+Vortrag/*.pdf
+Besprechung/**/*.pdf
+
+# Lua source (downloaded during build)
+lua-5.5.0/
+
+# Documentation
+docs/
+wiki/
+archive/
+review/
+branch_cleanup/
+legacy/
+latex_install/
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyc
+
+# Node modules (if any)
+node_modules/
+
+# Temporary files
+/tmp/
+*.tmp
+*.bak
