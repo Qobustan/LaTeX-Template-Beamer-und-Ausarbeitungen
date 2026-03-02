@@ -14,7 +14,7 @@
 # ==============================================================================
 
 # Use Ubuntu 22.04 LTS as the base image
-FROM ubuntu:22.04
+FROM ubuntu:24.04
 
 # Set non-interactive mode to avoid prompts during package installation
 ENV DEBIAN_FRONTEND=noninteractive
