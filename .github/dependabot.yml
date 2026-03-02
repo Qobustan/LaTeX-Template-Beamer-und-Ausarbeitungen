@@ -3,15 +3,12 @@
 # ============================================================
 #
 # Purpose:
-#   Automatically keep GitHub Actions up to date.
+#   Automatically keep GitHub Actions and Docker base images up to date.
 #
 # Why:
 #   - Security patches
 #   - Bug fixes
 #   - Reproducible CI builds
-#
-# File format:
-#   Dependabot configuration version 2
 #
 # Official documentation:
 #   https://docs.github.com/code-security/dependabot/
@@ -35,7 +32,6 @@ updates:
 
     # Update schedule
     schedule:
-      # Dependabot checks for updates once per week
       interval: "daily"
 
     # Optional quality-of-life settings
@@ -45,3 +41,20 @@ updates:
     labels:
       - "dependencies"
       - "ci"
+
+  # ----------------------------------------------------------
+  # Docker
+  # ----------------------------------------------------------
+  #
+  # Keeps the base image in Dockerfile up to date.
+  #
+  - package-ecosystem: "docker"
+
+    directory: "/"
+
+    schedule:
+      interval: "weekly"
+
+    labels:
+      - "dependencies"
+      - "docker"
