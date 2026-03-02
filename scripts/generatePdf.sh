@@ -8,88 +8,126 @@ show_help() {
     cat << EOF
 Usage: $(basename "$0") [OPTIONS]
 
-Generate PDFs for Ausarbeitung and Vortrag using pdflatex and bibtex.
+Generate PDFs for Ausarbeitung and Vortrag using pdflatex or lualatex.
 
 OPTIONS:
-    -h, --help      Show this help message and exit
+    -h, --help              Show this help message and exit
+    -e, --engine ENGINE     LaTeX engine to use: pdflatex (default) or lualatex
 
 DESCRIPTION:
     This script compiles LaTeX documents in the Ausarbeitung and Vortrag
-    directories. It runs pdflatex three times and bibtex once for each
-    document to ensure all references and cross-references are resolved.
+    directories. It runs the specified LaTeX engine three times and biber/bibtex
+    once for each document to ensure all references and cross-references are
+    resolved.
+
+    The engine can also be set via the LATEX_ENGINE environment variable:
+        export LATEX_ENGINE=lualatex
+        ./generatePdf.sh
 
 REQUIREMENTS:
-    - pdflatex (from a TeX distribution)
-    - bibtex (from a TeX distribution)
+    - pdflatex or lualatex (from a TeX distribution)
+    - bibtex or biber (from a TeX distribution)
 
-EXAMPLE:
+EXAMPLES:
     ./generatePdf.sh
+    ./generatePdf.sh --engine lualatex
+    LATEX_ENGINE=lualatex ./generatePdf.sh
 
 EOF
 }
 
 # Parse command line arguments
-if [[ "${1:-}" == "-h" ]] || [[ "${1:-}" == "--help" ]]; then
-    show_help
-    exit 0
+ENGINE="${LATEX_ENGINE:-pdflatex}"
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        -h|--help)
+            show_help
+            exit 0
+            ;;
+        -e|--engine)
+            ENGINE="${2:-}"
+            shift 2
+            ;;
+        *)
+            echo "Unknown option: $1"
+            show_help
+            exit 1
+            ;;
+    esac
+done
+
+# Validate engine choice
+if [[ "$ENGINE" != "pdflatex" && "$ENGINE" != "lualatex" ]]; then
+    echo "Error: Unsupported engine '$ENGINE'. Use 'pdflatex' or 'lualatex'."
+    exit 1
 fi
 
 # Check if required tools are installed
-if ! command -v pdflatex &> /dev/null; then
-    echo "Error: pdflatex is not installed or not in PATH"
+if ! command -v "$ENGINE" &> /dev/null; then
+    echo "Error: $ENGINE is not installed or not in PATH"
     echo "Please install a TeX distribution (e.g., TeX Live, MiKTeX)"
     exit 1
 fi
 
-if ! command -v bibtex &> /dev/null; then
-    echo "Error: bibtex is not installed or not in PATH"
+if ! command -v bibtex &> /dev/null && ! command -v biber &> /dev/null; then
+    echo "Error: Neither bibtex nor biber is installed or not in PATH"
     echo "Please install a TeX distribution (e.g., TeX Live, MiKTeX)"
     exit 1
+fi
+
+# Use biber if available, otherwise fall back to bibtex
+BIB_TOOL="bibtex"
+if command -v biber &> /dev/null; then
+    BIB_TOOL="biber"
 fi
 
 echo "=== PDF Generation Script ==="
+echo "Engine:  $ENGINE"
+echo "BibTool: $BIB_TOOL"
 echo ""
+
+# Helper: compile a single LaTeX document
+compile_document() {
+    local doc_dir="$1"
+    local doc_name="$2"
+    local doc_label="$3"
+
+    echo "[${doc_label}] Building ${doc_name}..."
+    cd "$doc_dir"
+
+    echo "  Step 1/4: Running ${ENGINE} (first pass)..."
+    "$ENGINE" -interaction=nonstopmode "${doc_name}.tex" > /dev/null
+
+    echo "  Step 2/4: Running ${BIB_TOOL}..."
+    "$BIB_TOOL" "${doc_name}" > /dev/null 2>&1 || true
+
+    echo "  Step 3/4: Running ${ENGINE} (second pass)..."
+    "$ENGINE" -interaction=nonstopmode "${doc_name}.tex" > /dev/null
+
+    echo "  Step 4/4: Running ${ENGINE} (third pass)..."
+    "$ENGINE" -interaction=nonstopmode "${doc_name}.tex" > /dev/null
+
+    if [[ -f "${doc_name}.pdf" ]]; then
+        local size
+        size=$(du -h "${doc_name}.pdf" | cut -f1)
+        echo "  ✓ ${doc_name}.pdf generated successfully (size: ${size})"
+    else
+        echo "  ✗ Error: ${doc_name}.pdf was not generated"
+        exit 1
+    fi
+}
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+REPO_ROOT="$(dirname "$SCRIPT_DIR")"
 
 # Build Ausarbeitung
-echo "[1/2] Building Ausarbeitung..."
-cd "$(dirname "$0")/../Ausarbeitung"
-echo "  Step 1/4: Running pdflatex (first pass)..."
-pdflatex -interaction=nonstopmode Ausarbeitung.tex > /dev/null
-echo "  Step 2/4: Running bibtex..."
-bibtex Ausarbeitung > /dev/null || true
-echo "  Step 3/4: Running pdflatex (second pass)..."
-pdflatex -interaction=nonstopmode Ausarbeitung.tex > /dev/null
-echo "  Step 4/4: Running pdflatex (third pass)..."
-pdflatex -interaction=nonstopmode Ausarbeitung.tex > /dev/null
+compile_document "${REPO_ROOT}/Ausarbeitung" "Ausarbeitung" "1/2"
 
-if [[ -f "Ausarbeitung.pdf" ]]; then
-    AUSARBEITUNG_SIZE=$(du -h "Ausarbeitung.pdf" | cut -f1)
-    echo "  ✓ Ausarbeitung.pdf generated successfully (size: $AUSARBEITUNG_SIZE)"
-else
-    echo "  ✗ Error: Ausarbeitung.pdf was not generated"
-    exit 1
-fi
+echo ""
 
 # Build Vortrag
-echo ""
-echo "[2/2] Building Vortrag..."
-cd ../Vortrag
-echo "  Step 1/4: Running pdflatex (first pass)..."
-pdflatex -interaction=nonstopmode Vortrag.tex > /dev/null
-echo "  Step 2/4: Running bibtex..."
-bibtex Vortrag > /dev/null || true
-echo "  Step 3/4: Running pdflatex (second pass)..."
-pdflatex -interaction=nonstopmode Vortrag.tex > /dev/null
-echo "  Step 4/4: Running pdflatex (third pass)..."
-pdflatex -interaction=nonstopmode Vortrag.tex > /dev/null
-
-if [[ -f "Vortrag.pdf" ]]; then
-    VORTRAG_SIZE=$(du -h "Vortrag.pdf" | cut -f1)
-    echo "  ✓ Vortrag.pdf generated successfully (size: $VORTRAG_SIZE)"
-else
-    echo "  ✗ Error: Vortrag.pdf was not generated"
-    exit 1
-fi
+compile_document "${REPO_ROOT}/Vortrag" "Vortrag" "2/2"
 
 echo ""
 echo "=== All PDFs generated successfully! ==="

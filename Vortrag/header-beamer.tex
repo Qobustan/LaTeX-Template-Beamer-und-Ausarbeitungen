@@ -1,0 +1,40 @@
+% ==============================================================================
+% header-beamer.tex
+% Beamer-specific packages, theme configuration, and custom commands.
+% This file is included by header.tex in Vortrag/.
+% ==============================================================================
+
+% ──────────────────────────────────────────────────────────────────────────────
+% Beamer Theme
+% ──────────────────────────────────────────────────────────────────────────────
+
+% Theme: Madrid (clean, professional; easily customizable)
+% Available themes: AnnArbor, Antibes, Bergen, Berkeley, Berlin, Boadilla,
+%   CambridgeUS, Copenhagen, Darmstadt, Dresden, EastLansing, Frankfurt,
+%   Goettingen, Hannover, Ilmenau, JuanLesPins, Luebeck, Madrid, Malmoe,
+%   Marburg, Montpellier, PaloAlto, Pittsburgh, Rochester, Singapore,
+%   Szeged, Warsaw
+\usetheme{Madrid}
+
+% ──────────────────────────────────────────────────────────────────────────────
+% List Item Templates
+% ──────────────────────────────────────────────────────────────────────────────
+
+% Use default item marker style (overrides enumitem defaults for beamer)
+\setbeamertemplate{items}[default]
+\setbeamertemplate{enumerate items}[circle]
+
+% ──────────────────────────────────────────────────────────────────────────────
+% Beamer-specific Commands
+% ──────────────────────────────────────────────────────────────────────────────
+
+% Separator slide with large centered text
+% Usage: \trennfolie{Section Title}
+\newcommand{\trennfolie}[1]{
+	\begin{frame}[plain]
+		\centering
+		\vfill
+		\Huge \textbf{#1}
+		\vfill
+	\end{frame}
+}

@@ -1,0 +1,29 @@
+% ==============================================================================
+% header-article.tex
+% Article/scrartcl-specific packages and configuration.
+% This file is included by header.tex in Ausarbeitung/.
+% ==============================================================================
+
+% ──────────────────────────────────────────────────────────────────────────────
+% Page Layout
+% ──────────────────────────────────────────────────────────────────────────────
+
+% Page margins (KOMA-Script: use typearea instead of geometry when possible)
+\usepackage[left=1.5cm, right=1.5cm, top=2.5cm, bottom=2.5cm]{geometry}
+
+% ──────────────────────────────────────────────────────────────────────────────
+% Figure and Float Enhancements
+% ──────────────────────────────────────────────────────────────────────────────
+
+% Wider figure/table environments that break the text width
+\usepackage{changepage}
+
+% Resize and clip boxes to fit constraints
+\usepackage{adjustbox}
+
+% ──────────────────────────────────────────────────────────────────────────────
+% Article-specific Typography
+% ──────────────────────────────────────────────────────────────────────────────
+
+% csquotes: context-sensitive quotation marks (use \enquote{text})
+\usepackage{csquotes}

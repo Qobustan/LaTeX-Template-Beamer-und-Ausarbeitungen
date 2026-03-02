@@ -5,6 +5,7 @@ A comprehensive LaTeX template repository for creating professional Beamer prese
 **Author:** Yavuzâlp Dal
 
 📚 **[Visit our Wiki](https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen/wiki)** for comprehensive documentation and guides.
+📖 **[Architecture Overview](docs/ARCHITECTURE.md)** — detailed project structure documentation.
 
 ---
 
@@ -15,9 +16,11 @@ A comprehensive LaTeX template repository for creating professional Beamer prese
 - [Prerequisites](#prerequisites)
 - [Building the PDFs](#building-the-pdfs)
   - [Manual Compilation](#manual-compilation)
+  - [Using the Build Script](#using-the-build-script)
   - [Using latexmk](#using-latexmk)
   - [Using Docker](#using-docker)
   - [Using GitHub Actions](#using-github-actions)
+- [Modular Header System](#modular-header-system)
 - [CI/CD Workflows](#cicd-workflows)
 - [Available Scripts](#available-scripts)
 - [Contributing](#contributing)
@@ -31,32 +34,20 @@ A comprehensive LaTeX template repository for creating professional Beamer prese
 ```
 .
 ├── Ausarbeitung/            # LaTeX sources for the written elaboration
+│   ├── header.tex           # Dispatcher (loads header-common + header-article)
+│   ├── header-common.tex    # Common packages (shared with Vortrag)
+│   └── header-article.tex   # Article-specific packages
 ├── Vortrag/                 # LaTeX sources for the presentation
-├── Besprechung/             # Meeting notes and discussions
+│   ├── header.tex           # Dispatcher (loads header-common + header-beamer)
+│   ├── header-common.tex    # Common packages (shared with Ausarbeitung)
+│   └── header-beamer.tex    # Beamer-specific packages and theme
 ├── scripts/                 # Build and utility scripts
 ├── cleanup/                 # Cleanup scripts for temporary LaTeX files
 ├── task_skripts/            # Task-specific scripts (bash, perl)
-│   ├── bash/
-│   └── perl/
-├── legacy/                  # Archived, deprecated files
-├── archive/                 # Branch documentation and historical content
-│   ├── branch-snapshots/
-│   └── unique-content/
+├── docs/                    # Project documentation
 ├── .github/workflows/       # CI/CD automation
 └── wiki/                    # Project wiki documentation
 ```
-
-### Directory Descriptions
-
-- **`Ausarbeitung/`** - Template for written elaborations/papers (contains example: introduction to kernel density estimation)
-- **`Vortrag/`** - Template for Beamer presentations (contains example: statistical methods presentation)
-- **`Besprechung/`** - Additional template materials for meetings and discussions
-- **`scripts/`** - Utility scripts for PDF generation (`generatePdf.sh`, `generatePdf.bat`)
-- **`cleanup/`** - Scripts to remove temporary LaTeX auxiliary files (`Remove_Junk_*.sh|bat`)
-- **`task_skripts/`** - Task-specific scripts organized by language (bash, perl)
-- **`legacy/`** - Archived files and historical code no longer actively used
-- **`archive/`** - Historical branch documentation and unique content preservation
-- **`.github/workflows/`** - GitHub Actions workflows for automated building, linting, and testing
 
 ---
 
@@ -66,7 +57,7 @@ This template provides two main document types:
 
 ### 1. Beamer Presentation (`Vortrag/`)
 
-A professional Beamer presentation template with example content about statistical methods.
+A professional Beamer presentation template.
 
 **To use this template:**
 1. Navigate to the `Vortrag/` directory
@@ -79,13 +70,14 @@ A professional Beamer presentation template with example content about statistic
 - Madrid theme (easily customizable)
 - Automatic table of contents at section starts
 - TikZ support for diagrams
-- Bibliography support with BibTeX
+- Bibliography support with BibTeX/biber
 - Pause command control for incremental reveals
 - German language support (easily changed to English)
+- Modular header system
 
 ### 2. Written Elaboration (`Ausarbeitung/`)
 
-A KOMA-Script article template for academic papers and written assignments, with example content about kernel density estimation.
+A KOMA-Script article template for academic papers and written assignments.
 
 **To use this template:**
 1. Navigate to the `Ausarbeitung/` directory
@@ -99,13 +91,10 @@ A KOMA-Script article template for academic papers and written assignments, with
 - Comprehensive package setup for mathematics, algorithms, and code listings
 - Custom theorem environments (Satz, Lemma, Definition, Bemerkung, etc.)
 - TikZ support for diagrams
-- Bibliography support with BibTeX
+- Bibliography support with BibTeX/biber
 - Table of contents toggle
 - German language support (easily changed to English)
-
-### 3. Additional Templates (`Besprechung/Material/`)
-
-The `Besprechung/` directory contains additional template variants for meetings and discussions.
+- Modular header system
 
 ---
 
@@ -114,14 +103,14 @@ The `Besprechung/` directory contains additional template variants for meetings 
 ### Required
 
 - **TeX Live** (or MiKTeX on Windows) - LaTeX distribution
-  - `pdflatex` - PDF generation
+  - `pdflatex` or `lualatex` - PDF generation
   - `bibtex` or `biber` - Bibliography management
   - `latexmk` - Automated LaTeX building (recommended)
 - **Git** - Version control
 
 ### Optional
 
-- **Docker** - For containerized builds
+- **Docker** - For containerized builds (includes LuaLaTeX + full TeX Live)
 - **Perl** - Required for certain task scripts in `task_skripts/perl/`
 - **chktex** - LaTeX linter (used in CI)
 - **cspell** - Spell checker (used in CI)
@@ -154,6 +143,32 @@ pdflatex -interaction=nonstopmode Vortrag.tex
 pdflatex -interaction=nonstopmode Vortrag.tex
 ```
 
+### Using the Build Script
+
+The `scripts/generatePdf.sh` script handles both documents automatically:
+
+```bash
+# Default: pdflatex engine
+./scripts/generatePdf.sh
+
+# Using LuaLaTeX
+./scripts/generatePdf.sh --engine lualatex
+
+# Using environment variable
+export LATEX_ENGINE=lualatex
+./scripts/generatePdf.sh
+
+# Show help
+./scripts/generatePdf.sh --help
+```
+
+On Windows, use `scripts/generatePdf.bat`:
+
+```bat
+scripts\generatePdf.bat
+scripts\generatePdf.bat --engine lualatex
+```
+
 ### Using latexmk
 
 Automated building with dependency tracking (recommended):
@@ -162,6 +177,8 @@ Automated building with dependency tracking (recommended):
 # Build Ausarbeitung
 cd Ausarbeitung
 latexmk -pdf Ausarbeitung.tex
+# or with LuaLaTeX:
+latexmk -lualatex Ausarbeitung.tex
 
 # Build Vortrag
 cd ../Vortrag
@@ -170,17 +187,24 @@ latexmk -pdf Vortrag.tex
 
 ### Using Docker
 
-Build PDFs in a containerized environment:
+Build PDFs in a fully reproducible containerized environment:
 
 ```bash
 # Build the Docker image
-docker build -t latex-seminar .
+docker build -t latex-template .
 
-# Run the container to generate PDFs
-docker run --rm -v $(pwd):/app latex-seminar
+# Run with default engine (lualatex)
+docker run --rm -v $(pwd):/workspace latex-template
+
+# Run with pdflatex
+docker run --rm -v $(pwd):/workspace -e LATEX_ENGINE=pdflatex latex-template
 ```
 
-The Dockerfile includes TeX Live, German language support, and all necessary dependencies.
+The Docker image includes:
+- Full TeX Live with LuaLaTeX, XeLaTeX, biber, latexmk
+- Lua 5.5.0
+- Perl with latexindent dependencies
+- Python 3 + PyGithub
 
 ### Using GitHub Actions
 
@@ -190,7 +214,23 @@ PDFs are automatically built on every push to the `main` branch:
 2. GitHub Actions automatically builds both PDFs
 3. Download generated PDFs from the workflow artifacts
 
-See the [CI/CD Workflows](#cicd-workflows) section for details.
+---
+
+## Modular Header System
+
+The template uses a **modular header system** for maintainability:
+
+| File | Purpose |
+|------|---------|
+| `header.tex` | Dispatcher: loads common + document-specific headers, plus metadata |
+| `header-common.tex` | Packages shared by both Beamer and Article |
+| `header-beamer.tex` | Beamer theme, `\trennfolie`, list templates |
+| `header-article.tex` | Page geometry, `adjustbox`, `csquotes` |
+
+**To customize your document:**
+1. Update metadata in `header.tex` (author, title, course, etc.)
+2. Add shared packages to `header-common.tex`
+3. Add document-class-specific packages to `header-beamer.tex` or `header-article.tex`
 
 ---
 
@@ -198,25 +238,12 @@ See the [CI/CD Workflows](#cicd-workflows) section for details.
 
 The repository includes comprehensive GitHub Actions workflows in `.github/workflows/`:
 
-### Main Workflows
-
 - **`build-and-publish-pdfs.yml`** - Automatically compiles LaTeX documents
-  - Triggers on push to `main` or manual dispatch
-  - Uses `xu-cheng/latex-action@v4` for reliable PDF generation
-  - Uploads generated PDFs as artifacts
-  - Artifacts are available for 90 days after each workflow run
-
-- **`publish-wiki.yml`** - Publishes wiki documentation to GitHub Wiki
-  - Triggers on push to `main/master` when wiki files change or manual dispatch
-  - Syncs markdown files from `wiki/` directory to the repository's GitHub Wiki
-  - Uses pinned commit SHA to avoid firewall issues
-
-### Accessing Generated PDFs
-
-After a successful build:
-1. Go to the Actions tab in the GitHub repository
-2. Select the latest workflow run
-3. Download the `latex-pdfs` artifact containing both PDFs
+- **`docker-image.yml`** - Builds the Docker image
+- **`lint.yml`** - Runs chktex on LaTeX files
+- **`spellcheck.yml`** - Runs cspell on text files
+- **`bibcheck.yml`** - Checks bibliography files for duplicates
+- **`stale.yml`** - Closes stale issues/PRs automatically
 
 ---
 
@@ -226,15 +253,14 @@ After a successful build:
 
 **`scripts/generatePdf.sh`** (Linux/macOS) / **`scripts/generatePdf.bat`** (Windows)
 - Builds both Ausarbeitung and Vortrag PDFs
-- Runs pdflatex and bibtex with proper multi-pass compilation
-- Usage: `./scripts/generatePdf.sh`
+- Supports `--engine pdflatex` (default) or `--engine lualatex`
+- Usage: `./scripts/generatePdf.sh [--engine ENGINE]`
 
 ### Cleanup Scripts
 
 **`cleanup/Remove_Junk_Linux.sh`** (Linux/macOS) / **`cleanup/Remove_Junk_Windows.bat`** (Windows)
 - Removes temporary LaTeX auxiliary files
-- Cleans `.aux`, `.log`, `.toc`, `.bbl`, `.blg`, `.synctex.gz`, and other build artifacts
-- Runs cleanup in both Ausarbeitung and Vortrag directories
+- Supports `--quiet` flag (Linux) and `/Q` flag (Windows)
 - Usage: `./cleanup/Remove_Junk_Linux.sh`
 
 ### Task-Specific Scripts
@@ -243,17 +269,11 @@ Located in `task_skripts/`:
 - `bash/` - Bash scripts for various tasks
 - `perl/` - Perl scripts for text processing
 
-Most scripts support a `--help` option for usage information.
-
 ### Branch Management
 
 **`scripts/delete-obsolete-branches.sh`** / **`scripts/delete-obsolete-branches.py`**
-- Deletes obsolete branches from the repository
-- Removes old feature branches and merged PR branches
-- Keeps main branch and active PR branches
-- See `BRANCHES_TO_DELETE.md` for the list of branches to be removed
-- Usage (Bash): `./scripts/delete-obsolete-branches.sh`
-- Usage (Python): `python3 scripts/delete-obsolete-branches.py` (requires `GITHUB_TOKEN` environment variable)
+- Deletes configured obsolete branches from the repository
+- Edit the `OBSOLETE_BRANCHES` list before running
 - Dry run: `python3 scripts/delete-obsolete-branches.py --dry-run`
 
 ---
@@ -270,19 +290,12 @@ Contributions are welcome! Please see our [Contributing Guidelines](CONTRIBUTING
 4. Commit your changes with clear, descriptive messages
 5. Push to your fork and open a Pull Request
 
-For detailed guidelines on LaTeX conventions, quality checks, and the PR process, see [CONTRIBUTING.md](CONTRIBUTING.md).
-
 ### Using This as a Template for Your Project
 
-If you're using this as a starting point for your own project:
-
 1. Fork or clone the repository
-2. Update the repository name and URLs in:
-   - README.md (badges and links)
-   - Wiki files (if you keep the wiki)
-   - GitHub Actions workflows (if you customize them)
-3. Update metadata in `header.tex` files with your information
-4. Replace example content with your own
+2. Update metadata in `header.tex` files (author, title, course, etc.)
+3. Replace example content in `Vortrag.tex` and `Ausarbeitung.tex`
+4. Add your bibliography entries to `.bib` files
 5. Customize the templates to your needs
 
 ---
@@ -293,12 +306,6 @@ If you're using this as a starting point for your own project:
 
 This project is provided "as is" without warranty. See [DISCLAIMER.txt](DISCLAIMER.txt) for full details.
 
-**Key Points:**
-- No warranty of any kind
-- Not intended for personal data processing
-- User assumes all risks for uploaded content
-- No liability for damages or claims
-
 ### Security Policy
 
 For information about supported versions and reporting vulnerabilities, see [SECURITY.md](SECURITY.md).
@@ -307,24 +314,21 @@ For information about supported versions and reporting vulnerabilities, see [SEC
 
 ## Additional Documentation
 
-- [Contributing Guidelines](CONTRIBUTING.md) - How to contribute to this project
-- [LaTeX Installation Guide (English)](latex_install/LaTeX-Install.md) - Comprehensive LaTeX setup instructions
-- [LaTeX Installation Guide (German)](latex_install/LaTeX-Install.de.md) - Deutsche LaTeX-Installationsanleitung
-- [Branch Archive Documentation](archive/README.md) - Historical branch consolidation and analysis
-- [Security Policy](SECURITY.md) - Security guidelines and vulnerability reporting
+- [Architecture Overview](docs/ARCHITECTURE.md) - Detailed project structure
+- [Changelog](docs/CHANGELOG.md) - Version history
+- [Contributing Guidelines](CONTRIBUTING.md) - How to contribute
+- [LaTeX Installation Guide (English)](latex_install/LaTeX-Install.md)
+- [LaTeX Installation Guide (German)](latex_install/LaTeX-Install.de.md)
+- [Security Policy](SECURITY.md)
 
 ### Wiki Documentation
 
-The `wiki/` directory contains additional documentation that is automatically synced to the [GitHub Wiki](https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen/wiki):
+The `wiki/` directory is automatically synced to the [GitHub Wiki](https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen/wiki):
 - [Getting Started Guide](https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen/wiki/Getting-Started)
 - [Building PDFs](https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen/wiki/Building-PDFs)
 - [CI/CD Workflows](https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen/wiki/CI-CD-Workflows)
-- [Contributing Guidelines](https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen/wiki/Contributing)
 - [FAQ](https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen/wiki/FAQ)
 - [Troubleshooting](https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen/wiki/Troubleshooting)
-- [Project Structure](https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen/wiki/Project-Structure)
-
-**Note:** Changes to files in the `wiki/` directory are automatically synced to the GitHub Wiki when pushed to the main branch.
 
 ---
 

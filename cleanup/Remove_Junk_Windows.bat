@@ -3,28 +3,28 @@ REM ============================================================================
 REM
 REM          FILE: Remove_Junk_Windows.bat
 REM
-REM         USAGE: Remove_Junk_Windows.bat
+REM         USAGE: Remove_Junk_Windows.bat [/Q]
 REM
 REM   DESCRIPTION: Remove temporary LaTeX build files from the repository.
-REM                This script safely removes LaTeX temporary and auxiliary files
-REM                from the current directory, Ausarbeitung, and Vortrag subdirectories.
+REM                Cleans the current directory, Ausarbeitung, and Vortrag.
 REM
-REM       OPTIONS: None
+REM       OPTIONS:
+REM         /Q    Quiet mode (suppress status messages)
 REM
 REM         FILES: Removes .aux, .log, .lof, .gz, .toc, .bak~, .bbl, .bcf, .blg,
-REM                .lot, .out, .xml, .acn, .acr, .alg, .glg, .glo, .gls, .gug,
-REM                .guo, .gus, .ist, .llg, .llo, .lls, .lug, .luo, .lus, .mog,
-REM                .moo, .mos, .xdy, .mw, .synctex.gz, .fdb_latexmk, .fls, .idx,
-REM                .ind, .ilg, .dvi, .ps, .pdf
+REM                .lot, .out, .xml, .run.xml, .acn, .acr, .alg, .glg, .glo, .gls,
+REM                .gug, .guo, .gus, .ist, .llg, .llo, .lls, .lug, .luo, .lus,
+REM                .mog, .moo, .mos, .xdy, .mw, .synctex.gz, .fdb_latexmk, .fls,
+REM                .idx, .ind, .ilg, .dvi, .nav, .snm
 REM
 REM ==============================================================================
 
 set SHOW_COMMENTS=true
+if /i "%1"=="/Q" set SHOW_COMMENTS=false
 
-REM Die Dateipfade müsste man anpassen, wenn man das braucht
-if "%SHOW_COMMENTS%"=="true" echo REM Cleaning temporary LaTeX files from current directory
+REM ── Current directory ─────────────────────────────────────────────────────
+if "%SHOW_COMMENTS%"=="true" echo Cleaning temporary LaTeX files from current directory...
 
-REM Delete files only if they exist
 if exist *.aux del /Q *.aux
 if exist *.log del /Q *.log
 if exist *.lof del /Q *.lof
@@ -72,17 +72,12 @@ if exist *.snm del /Q *.snm
 REM Get repository root directory
 set REPO_ROOT=%~dp0..
 
-REM Check if Ausarbeitung directory exists before changing to it
-if "%SHOW_COMMENTS%"=="true" echo REM Checking for Ausarbeitung directory
+REM ── Ausarbeitung directory ────────────────────────────────────────────────
+if "%SHOW_COMMENTS%"=="true" echo Cleaning Ausarbeitung directory...
 
 if exist "%REPO_ROOT%\Ausarbeitung" (
-    REM Wechsel in das Verzeichnis 'Ausarbeitung'
-    if "%SHOW_COMMENTS%"=="true" echo REM Changing to 'Ausarbeitung' directory
     pushd "%REPO_ROOT%\Ausarbeitung"
 
-    REM Löschen der gleichen temporären Dateien im Zielverzeichnis
-    if "%SHOW_COMMENTS%"=="true" echo REM Cleaning temporary LaTeX files from Ausarbeitung directory
-    
     if exist *.aux del /Q *.aux
     if exist *.log del /Q *.log
     if exist *.lof del /Q *.lof
@@ -126,23 +121,18 @@ if exist "%REPO_ROOT%\Ausarbeitung" (
     if exist *.ps del /Q *.ps
     if exist *.nav del /Q *.nav
     if exist *.snm del /Q *.snm
-    
+
     popd
 ) else (
-    if "%SHOW_COMMENTS%"=="true" echo REM Warning: Ausarbeitung directory not found, skipping
+    if "%SHOW_COMMENTS%"=="true" echo Warning: Ausarbeitung directory not found, skipping.
 )
 
-REM Check if Vortrag directory exists before changing to it
-if "%SHOW_COMMENTS%"=="true" echo REM Checking for Vortrag directory
+REM ── Vortrag directory ─────────────────────────────────────────────────────
+if "%SHOW_COMMENTS%"=="true" echo Cleaning Vortrag directory...
 
 if exist "%REPO_ROOT%\Vortrag" (
-    REM Wechsel in das Verzeichnis 'Vortrag'
-    if "%SHOW_COMMENTS%"=="true" echo REM Changing to 'Vortrag' directory
     pushd "%REPO_ROOT%\Vortrag"
 
-    REM Löschen der gleichen temporären Dateien im Zielverzeichnis
-    if "%SHOW_COMMENTS%"=="true" echo REM Cleaning temporary LaTeX files from Vortrag directory
-    
     if exist *.aux del /Q *.aux
     if exist *.log del /Q *.log
     if exist *.lof del /Q *.lof
@@ -186,10 +176,10 @@ if exist "%REPO_ROOT%\Vortrag" (
     if exist *.ps del /Q *.ps
     if exist *.nav del /Q *.nav
     if exist *.snm del /Q *.snm
-    
+
     popd
 ) else (
-    if "%SHOW_COMMENTS%"=="true" echo REM Warning: Vortrag directory not found, skipping
+    if "%SHOW_COMMENTS%"=="true" echo Warning: Vortrag directory not found, skipping.
 )
 
 echo.
