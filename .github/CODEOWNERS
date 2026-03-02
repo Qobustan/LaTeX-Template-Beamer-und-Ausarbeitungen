@@ -1,0 +1,21 @@
+# CODEOWNERS
+# Defines who is responsible for reviewing changes to specific parts of the repo.
+# See: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Global owner – responsible for all files by default
+* @Qobustan
+
+# CI/CD workflows
+.github/workflows/ @Qobustan
+
+# Docker configuration
+Dockerfile @Qobustan
+.dockerignore @Qobustan
+
+# LaTeX templates (core template files)
+Vortrag/header*.tex @Qobustan
+Ausarbeitung/header*.tex @Qobustan
+
+# Build scripts
+scripts/ @Qobustan
+cleanup/ @Qobustan

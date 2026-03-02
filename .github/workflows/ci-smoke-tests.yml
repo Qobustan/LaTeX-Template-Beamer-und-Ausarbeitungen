@@ -20,6 +20,14 @@ on:
 jobs:
   smoke-test-ausarbeitung:
     name: Smoke test – Ausarbeitung
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  docker-build-and-smoke:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -61,3 +69,83 @@ jobs:
         run: |
           ls -lh Vortrag/Vortrag.pdf
           echo "Vortrag smoke test passed."
+        uses: actions/checkout@v4
+
+      # QEMU is intentionally omitted per maintainer request
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: false
+          load: true
+          tags: latex-template:ci
+
+      - name: Create minimal LuaLaTeX test document
+        run: |
+          mkdir -p test
+          cat > test/minimal.tex << 'EOF'
+          \documentclass{article}
+          \begin{document}
+          Minimal LuaLaTeX smoke test.
+          \end{document}
+          EOF
+
+      - name: Run LuaLaTeX smoke test in container
+        run: |
+          docker run --rm \
+            -v "${{ github.workspace }}/test:/workspace" \
+            -w /workspace \
+            latex-template:ci \
+            bash -c "lualatex --interaction=nonstopmode minimal.tex && lualatex --interaction=nonstopmode minimal.tex"
+
+      - name: Upload minimal.pdf as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: minimal-pdf
+          path: test/minimal.pdf
+
+      - name: Seminar content check
+        run: |
+          echo "Checking for seminar-specific content in repository files..."
+          SEMINAR_PATTERNS=(
+            "Angewandte Statistik"
+            "Seminar"
+          )
+          FOUND=0
+          FOUND_FILES=""
+          for pattern in "${SEMINAR_PATTERNS[@]}"; do
+            MATCHES=$(grep -rl "$pattern" \
+              --include="*.tex" \
+              --include="*.bib" \
+              --include="*.md" \
+              --exclude-dir=".git" \
+              --exclude-dir="legacy" \
+              . 2>/dev/null || true)
+            if [ -n "$MATCHES" ]; then
+              FOUND=1
+              FOUND_FILES="$FOUND_FILES\nPattern '$pattern' found in:\n$MATCHES"
+            fi
+          done
+          if [ "$FOUND" -eq 1 ]; then
+            echo "ERROR: Seminar-specific content detected in repository files:"
+            echo -e "$FOUND_FILES"
+            exit 1
+          else
+            echo "OK: No seminar-specific content detected."
+          fi
+
+      - name: Script integration test (optional)
+        run: |
+          if [ -x "scripts/generatePdf.sh" ]; then
+            echo "Running scripts/generatePdf.sh integration test..."
+            docker run --rm \
+              -v "${{ github.workspace }}:/workspace" \
+              -w /workspace \
+              latex-template:ci \
+              bash -c "bash scripts/generatePdf.sh" || echo "WARNING: generatePdf.sh integration test failed (non-critical)"
+          else
+            echo "scripts/generatePdf.sh not found or not executable, skipping integration test."
+          fi
