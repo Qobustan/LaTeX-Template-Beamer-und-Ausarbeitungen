@@ -1,10 +1,6 @@
-# Contributing to the Latex Template project (based on the Seminar: Angewandte Statistik 2025).
-# (An generalized template with workflows and a good worked out project template with a presentation and a script.)
+# Contributing to the LaTeX Template (Beamer Presentations and Written Elaborations)
 
-(We decided not to take the full document here, since it would make the repository too heavy to be able to use it correctly.
-So this is supposed to get provided in an other repository.)
-
-Thank you for your interest in contributing to this new template project effort!
+Thank you for your interest in contributing to this LaTeX template project!
 This document provides guidelines and information for contributors.
 
 ## Table of Contents
@@ -23,7 +19,7 @@ This document provides guidelines and information for contributors.
 Before contributing, ensure you have the following installed:
 
 - **TeX Live** (or MiKTeX on Windows) - LaTeX distribution
-  - `pdflatex` - PDF generation
+  - `pdflatex` or `lualatex` - PDF generation
   - `bibtex` or `biber` - Bibliography management
   - `latexmk` - Automated LaTeX building (recommended)
 - **Git** - Version control
@@ -39,12 +35,12 @@ For detailed installation instructions, see:
 1. Fork the repository on GitHub
 2. Clone your fork locally:
    ```bash
-   git clone https://github.com/YOUR_USERNAME/Seminar-Angewandte-Statistik-2025.git
-   cd Seminar-Angewandte-Statistik-2025
+   git clone https://github.com/YOUR_USERNAME/LaTeX-Template-Beamer-und-Ausarbeitungen.git
+   cd LaTeX-Template-Beamer-und-Ausarbeitungen
    ```
 3. Add the upstream repository as a remote:
    ```bash
-   git remote add upstream https://github.com/Qobustan/Seminar-Angewandte-Statistik-2025.git
+   git remote add upstream https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen.git
    ```
 4. Verify your LaTeX installation:
    ```bash
@@ -72,16 +68,19 @@ For detailed installation instructions, see:
 1. Make your changes to the LaTeX files
 2. Test locally by building the PDFs:
    ```bash
-   # Using the provided script
+   # Using the provided script (default: pdflatex)
    ./scripts/generatePdf.sh
-   
+
+   # Using LuaLaTeX
+   ./scripts/generatePdf.sh --engine lualatex
+
    # Or using latexmk directly
    cd Ausarbeitung
    latexmk -pdf Ausarbeitung.tex
    ```
 3. Clean up temporary files:
    ```bash
-   ./cleanup/Remove_Junk_Linux.sh  # On Linux/macOS
+   ./cleanup/Remove_Junk_Linux.sh   # On Linux/macOS
    ./cleanup/Remove_Junk_Windows.bat  # On Windows
    ```
 
@@ -118,16 +117,21 @@ Please follow these conventions when contributing LaTeX code:
 
 - **`Ausarbeitung/`** - Written elaboration
   - `Ausarbeitung.tex` - Main document
-  - `header.tex` - Preamble and package configuration
+  - `header.tex` - Dispatcher (loads `header-common` + `header-article`)
+  - `header-common.tex` - Common packages (shared with Vortrag)
+  - `header-article.tex` - Article-specific packages
   - `Ausarbeitung.bib` - Bibliography
 - **`Vortrag/`** - Beamer presentation
   - `Vortrag.tex` - Main presentation
-  - `header.tex` - Preamble and theme configuration
+  - `header.tex` - Dispatcher (loads `header-common` + `header-beamer`)
+  - `header-common.tex` - Common packages (shared with Ausarbeitung)
+  - `header-beamer.tex` - Beamer-specific packages and theme
   - `Vortrag.bib` - Bibliography
 
 ### LaTeX Best Practices
 
-1. **Packages**: Add new packages to `header.tex`, not in the main document
+1. **Packages**: Add new packages to the appropriate header file (`header-common.tex`,
+   `header-beamer.tex`, or `header-article.tex`), not in the main document
 2. **Bibliography**: Use BibTeX format, maintain alphabetical order
 3. **Cross-references**: Use `\label{}` and `\ref{}` consistently
 4. **Figures**: Place figures in appropriate directories, use meaningful filenames
@@ -224,35 +228,27 @@ Write clear, descriptive commit messages:
 ### Examples
 
 ```
-feat: add kernel density estimation section to Ausarbeitung
+feat: add modular header system for Vortrag and Ausarbeitung
 
-- Added mathematical derivation
-- Included practical examples
-- Added references to Rosenblatt (1956)
-
-docs: update README with Docker build instructions
+docs: update README with LuaLaTeX build instructions
 
 fix: correct bibtex citation format in bibliography
 ```
-
-### Reporting
-
-If you experience or witness unacceptable behavior, please contact the repository maintainer through GitHub.
 
 ## Questions?
 
 If you have questions about contributing:
 
-1. Check the [FAQ in the Wiki](https://github.com/Qobustan/Seminar-Angewandte-Statistik-2025/wiki/FAQ)
+1. Check the [Wiki](https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen/wiki)
 2. Create an issue with the `question` label
 
 ## Additional Resources
 
 - [Repository README](README.md)
-- [Project Wiki](https://github.com/Qobustan/Seminar-Angewandte-Statistik-2025/wiki)
+- [Architecture Documentation](docs/ARCHITECTURE.md)
 - [Security Policy](SECURITY.md)
 - [LaTeX Installation Guides](latex_install/)
 
 ---
 
-Thank you for being part and contributing to this new template project effort!
+Thank you for contributing to this LaTeX template project!
