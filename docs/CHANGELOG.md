@@ -42,6 +42,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- CI smoke-test workflow (`.github/workflows/ci-smoke-tests.yml`) using Docker Buildx
+  (without QEMU) to build the image, compile a minimal LuaLaTeX document, and run a
+  seminar-content scan.
+- Minimal LuaLaTeX test document (`test/minimal.tex`) compiled in CI and published
+  as a build artefact.
+- `RELEASE_NOTES_TEMPLATE.md` – template for writing structured release notes.
+- This `CHANGELOG.md` file.
 - CI smoke tests workflow (`.github/workflows/ci-smoke-tests.yml`): Docker build without QEMU, LuaLaTeX smoke test, seminar content check, and optional `generatePdf.sh` integration test.
 - `docs/CHANGELOG.md`: This changelog file following Keep a Changelog conventions.
 - `RELEASE_NOTES_TEMPLATE.md`: Reusable template for GitHub release notes.
