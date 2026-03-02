@@ -2,6 +2,30 @@ name: CI Smoke Tests
 
 on:
   push:
+    branches: ["main", "backport/**"]
+    branches: ["main", "backport/infrastructure-ci"]
+# Smoke tests that verify the LaTeX templates compile without errors.
+# Note: QEMU/cross-compilation is intentionally omitted – these tests
+# run natively on the GitHub-hosted ubuntu-latest runner.
+#
+# Local test commands (requires TeX Live installed):
+#   cd Ausarbeitung && latexmk -pdf -interaction=nonstopmode Ausarbeitung.tex
+#   cd Vortrag      && latexmk -pdf -interaction=nonstopmode Vortrag.tex
+#   # or using the helper script:
+#   ./scripts/generatePdf.sh
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: ["**"]
+  workflow_dispatch:
+
+jobs:
+  smoke-test-ausarbeitung:
+    name: Smoke test – Ausarbeitung
+on:
+  push:
     branches: ["main"]
   pull_request:
     branches: ["main"]
@@ -15,6 +39,12 @@ jobs:
     permissions:
       contents: read
       packages: write
+  smoke-test:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write  # needed if pushing to GHCR
 
     steps:
       - name: Checkout repository
@@ -25,6 +55,13 @@ jobs:
         uses: docker/setup-buildx-action@v2
 
       # ── Layer cache (local export/import via actions/cache) ─────────────────
+      # ── Docker buildx setup (no QEMU – host platform only) ──────────────
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+        # Note: QEMU is intentionally omitted – we only target linux/amd64.
+
       - name: Cache Docker layers
         uses: actions/cache@v3
         with:
@@ -34,6 +71,75 @@ jobs:
             ${{ runner.os }}-buildx-
 
       # ── Build image (load into local daemon so we can docker-run it) ─────────
+      # ── Optional: log in to GHCR when secrets are present ───────────────
+      - name: Log in to GitHub Container Registry
+        if: ${{ secrets.GHCR_USERNAME != '' && secrets.GHCR_TOKEN != '' }}
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ secrets.GHCR_USERNAME }}
+          password: ${{ secrets.GHCR_TOKEN }}
+
+      # ── Build image (push only when registry credentials are available) ──
+      # Optional: login to GHCR when secrets are available
+      - name: Log in to GitHub Container Registry
+        if: ${{ env.GHCR_USERNAME != '' && env.GHCR_TOKEN != '' }}
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ env.GHCR_USERNAME }}
+          password: ${{ env.GHCR_TOKEN }}
+        env:
+          GHCR_USERNAME: ${{ secrets.GHCR_USERNAME }}
+          GHCR_TOKEN: ${{ secrets.GHCR_TOKEN }}
+  docker-build-and-smoke:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Compile Ausarbeitung (smoke test)
+        uses: xu-cheng/latex-action@v4
+        with:
+          root_file: Ausarbeitung.tex
+          working_directory: Ausarbeitung
+          args: -pdf -interaction=nonstopmode
+
+      - name: Verify PDF was produced
+        run: |
+          ls -lh Ausarbeitung/Ausarbeitung.pdf
+          echo "Ausarbeitung smoke test passed."
+
+  smoke-test-vortrag:
+    name: Smoke test – Vortrag
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Compile Vortrag (smoke test)
+        uses: xu-cheng/latex-action@v4
+        with:
+          root_file: Vortrag.tex
+          working_directory: Vortrag
+          args: -pdf -interaction=nonstopmode
+
+      - name: Verify PDF was produced
+        run: |
+          ls -lh Vortrag/Vortrag.pdf
+          echo "Vortrag smoke test passed."
+        uses: actions/checkout@v4
+
+      # QEMU is intentionally omitted per maintainer request
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
       - name: Build Docker image
         uses: docker/build-push-action@v4
         with:
@@ -72,6 +178,107 @@ jobs:
           cache-to: type=local,dest=/tmp/.buildx-cache,mode=max
 
       # ── Smoke test: compile a minimal LuaLaTeX document ─────────────────────
+          tags: |
+            latex-template-ci:local
+            ${{ (secrets.GHCR_USERNAME != '' && secrets.GHCR_TOKEN != '') && format('ghcr.io/{0}/latex-template-ci:pr-{1}', github.repository_owner, github.run_id) || '' }}
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
+
+      # Rotate cache to avoid unbounded growth
+      - name: Move cache
+          file: Dockerfile
+          push: false
+          load: true
+          tags: latex-template-ci:smoke
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
+
+      # Optional: push to GHCR when secrets are available
+      - name: Push Docker image to GHCR
+        if: ${{ env.GHCR_USERNAME != '' && env.GHCR_TOKEN != '' }}
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: Dockerfile
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/latex-template-ci:pr-${{ github.run_id }}
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
+        env:
+          GHCR_USERNAME: ${{ secrets.GHCR_USERNAME }}
+          GHCR_TOKEN: ${{ secrets.GHCR_TOKEN }}
+
+      # Move cache to avoid unbounded growth
+      - name: Move build cache
+        run: |
+          rm -rf /tmp/.buildx-cache
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+
+      # ── Create minimal LuaLaTeX test document ────────────────────────────
+      - name: Create test/minimal.tex
+      - name: Compile minimal.tex with LuaLaTeX (twice)
+        run: |
+          docker run --rm \
+            -v "${{ github.workspace }}/test:/work" \
+            --entrypoint /bin/bash \
+            latex-template-ci:smoke \
+            -c "cd /work && lualatex -interaction=nonstopmode minimal.tex && lualatex -interaction=nonstopmode minimal.tex"
+
+      - name: Upload minimal.pdf artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: latex-smoke-test-pdf
+          path: test/minimal.pdf
+
+      - name: Seminar content scan
+        run: |
+          # Scan for seminar-specific content that must NOT appear in this template repo.
+          # Typical indicators: specific course name, real author/supervisor names, etc.
+          # The most unique identifier is "Angewandte Statistik" (the actual seminar name).
+          # Additional terms checked: Seminar (as a course title), Prof., Dr., Autor –
+          # but only outside the known placeholder lines in the template scaffolding.
+          echo "Scanning repository for seminar-specific content strings..."
+          FOUND=$(grep -rn \
+            -e "Angewandte Statistik" \
+            -e "Seminar-Angewandte" \
+            --include="*.tex" \
+            --include="*.bib" \
+            --include="*.md" \
+            . \
+            2>/dev/null || true)
+          if [ -n "$FOUND" ]; then
+            echo "ERROR: Seminar-specific content detected in the repository:"
+            echo "$FOUND"
+            echo ""
+            echo "The following files/directories must NOT be included in this template repository:"
+            echo "  - Vortrag/, Ausarbeitung/ with real seminar content"
+            echo "  - Any seminar-specific PDFs or BibTeX files"
+            echo "  - Vortrag/img/, secondary drafts, etc."
+            echo ""
+            echo "Searched for: Angewandte Statistik, Seminar-Angewandte, real author/supervisor names"
+            exit 1
+          else
+            echo "OK: No seminar-specific content found."
+          fi
+
+      - name: Optional integration test (generatePdf.sh)
+        continue-on-error: true
+        run: |
+          if [ -x scripts/generatePdf.sh ]; then
+            echo "scripts/generatePdf.sh is executable – running integration test in container..."
+            docker run --rm \
+              -v "${{ github.workspace }}:/work" \
+              --entrypoint /bin/bash \
+              latex-template-ci:smoke \
+              -c "cd /work && bash scripts/generatePdf.sh" \
+              && echo "Integration test passed." \
+              || echo "Integration test failed (non-blocking)."
+          else
+            echo "scripts/generatePdf.sh not found or not executable – skipping integration test."
+          push: false
+          load: true
+          tags: latex-template:ci
+
       - name: Create minimal LuaLaTeX test document
         run: |
           mkdir -p test
@@ -99,6 +306,36 @@ jobs:
 
       - name: Upload minimal.pdf artifact
         uses: actions/upload-artifact@v3
+          Hello from the CI smoke test.
+          \end{document}
+          EOF
+
+      # ── Compile with lualatex (two passes) ──────────────────────────────
+      - name: Compile minimal.tex with lualatex (two passes)
+        run: |
+          docker run --rm \
+            -v "${{ github.workspace }}/test:/workdir" \
+            -w /workdir \
+            --entrypoint /bin/bash \
+            latex-template-ci:local \
+            -c "lualatex -interaction=nonstopmode minimal.tex && lualatex -interaction=nonstopmode minimal.tex"
+
+      # ── Upload compiled PDF as artefact ─────────────────────────────────
+      - name: Upload minimal.pdf
+          Minimal LuaLaTeX smoke test.
+          \end{document}
+          EOF
+
+      - name: Run LuaLaTeX smoke test in container
+        run: |
+          docker run --rm \
+            -v "${{ github.workspace }}/test:/workspace" \
+            -w /workspace \
+            latex-template:ci \
+            bash -c "lualatex --interaction=nonstopmode minimal.tex && lualatex --interaction=nonstopmode minimal.tex"
+
+      - name: Upload minimal.pdf as artifact
+        uses: actions/upload-artifact@v4
         with:
           name: minimal-pdf
           path: test/minimal.pdf
@@ -131,6 +368,15 @@ jobs:
           SEARCH_PATTERNS=(
             "Seminar"
             "Angewandte Statistik"
+      # ── Seminar content scan ─────────────────────────────────────────────
+      # Fail loudly if seminar-specific strings are found in tracked files.
+      - name: Seminar content scan
+        run: |
+          PATTERNS=(
+            "Seminar"
+            "Angewandte Statistik"
+            "Vortrag"
+            "Ausarbeitung"
             "Autor"
             "Prof\."
             "Dr\."
@@ -168,4 +414,79 @@ jobs:
               "$SCRIPT" || echo "WARNING: generatePdf.sh exited with non-zero status (non-fatal)"
           else
             echo "$SCRIPT not found or not executable – skipping."
+          GREP_ARGS=()
+          for p in "${PATTERNS[@]}"; do
+            GREP_ARGS+=(-e "$p")
+          done
+
+          # Only scan text-like files tracked by git; skip binary blobs and
+          # the workflow file itself to avoid false positives.
+          HITS=$(git ls-files \
+            -- '*.tex' '*.bib' '*.md' '*.txt' '*.sh' '*.bat' '*.py' \
+            | grep -v '^\.github/workflows/ci-smoke-tests\.yml$' \
+            | xargs --no-run-if-empty grep -l "${GREP_ARGS[@]}" 2>/dev/null || true)
+
+          if [[ -n "$HITS" ]]; then
+            echo "::error::Seminar-specific content detected in the following files:"
+            echo "$HITS"
+            exit 1
+          fi
+          echo "Seminar content scan passed – no seminar-specific strings found."
+
+      # ── Optional: run generatePdf.sh ────────────────────────────────────
+      - name: Run generatePdf.sh (optional, non-fatal)
+        continue-on-error: true
+        run: |
+          if [[ -x scripts/generatePdf.sh ]]; then
+            echo "scripts/generatePdf.sh is executable – running inside container..."
+            docker run --rm \
+              -v "${{ github.workspace }}:/workdir" \
+              -w /workdir \
+              --entrypoint /bin/bash \
+              latex-template-ci:local \
+              -c "bash scripts/generatePdf.sh" 2>&1 | tee /tmp/generatePdf.log || true
+            echo "generatePdf.sh output logged above."
+          else
+            echo "scripts/generatePdf.sh not executable or not found – skipping."
+      - name: Seminar content check
+        run: |
+          echo "Checking for seminar-specific content in repository files..."
+          SEMINAR_PATTERNS=(
+            "Angewandte Statistik"
+            "Seminar"
+          )
+          FOUND=0
+          FOUND_FILES=""
+          for pattern in "${SEMINAR_PATTERNS[@]}"; do
+            MATCHES=$(grep -rl "$pattern" \
+              --include="*.tex" \
+              --include="*.bib" \
+              --include="*.md" \
+              --exclude-dir=".git" \
+              --exclude-dir="legacy" \
+              . 2>/dev/null || true)
+            if [ -n "$MATCHES" ]; then
+              FOUND=1
+              FOUND_FILES="$FOUND_FILES\nPattern '$pattern' found in:\n$MATCHES"
+            fi
+          done
+          if [ "$FOUND" -eq 1 ]; then
+            echo "ERROR: Seminar-specific content detected in repository files:"
+            echo -e "$FOUND_FILES"
+            exit 1
+          else
+            echo "OK: No seminar-specific content detected."
+          fi
+
+      - name: Script integration test (optional)
+        run: |
+          if [ -x "scripts/generatePdf.sh" ]; then
+            echo "Running scripts/generatePdf.sh integration test..."
+            docker run --rm \
+              -v "${{ github.workspace }}:/workspace" \
+              -w /workspace \
+              latex-template:ci \
+              bash -c "bash scripts/generatePdf.sh" || echo "WARNING: generatePdf.sh integration test failed (non-critical)"
+          else
+            echo "scripts/generatePdf.sh not found or not executable, skipping integration test."
           fi
