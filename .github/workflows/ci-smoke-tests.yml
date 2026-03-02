@@ -1,0 +1,171 @@
+name: CI Smoke Tests
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+env:
+  IMAGE_NAME: latex-template-ci
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ── Docker Buildx setup (no QEMU – host architecture only) ──────────────
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      # ── Layer cache (local export/import via actions/cache) ─────────────────
+      - name: Cache Docker layers
+        uses: actions/cache@v3
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+
+      # ── Build image (load into local daemon so we can docker-run it) ─────────
+      - name: Build Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: false
+          load: true
+          tags: ${{ env.IMAGE_NAME }}:ci
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
+
+      # Rotate cache so old entries are not accumulated indefinitely
+      - name: Move cache
+        run: |
+          rm -rf /tmp/.buildx-cache
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+
+      # ── Optional: push to GHCR when registry credentials are available ───────
+      - name: Log in to GHCR (optional)
+        id: ghcr-login
+        if: github.event_name == 'push'
+        continue-on-error: true
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ secrets.GHCR_USERNAME }}
+          password: ${{ secrets.GHCR_TOKEN }}
+
+      - name: Push image to GHCR (optional)
+        if: github.event_name == 'push' && steps.ghcr-login.outcome == 'success'
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/latex-template-ci:pr-${{ github.run_id }}
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache,mode=max
+
+      # ── Smoke test: compile a minimal LuaLaTeX document ─────────────────────
+      - name: Create minimal LuaLaTeX test document
+        run: |
+          mkdir -p test
+          cat > test/minimal.tex << 'EOF'
+          \documentclass{article}
+          \begin{document}
+          Hello, LuaLaTeX smoke test!
+          \end{document}
+          EOF
+
+      - name: Run lualatex twice in container
+        run: |
+          docker run --rm \
+            -v "${{ github.workspace }}/test:/work" \
+            -w /work \
+            --entrypoint lualatex \
+            ${{ env.IMAGE_NAME }}:ci \
+            -interaction=nonstopmode minimal.tex
+          docker run --rm \
+            -v "${{ github.workspace }}/test:/work" \
+            -w /work \
+            --entrypoint lualatex \
+            ${{ env.IMAGE_NAME }}:ci \
+            -interaction=nonstopmode minimal.tex
+
+      - name: Upload minimal.pdf artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: minimal-pdf
+          path: test/minimal.pdf
+
+      # ── Seminar content scan (new/changed files only) ───────────────────────
+      - name: Scan for seminar-specific content
+        run: |
+          echo "Scanning changed files for seminar-specific strings..."
+
+          # Determine the set of changed files depending on the event type
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            BASE_REF="${{ github.base_ref }}"
+            git fetch origin "$BASE_REF" --depth=1
+            CHANGED_FILES=$(git diff --name-only "origin/$BASE_REF"...HEAD \
+              -- '*.tex' '*.md' '*.txt' 2>/dev/null || true)
+          else
+            CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD \
+              -- '*.tex' '*.md' '*.txt' 2>/dev/null || true)
+          fi
+
+          if [ -z "$CHANGED_FILES" ]; then
+            echo "No relevant changed files to scan."
+            exit 0
+          fi
+
+          echo "Files being scanned:"
+          echo "$CHANGED_FILES"
+          echo ""
+
+          SEARCH_PATTERNS=(
+            "Seminar"
+            "Angewandte Statistik"
+            "Autor"
+            "Prof\."
+            "Dr\."
+            "Dozent"
+          )
+          FOUND=0
+          while IFS= read -r file; do
+            [ -f "$file" ] || continue
+            for pattern in "${SEARCH_PATTERNS[@]}"; do
+              if grep -In "$pattern" "$file" 2>/dev/null; then
+                echo "  MATCH in $file for pattern: $pattern"
+                FOUND=1
+              fi
+            done
+          done <<< "$CHANGED_FILES"
+
+          if [ "$FOUND" -eq 1 ]; then
+            echo ""
+            echo "ERROR: Seminar-specific content detected in changed files. Remove it before merging."
+            exit 1
+          fi
+          echo "No seminar-specific content found in changed files."
+
+      # ── Optional: run generatePdf.sh if present and executable ──────────────
+      - name: Run generatePdf.sh (optional, non-fatal)
+        run: |
+          SCRIPT="./scripts/generatePdf.sh"
+          if [ -x "$SCRIPT" ]; then
+            echo "Running $SCRIPT inside container..."
+            docker run --rm \
+              -v "${{ github.workspace }}:/repo" \
+              -w /repo \
+              --entrypoint /bin/bash \
+              ${{ env.IMAGE_NAME }}:ci \
+              "$SCRIPT" || echo "WARNING: generatePdf.sh exited with non-zero status (non-fatal)"
+          else
+            echo "$SCRIPT not found or not executable – skipping."
+          fi
