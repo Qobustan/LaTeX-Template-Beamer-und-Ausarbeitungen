@@ -1,12 +1,9 @@
-# ==============================================================================
-# .gitignore
-# ==============================================================================
-
 # -----------------------
 # LaTeX auxiliary files
 # -----------------------
-# These files are currently tracked in the repository as examples.
-# Uncomment these lines to ignore them in your fork/copy.
+# Note: These files are currently checked into the repository but are listed
+# here as information for users. They can be cleaned using cleanup scripts.
+# Uncomment these lines if you want to ignore these files in your local repo.
 #
 # *.aux
 # *.lof
@@ -37,7 +34,6 @@
 # *.fdb_latexmk
 # *.run.xml
 # *.auxlock
-# *-blx.bib
 
 # -----------------------
 # Output / build folders
@@ -45,6 +41,45 @@
 build/
 out/
 dist/
+# *.zip
+
+# If you don't want to track generated PDFs in the repo:
+# seminar_skript.pdf
+# seminar_presentation.pdf
+# # *.pdf
+
+# -----------------------
+# Images / binaries that may be large
+# -----------------------
+# *.eps~
+# *.svg~
+# *.ai~
+# *.psd
+# *.xcf
+
+# -----------------------
+# Gradle / Java artifacts
+# -----------------------
+.gradle/
+.gradle-cache/
+gradle-app.setting
+/.settings/
+# keep gradle wrapper files in repo (gradlew, gradle/wrapper/# *# *)
+
+# -----------------------
+# Editors / OS
+# -----------------------
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+# *.iml
+# *.swp
+
+# TeXstudio specific
+# *.txs-profile
+# *.txs-undo
+legacy/debug
 
 # -----------------------
 # Python
@@ -54,41 +89,5 @@ __pycache__/
 *$py.class
 *.so
 .Python
-*.egg-info/
-.eggs/
-*.egg
-venv/
-env/
-.venv/
 
-# -----------------------
-# Node.js (if any tools use it)
-# -----------------------
-node_modules/
-npm-debug.log*
-
-# -----------------------
-# Editors / IDEs
-# -----------------------
-.DS_Store
-Thumbs.db
-.vscode/
-.idea/
-*.iml
-*.swp
-*.swo
-*~
-.project
-.settings/
-
-# -----------------------
-# TeXstudio specific
-# -----------------------
-*.txs-profile
-*.txs-undo
-
-# -----------------------
-# Legacy / debug
-# -----------------------
-legacy/debug
-
+*.backup

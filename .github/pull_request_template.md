@@ -1,34 +1,78 @@
-## Pull Request Description
+## Description
 
-### What does this PR do?
+<!-- Provide a clear and concise description of your changes -->
 
-<!-- Briefly describe the changes you made -->
+## Type of Change
 
-### Why is this change needed?
+<!-- Mark the relevant option with an "x" -->
 
-<!-- Explain the motivation for this change -->
+- [ ] 📝 Documentation update
+- [ ] 🐛 Bug fix (non-breaking change that fixes an issue)
+- [ ] ✨ New feature (non-breaking change that adds functionality)
+- [ ] 💥 Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] 🔧 Configuration change (workflow, Docker, scripts)
+- [ ] 🎨 Style/formatting change (LaTeX formatting, code style)
+- [ ] ♻️ Refactoring (no functional changes)
+- [ ] 📚 Bibliography update
 
-### Type of change
+## Changes Made
 
-- [ ] Bug fix
-- [ ] New feature
-- [ ] Documentation update
-- [ ] Refactoring (no functional change)
-- [ ] CI/CD improvement
-- [ ] Other: <!-- describe -->
+<!-- List the specific changes you made -->
 
-### Checklist
+- 
+- 
+- 
 
-- [ ] The LaTeX documents compile without errors (`./scripts/generatePdf.sh`)
-- [ ] Temporary build files are cleaned up (`./cleanup/Remove_Junk_Linux.sh`)
-- [ ] New packages/dependencies are documented in the README
-- [ ] Spell check passes (if applicable)
-- [ ] Changes are self-reviewed
+## Related Issues
 
-### Testing
+<!-- Link any related issues using #issue_number -->
 
-<!-- How did you test this change? -->
+Fixes #
+Related to #
 
-### Related Issues
+## Testing
 
-<!-- Link to related issues: Closes #<issue_number> -->
+<!-- Describe how you tested your changes -->
+
+### Build Testing
+- [ ] Ausarbeitung.pdf builds successfully with pdflatex
+- [ ] Vortrag.pdf builds successfully with pdflatex
+- [ ] Tested with LuaLaTeX (if applicable)
+- [ ] Docker build succeeds (if applicable)
+
+### Quality Checks
+- [ ] LaTeX linting passes (chktex)
+- [ ] Spell check passes (cspell)
+- [ ] Bibliography compiles without errors
+- [ ] No warnings in LaTeX compilation logs
+- [ ] Visual inspection of generated PDFs
+
+### Manual Testing
+<!-- Describe any manual testing you performed -->
+
+
+## Screenshots (if applicable)
+
+<!-- Add screenshots of PDF output if your changes affect visual appearance -->
+
+
+## Checklist
+
+<!-- Mark completed items with an "x" -->
+
+- [ ] My changes follow the project's coding conventions
+- [ ] I have updated the documentation accordingly
+- [ ] I have added/updated citations where necessary
+- [ ] My changes generate no new warnings
+- [ ] I have cleaned up temporary LaTeX auxiliary files
+- [ ] I have tested my changes locally
+- [ ] My commit messages are clear and descriptive
+
+## Additional Notes
+
+<!-- Add any additional information, context, or notes for reviewers -->
+
+
+## Reviewer Notes
+
+<!-- This section is for reviewers - leave empty when submitting -->
