@@ -265,8 +265,8 @@ Temporary LaTeX files (.aux, .log, .toc, .synctex.gz, etc.) are removed by:
 
 1. **Clone repository**
    ```bash
-   git clone https://github.com/Qobustan/Seminar-Angewandte-Statistik-2025.git
-   cd Seminar-Angewandte-Statistik-2025
+   git clone https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen.git
+   cd LaTeX-Template-Beamer-und-Ausarbeitungen
    ```
 
 2. **Install prerequisites**

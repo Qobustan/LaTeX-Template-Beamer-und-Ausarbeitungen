@@ -181,7 +181,7 @@ git push origin feature/my-changes
 
 ```bash
 # Add upstream remote (once)
-git remote add upstream https://github.com/Qobustan/Seminar-Angewandte-Statistik-2025.git
+git remote add upstream https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen.git
 
 # Fetch and merge updates
 git fetch upstream
@@ -289,7 +289,7 @@ Typically **2-5 minutes** depending on:
 
 ### Where can I see build logs?
 
-1. Go to [Actions tab](https://github.com/Qobustan/Seminar-Angewandte-Statistik-2025/actions)
+1. Go to [Actions tab](https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen/actions)
 2. Click on the workflow run
 3. Expand steps to view logs
 
@@ -358,7 +358,7 @@ No! Contributions welcome at all levels:
 
 ### How do I report a bug?
 
-1. Check [existing issues](https://github.com/Qobustan/Seminar-Angewandte-Statistik-2025/issues)
+1. Check [existing issues](https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen/issues)
 2. Use the bug report template
 3. Include:
    - Clear description
@@ -392,7 +392,7 @@ Be patient and feel free to ping if no response after a week.
 ## Still Have Questions?
 
 - 📖 Check the [wiki documentation](Home.md)
-- 🐛 Search [existing issues](https://github.com/Qobustan/Seminar-Angewandte-Statistik-2025/issues)
+- 🐛 Search [existing issues](https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen/issues)
 - 💬 Create a new issue with the "question" label
 - 📧 Contact the maintainers
 

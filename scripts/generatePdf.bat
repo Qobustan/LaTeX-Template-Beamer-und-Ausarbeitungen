@@ -26,8 +26,7 @@ if "%LATEX_ENGINE%"=="lualatex" goto :engine_ok
 
 echo Error: Invalid LATEX_ENGINE '%LATEX_ENGINE%'
 echo Supported engines: pdflatex, lualatex
-echo Defaulting to pdflatex for backwards compatibility
-set LATEX_ENGINE=pdflatex
+exit /b 1
 
 :engine_ok
 echo Using LaTeX engine: %LATEX_ENGINE%

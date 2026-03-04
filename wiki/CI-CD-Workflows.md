@@ -20,7 +20,7 @@ The project includes several automated workflows for:
 
 **File**: `.github/workflows/build-and-publish-pdfs.yml`
 
-**Badge**: [![Build all LaTeX projects](https://github.com/Qobustan/Seminar-Angewandte-Statistik-2025/actions/workflows/build-and-publish-pdfs.yml/badge.svg)](https://github.com/Qobustan/Seminar-Angewandte-Statistik-2025/actions/workflows/build-and-publish-pdfs.yml)
+**Badge**: [![Build all LaTeX projects](https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen/actions/workflows/build-and-publish-pdfs.yml/badge.svg)](https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen/actions/workflows/build-and-publish-pdfs.yml)
 
 #### Triggers
 
@@ -357,7 +357,7 @@ This workflow uses the **built-in `GITHUB_TOKEN`** — no personal access tokens
 
 #### Accessing the Wiki
 
-Visit the repository's [Wiki tab](https://github.com/Qobustan/Seminar-Angewandte-Statistik-2025/wiki) to view the published documentation.
+Visit the repository's [Wiki tab](https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen/wiki) to view the published documentation.
 
 ---
 
@@ -393,7 +393,7 @@ When GitHub Advanced Security is later enabled for this repository, the SARIF up
 
 #### Accessing Results
 
-1. Go to the [Actions tab](https://github.com/Qobustan/Seminar-Angewandte-Statistik-2025/actions)
+1. Go to the [Actions tab](https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen/actions)
 2. Select a CodeQL workflow run
 3. Download the `codeql-sarif-python` artifact under "Artifacts"
 4. Open the `.sarif` file with a SARIF viewer (e.g., the [VS Code SARIF extension](https://marketplace.visualstudio.com/items?itemName=MS-SarifVSCode.sarif-viewer))
@@ -402,7 +402,7 @@ When GitHub Advanced Security is later enabled for this repository, the SARIF up
 
 View the status of all workflows:
 
-1. Go to the [Actions tab](https://github.com/Qobustan/Seminar-Angewandte-Statistik-2025/actions)
+1. Go to the [Actions tab](https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen/actions)
 2. Select a workflow to view runs
 3. Click on a specific run to see detailed logs
 

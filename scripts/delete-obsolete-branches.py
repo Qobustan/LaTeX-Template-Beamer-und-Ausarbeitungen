@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: MIT
 # SPDX-FileCopyrightText: 2026 Yavuzâlp Dal
 """
-Script to delete obsolete branches from the Seminar-Angewandte-Statistik-2025 repository.
+Script to delete obsolete branches from the LaTeX-Template-Beamer-und-Ausarbeitungen repository.
 
 This script uses the GitHub API to delete branches that are no longer needed.
 Requires: PyGithub (install with: pip install PyGithub)
@@ -23,7 +23,7 @@ except ImportError:
 
 # Repository details
 REPO_OWNER = "Qobustan"
-REPO_NAME = "Seminar-Angewandte-Statistik-2025"
+REPO_NAME = "LaTeX-Template-Beamer-und-Ausarbeitungen"
 
 # Branches to keep (main branch and active PRs)
 BRANCHES_TO_KEEP = [

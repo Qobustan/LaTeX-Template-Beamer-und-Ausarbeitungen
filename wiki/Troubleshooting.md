@@ -541,7 +541,7 @@ git push
 ### Build Workflow Fails
 
 **Check logs**:
-1. Go to [Actions tab](https://github.com/Qobustan/Seminar-Angewandte-Statistik-2025/actions)
+1. Go to [Actions tab](https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen/actions)
 2. Click failed run
 3. Expand failed step
 
@@ -674,7 +674,7 @@ fc-cache -fv
 If your issue isn't covered here:
 
 1. Check the [FAQ](FAQ.md)
-2. Search [existing issues](https://github.com/Qobustan/Seminar-Angewandte-Statistik-2025/issues)
+2. Search [existing issues](https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen/issues)
 3. Review [LaTeX documentation](https://www.latex-project.org/help/documentation/)
 4. Ask on [TeX StackExchange](https://tex.stackexchange.com/)
 5. Create a new issue with detailed information
