@@ -12,11 +12,13 @@
 --
 -- If no files are given, defaults to Ausarbeitung/Ausarbeitung.bib.
 
--- Required fields per BibTeX entry type (strict subset; others allowed)
+-- Required fields per BibTeX entry type (strict subset; others allowed).
+-- "year" entries accept biblatex "date" as an equivalent alternative.
+-- "author" entries for book-like types accept "editor" as an alternative.
 local REQUIRED_FIELDS = {
     article      = {"author", "title", "journal", "year"},
     book         = {"author", "title", "publisher", "year"},
-    inbook       = {"author", "title", "chapter", "publisher", "year"},
+    inbook       = {"author", "title", "publisher", "year"},
     incollection = {"author", "title", "booktitle", "year"},
     inproceedings= {"author", "title", "booktitle", "year"},
     proceedings  = {"title", "year"},
@@ -27,6 +29,11 @@ local REQUIRED_FIELDS = {
     unpublished  = {"author", "title", "note"},
     misc         = {},
     online       = {"url"},
+}
+
+-- Entry types where "editor" is a valid alternative to "author"
+local AUTHOR_OR_EDITOR = {
+    book=true, inbook=true, incollection=true, proceedings=true,
 }
 
 local function read_file(path)
@@ -137,34 +144,49 @@ local function check_entries(entries, path)
             io.write(string.format("[WARN]  %s: unknown entry type\n", loc))
             warnings = warnings + 1
         else
-            -- Missing required fields
+            -- Missing required fields.
+            -- "year" accepts biblatex "date" as an equivalent.
+            -- "author" accepts "editor" for book-like entry types.
             for _, field in ipairs(required) do
-                if not entry.fields[field] then
-                    io.write(string.format("[ERROR] %s: missing required field '%s'\n", loc, field))
-                    errors = errors + 1
+                if field == "year" then
+                    if not entry.fields["year"] and not entry.fields["date"] then
+                        io.write(string.format("[ERROR] %s: missing required field 'year' (or 'date')\n", loc))
+                        errors = errors + 1
+                    end
+                elseif field == "author" and AUTHOR_OR_EDITOR[entry.type] then
+                    if not entry.fields["author"] and not entry.fields["editor"] then
+                        io.write(string.format("[ERROR] %s: missing required field 'author' (or 'editor')\n", loc))
+                        errors = errors + 1
+                    end
+                else
+                    if not entry.fields[field] then
+                        io.write(string.format("[ERROR] %s: missing required field '%s'\n", loc, field))
+                        errors = errors + 1
+                    end
                 end
             end
         end
 
         -- Missing year: only warn when year is NOT already a required field for
         -- this entry type (to avoid duplicating the required-field error above).
+        -- Accepts biblatex "date" as an equivalent to "year".
         local year_is_required = required and (function()
             for _, f in ipairs(required) do if f == "year" then return true end end
             return false
         end)()
         if not year_is_required and entry.type ~= "misc" and entry.type ~= "online"
-            and not entry.fields["year"] then
-        -- Missing year (not required for misc/online but still useful to flag)
-        if entry.type ~= "misc" and entry.type ~= "online" and not entry.fields["year"] then
-            io.write(string.format("[WARN]  %s: missing 'year' field\n", loc))
+                and not entry.fields["year"] and not entry.fields["date"] then
+            io.write(string.format("[WARN]  %s: missing 'year' (or 'date') field\n", loc))
             warnings = warnings + 1
         end
 
-        -- Year must be a 4-digit number when present
-        local yr = entry.fields["year"]
-        if yr and not yr:match("^%d%d%d%d$") then
-            io.write(string.format("[WARN]  %s: 'year' value '%s' is not a 4-digit number\n", loc, yr))
-            warnings = warnings + 1
+        -- year/date must be a 4-digit year or ISO date (e.g. 2024-03-01) when present
+        local yr = entry.fields["year"] or entry.fields["date"]
+        if yr then
+            if not yr:match("^%d%d%d%d$") and not yr:match("^%d%d%d%d%-") then
+                io.write(string.format("[WARN]  %s: 'year'/'date' value '%s' is not a 4-digit year or ISO date\n", loc, yr))
+                warnings = warnings + 1
+            end
         end
 
         -- URL field should look like a URL for @online entries

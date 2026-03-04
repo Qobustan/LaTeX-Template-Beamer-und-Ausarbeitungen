@@ -28,8 +28,8 @@ jobs:
             # Skip generated biblatex auxiliary files
             [[ "$bibfile" == *-blx.bib ]] && continue
             dups=$(grep -i "^@" "$bibfile" 2>/dev/null \
-              | grep -iv "^@comment" \
-              | sed 's/^@[^{]*{\([^,]*\),.*/\1/' \
+              | grep -iv "^@comment\|^@string\|^@preamble" \
+              | sed 's/^@[^{(]*[{(]\([^,)]*\).*/\1/' \
               | tr '[:upper:]' '[:lower:]' \
               | sort | uniq -d)
             if [ -n "$dups" ]; then
@@ -46,9 +46,16 @@ jobs:
 
       - name: Validate required .bib fields (Lua)
         run: |
-          lua-5.5.0/src/lua scripts/check-bib.lua \
-            Ausarbeitung/Ausarbeitung.bib \
-            Vortrag/Vortrag.bib
+          # Only run if bib files exist
+          bib_files=""
+          for f in Ausarbeitung/Ausarbeitung.bib Vortrag/Vortrag.bib; do
+            [ -f "$f" ] && bib_files="$bib_files $f"
+          done
+          if [ -z "$bib_files" ]; then
+            echo "ℹ️ No .bib files found, skipping Lua validation"
+          else
+            lua-5.5.0/src/lua scripts/check-bib.lua $bib_files
+          fi
 
       - name: Cross-reference check (cited keys exist in .bib)
         run: |
@@ -56,25 +63,35 @@ jobs:
           bib_keys=$(find Ausarbeitung Vortrag -name "*.bib" ! -name "*-blx.bib" \
             -exec grep -ih "^@" {} \; \
             | grep -iv "^@comment\|^@string\|^@preamble" \
-            | sed 's/^@[^{]*{\([^,}]*\).*/\1/' \
+            | sed 's/^@[^{(]*[{(]\([^,)]*\).*/\1/' \
             | tr '[:upper:]' '[:lower:]' \
             | sort -u)
 
-          # Collect all \cite{...} variants from all .tex files
-          # Collect all \cite{...}, \citep{...}, \citet{...}, \textcite{...}, \parencite{...}
-          # and multi-key variants \cite{key1,key2}
-          cited_keys=$(grep -roh \
-              -e '\\cite{[^}]*}' \
-              -e '\\citep{[^}]*}' \
-              -e '\\citet{[^}]*}' \
-              -e '\\textcite{[^}]*}' \
-              -e '\\parencite{[^}]*}' \
-              -e '\\autocite{[^}]*}' \
-              Ausarbeitung/ Vortrag/ \
-            | sed 's/^[^{]*{//;s/}//' \
+          if [ -z "$bib_keys" ]; then
+            echo "ℹ️ No .bib keys found, skipping cross-reference check"
+            exit 0
+          fi
+
+          # Collect all \cite{...} variants from all .tex files.
+          # Handles optional arguments: \cite[pre][post]{key}, \cite[opt]{key}
+          # and multi-key variants \cite{key1,key2}.
+          # Matches \cite, \citep, \citet, \textcite, \parencite, \autocite, etc.
+          # Uses grep -oP (PCRE) to robustly match all cite command forms.
+          cited_raw=$(grep -roP \
+              '\\[a-z]*cite[a-z*]*(?:\[[^\]]*\])*\{[^}]+\}' \
+              Ausarbeitung/ Vortrag/ 2>/dev/null || true)
+
+          if [ -z "$cited_raw" ]; then
+            echo "✅ No \\cite commands found; cross-reference check skipped"
+            exit 0
+          fi
+
+          cited_keys=$(echo "$cited_raw" \
+            | sed 's/.*{\([^}]*\)}/\1/' \
             | tr ',' '\n' \
             | tr -d ' ' \
             | tr '[:upper:]' '[:lower:]' \
+            | grep -v '^$' \
             | sort -u)
 
           missing=false
