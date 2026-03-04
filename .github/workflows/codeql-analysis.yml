@@ -37,6 +37,10 @@ jobs:
 
       - name: Autobuild
         uses: github/codeql-action/autobuild@v4
+        # Optionally specify queries to run
+        # queries: security-extended,security-and-quality
+        # Note: For Python, autobuild typically doesn't need to do much
+        # as CodeQL analyzes the source code directly
 
       - name: Perform CodeQL Analysis
         id: codeql_analyze
@@ -47,6 +51,7 @@ jobs:
         uses: github/codeql-action/analyze@v4
         with:
           category: "/language:${{ matrix.language }}"
+          # Save SARIF to a local path so we can always upload it as an artifact
           output: codeql-results
 
       - name: Upload SARIF as artifact

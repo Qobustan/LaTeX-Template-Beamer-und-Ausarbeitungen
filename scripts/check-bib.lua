@@ -154,6 +154,8 @@ local function check_entries(entries, path)
         end)()
         if not year_is_required and entry.type ~= "misc" and entry.type ~= "online"
             and not entry.fields["year"] then
+        -- Missing year (not required for misc/online but still useful to flag)
+        if entry.type ~= "misc" and entry.type ~= "online" and not entry.fields["year"] then
             io.write(string.format("[WARN]  %s: missing 'year' field\n", loc))
             warnings = warnings + 1
         end

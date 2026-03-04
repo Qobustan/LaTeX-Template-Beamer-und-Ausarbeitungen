@@ -35,14 +35,14 @@ Thank you for your interest in contributing to the Seminar: Angewandte Statistik
 
 ```bash
 # Fork the repository on GitHub, then:
-git clone https://github.com/YOUR-USERNAME/Seminar-Angewandte-Statistik-2025.git
-cd Seminar-Angewandte-Statistik-2025
+git clone https://github.com/YOUR-USERNAME/LaTeX-Template-Beamer-und-Ausarbeitungen.git
+cd LaTeX-Template-Beamer-und-Ausarbeitungen
 ```
 
 ### 2. Set Up Upstream
 
 ```bash
-git remote add upstream https://github.com/Qobustan/Seminar-Angewandte-Statistik-2025.git
+git remote add upstream https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen.git
 git fetch upstream
 ```
 
@@ -495,7 +495,7 @@ Any other relevant information
 If you have questions about contributing:
 
 1. Check the [FAQ](FAQ.md)
-2. Review existing [issues and discussions](https://github.com/Qobustan/Seminar-Angewandte-Statistik-2025/issues)
+2. Review existing [issues and discussions](https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen/issues)
 3. Create a new issue with the "question" label
 
 ## Recognition

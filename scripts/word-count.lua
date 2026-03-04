@@ -64,6 +64,11 @@ local function count_words(text)
     -- such as German ä/ö/ü/ß that Lua's %a class does not recognise.
     for _ in stripped:gmatch("%S+") do
         n = n + 1
+    -- Count sequences of non-whitespace characters that contain at least one letter
+    for token in stripped:gmatch("%S+") do
+        if token:match("%a") then
+            n = n + 1
+        end
     end
     return n
 end

@@ -52,7 +52,7 @@ See the [Getting Started Guide](Getting-Started.md) for details.
 
 **Minimum requirements**:
 - PDFLaTeX compiler
-- Biber (bibliography processor)
+- Biber (bibliography processor — this project uses `backend=biber`)
 - Common LaTeX packages (listed in workflow files)
 
 ### Do I need a specific editor?
@@ -90,7 +90,7 @@ Multiple methods:
 # Method 2: latexmk (recommended)
 cd Ausarbeitung && latexmk -pdf Ausarbeitung.tex
 
-# Method 3: Manual
+# Method 3: Manual (this project uses biber backend)
 pdflatex Ausarbeitung.tex
 biber Ausarbeitung
 pdflatex Ausarbeitung.tex
@@ -115,7 +115,7 @@ LaTeX requires multiple passes to resolve:
 
 ### What is latexmk and should I use it?
 
-`latexmk` is a Perl script that automatically runs LaTeX and BibTeX the correct number of times. **Yes, you should use it** - it's the easiest method.
+`latexmk` is a Perl script that automatically runs LaTeX and Biber the correct number of times. **Yes, you should use it** - it's the easiest method.
 
 ```bash
 latexmk -pdf Ausarbeitung.tex
@@ -137,11 +137,14 @@ rm -f *.aux *.log *.out *.bbl *.blg *.bcf *.run.xml
 
 ### Where do I find the generated PDFs?
 
-**Local builds**: In the same directory as the `.tex` file
-- `Ausarbeitung/Ausarbeitung.pdf`
-- `Vortrag/Vortrag.pdf`
+**In the repository** (PDFs are committed directly):
+- `Ausarbeitung/Ausarbeitung.pdf` — 17-page written paper
+- `Vortrag/Vortrag.pdf` — 68-page Beamer presentation (with pause overlays)
+- `Vortrag/Vortrag-Druckversion.pdf` — 51-page print version (without pauses)
 
-**CI/CD builds**: In the `pdfs` branch on GitHub
+**After local builds**: In the same directory as the `.tex` file.
+
+**CI/CD builds**: As GitHub Actions artifacts (available in the Actions tab).
 
 ### The build fails with "Package not found"
 
@@ -178,7 +181,7 @@ git push origin feature/my-changes
 
 ```bash
 # Add upstream remote (once)
-git remote add upstream https://github.com/Qobustan/Seminar-Angewandte-Statistik-2025.git
+git remote add upstream https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen.git
 
 # Fetch and merge updates
 git fetch upstream
@@ -189,17 +192,15 @@ git push origin main
 
 ### Should I commit build artifacts (PDFs, aux files)?
 
-**No!** These are in `.gitignore`:
-- ✅ **DO commit**: `.tex`, `.bib`, scripts, documentation
-- ❌ **DON'T commit**: `.pdf`, `.aux`, `.log`, `.out`, etc.
+In **this project**, yes — build artifacts ARE committed to the repository. The `.gitignore` has LaTeX auxiliary file patterns listed but commented out. This is intentional for this project.
 
-Exception: The `pdfs` branch is specifically for built PDFs.
+- ✅ **DO commit**: `.tex`, `.bib`, `.pdf`, `.aux`, `.bbl`, scripts, documentation
+- ❌ **DON'T commit** (unless intentional): large binary files unrelated to the project
 
 ### What's the difference between the branches?
 
 - **`main`**: Primary development branch
-- **`pdfs`**: Auto-generated PDFs (don't edit manually)
-- **Feature branches**: Temporary branches for development
+- **Feature branches**: Temporary branches for development (merged to main via PRs)
 - **Template branch**: Preserved template (don't merge to main)
 
 See [Project Structure](Project-Structure.md) for details.
@@ -223,14 +224,14 @@ See [Project Structure](Project-Structure.md) for details.
    According to \cite{smith2020}, ...
    ```
 
-3. **Rebuild with Biber**:
+3. **Rebuild**:
    ```bash
    latexmk -pdf Ausarbeitung.tex
    ```
 
 ### Citations aren't showing up
 
-Ensure you're using Biber (not BibTeX):
+Ensure you're using Biber (this project uses `backend=biber`):
 
 **In TeXstudio**:
 - Options → Configure TeXstudio → Build
@@ -239,7 +240,7 @@ Ensure you're using Biber (not BibTeX):
 **Command line**:
 ```bash
 pdflatex Ausarbeitung.tex
-biber Ausarbeitung      # NOT bibtex
+biber Ausarbeitung
 pdflatex Ausarbeitung.tex
 ```
 
@@ -288,7 +289,7 @@ Typically **2-5 minutes** depending on:
 
 ### Where can I see build logs?
 
-1. Go to [Actions tab](https://github.com/Qobustan/Seminar-Angewandte-Statistik-2025/actions)
+1. Go to [Actions tab](https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen/actions)
 2. Click on the workflow run
 3. Expand steps to view logs
 
@@ -324,14 +325,15 @@ latexmk -pdf Ausarbeitung/Ausarbeitung.tex
 lacheck Ausarbeitung/Ausarbeitung.tex
 ```
 
-### How do I download PDFs from the pdfs branch?
+### Where can I find the PDFs directly?
+
+The compiled PDFs are committed directly to the repository in the `main` branch:
 
 ```bash
-# Clone pdfs branch
-git clone -b pdfs https://github.com/Qobustan/Seminar-Angewandte-Statistik-2025.git
-
-# Or download directly
-wget https://raw.githubusercontent.com/Qobustan/Seminar-Angewandte-Statistik-2025/pdfs/Ausarbeitung.pdf
+# Clone the repo and find PDFs in:
+Ausarbeitung/Ausarbeitung.pdf
+Vortrag/Vortrag.pdf
+Vortrag/Vortrag-Druckversion.pdf
 ```
 
 ## Contributing
@@ -356,7 +358,7 @@ No! Contributions welcome at all levels:
 
 ### How do I report a bug?
 
-1. Check [existing issues](https://github.com/Qobustan/Seminar-Angewandte-Statistik-2025/issues)
+1. Check [existing issues](https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen/issues)
 2. Use the bug report template
 3. Include:
    - Clear description
@@ -390,7 +392,7 @@ Be patient and feel free to ping if no response after a week.
 ## Still Have Questions?
 
 - 📖 Check the [wiki documentation](Home.md)
-- 🐛 Search [existing issues](https://github.com/Qobustan/Seminar-Angewandte-Statistik-2025/issues)
+- 🐛 Search [existing issues](https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen/issues)
 - 💬 Create a new issue with the "question" label
 - 📧 Contact the maintainers
 

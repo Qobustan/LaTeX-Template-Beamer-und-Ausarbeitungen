@@ -35,6 +35,10 @@ Ausarbeitung/Ausarbeitung.tex                            1.234
 Vortrag/Vortrag.tex                                        567
 -----------------------------------------------------------------
 Total                                                    1.801
+Ausarbeitung/Ausarbeitung.tex                            3.434
+Vortrag/Vortrag.tex                                      1.121
+-----------------------------------------------------------------
+Total                                                    4.555
 ```
 
 ### What Is Stripped
@@ -73,6 +77,7 @@ lua-5.5.0/src/lua scripts/check-bib.lua
 
 # Explicit file list
 lua-5.5.0/src/lua scripts/check-bib.lua Ausarbeitung/Ausarbeitung.bib Vortrag/Vortrag.bib
+lua-5.5.0/src/lua scripts/check-bib.lua Ausarbeitung/Ausarbeitung.bib
 ```
 
 ### Sample Output (no issues)
@@ -82,6 +87,7 @@ Ausarbeitung/Ausarbeitung.bib                          5 entries,  0 errors,  0 
 Vortrag/Vortrag.bib                                    5 entries,  0 errors,  0 warnings
 -----------------------------------------------------------------
 Total                                                 10 entries,  0 errors,  0 warnings
+Ausarbeitung/Ausarbeitung.bib                        20 entries,  0 errors,  0 warnings
 ```
 
 ### Sample Output (with issues)
@@ -89,6 +95,9 @@ Total                                                 10 entries,  0 errors,  0 
 ```
 [ERROR] Ausarbeitung/Ausarbeitung.bib:10 @unpublished{Example2026}: missing required field 'note'
 Ausarbeitung/Ausarbeitung.bib                          5 entries,  1 errors,  0 warnings
+[ERROR] Ausarbeitung/Ausarbeitung.bib:153 @unpublished{DalItter2026}: missing required field 'note'
+[ERROR] Ausarbeitung/Ausarbeitung.bib:161 @article{DalItter2021}: missing required field 'journal'
+Ausarbeitung/Ausarbeitung.bib                        20 entries,  2 errors,  0 warnings
 ```
 
 ### Required Fields per Entry Type
@@ -113,6 +122,7 @@ Additionally the validator checks:
 
 - **Missing year** — warns for any entry (except `@misc` and `@online`) without a `year` field
 - **Year format** — warns when `year` is present but is not a 4-digit number
+- **Year format** — warns when `year` is present but is not a 4-digit number (e.g. `26` instead of `2026`)
 - **Duplicate keys** — errors when the same key appears more than once (case-insensitive)
 - **URL format** — warns when an `@online` entry has a `url` that does not start with `http://`, `https://`, or `ftp://`
 
@@ -120,6 +130,9 @@ Additionally the validator checks:
 
 The `bibcheck` job in `.github/workflows/bibcheck.yml` builds Lua
 from source and then runs this script as a required CI step:
+The `bibliography-check` job in `.github/workflows/bibcheck.yml` builds Lua
+from source and then runs this script as a required CI step, followed by a
+cross-reference check:
 
 ```yaml
 - name: Build Lua interpreter
@@ -127,6 +140,11 @@ from source and then runs this script as a required CI step:
 
 - name: Validate required .bib fields (Lua)
   run: lua-5.5.0/src/lua scripts/check-bib.lua Ausarbeitung/Ausarbeitung.bib Vortrag/Vortrag.bib
+  run: lua-5.5.0/src/lua scripts/check-bib.lua Ausarbeitung/Ausarbeitung.bib
+
+- name: Cross-reference check (cited keys exist in .bib)
+  run: |
+    # Verifies every \cite{key} in Ausarbeitung/ and Vortrag/ exists in the .bib
 ```
 
 ### Exit Codes

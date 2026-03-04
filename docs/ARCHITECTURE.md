@@ -1,12 +1,30 @@
-# Architecture
+# Project Architecture
+
+This document provides an architectural overview of the LaTeX-Template-Beamer-und-Ausarbeitungen project.
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Directory Structure](#directory-structure)
+- [Core Components](#core-components)
+- [Build System](#build-system)
+- [CI/CD Pipeline](#cicd-pipeline)
+- [Development Workflow](#development-workflow)
+
+---
 
 ## Overview
 
-This repository is a general-purpose LaTeX template for creating:
-1. **Beamer presentations** (`Vortrag/`) — slide decks using the Beamer document class
-2. **Written elaborations** (`Ausarbeitung/`) — academic papers using KOMA-Script (`scrartcl`)
+This is a generic LaTeX template repository for academic papers and Beamer presentations. The project provides two ready-to-use document templates:
 
-Both document types share a common package set and configuration managed through a **modular header system**.
+1. **Ausarbeitung** - A written elaboration template (article class, KOMA-Script)
+2. **Vortrag** - A Beamer presentation template
+
+The repository is designed for:
+- Automated PDF generation via GitHub Actions
+- Local development with multiple LaTeX engines (pdflatex, lualatex)
+- Containerized builds using Docker
+- Quality assurance through linting and spell checking
 
 ---
 
@@ -14,131 +32,457 @@ Both document types share a common package set and configuration managed through
 
 ```
 .
-├── Ausarbeitung/                # Written elaboration template
-│   ├── Ausarbeitung.tex         # Main document (edit this)
-│   ├── Ausarbeitung.bib         # Bibliography (edit this)
-│   ├── header.tex               # Dispatcher: loads header-common + header-article
-│   ├── header-common.tex        # Common packages (shared with Vortrag)
-│   └── header-article.tex       # Article/scrartcl-specific packages
+├── Ausarbeitung/          # Written elaboration LaTeX sources
+│   ├── Ausarbeitung.tex   # Main document
+│   ├── header.tex         # Top-level preamble
+│   ├── header-article.tex # Article-class preamble
+│   ├── header-common.tex  # Shared preamble (both documents)
+│   ├── Ausarbeitung.bib   # Bibliography
+│   └── Ausarbeitung.pdf   # Compiled PDF (17 pages, committed to repo)
 │
-├── Vortrag/                     # Beamer presentation template
-│   ├── Vortrag.tex              # Main document (edit this)
-│   ├── Vortrag.bib              # Bibliography (edit this)
-│   ├── header.tex               # Dispatcher: loads header-common + header-beamer
-│   ├── header-common.tex        # Common packages (shared with Ausarbeitung)
-│   └── header-beamer.tex        # Beamer-specific packages and theme
+├── Vortrag/               # Beamer presentation LaTeX sources
+│   ├── Vortrag.tex        # Main presentation file
+│   ├── header.tex         # Top-level preamble
+│   ├── header-beamer.tex  # Beamer-class preamble
+│   ├── header-common.tex  # Shared preamble (both documents)
+│   ├── Vortrag.bib        # Bibliography
+│   ├── Vortrag.pdf        # Compiled PDF (68 pages with pauses, committed)
+│   ├── Vortrag-Druckversion.pdf  # Print version (51 pages, no pauses, committed)
+│   └── img/               # Measurement images for slides
 │
-├── scripts/                     # Build and utility scripts
-│   ├── generatePdf.sh           # PDF generation (Linux/macOS) – supports pdflatex & lualatex
-│   ├── generatePdf.bat          # PDF generation (Windows)
-│   ├── delete-obsolete-branches.sh  # Branch cleanup (Bash)
-│   └── delete-obsolete-branches.py  # Branch cleanup (Python/PyGithub)
+├── Besprechung/           # Meeting notes and discussions
 │
-├── cleanup/                     # LaTeX auxiliary file cleanup
-│   ├── Remove_Junk_Linux.sh     # Cleanup script (Linux/macOS)
-│   └── Remove_Junk_Windows.bat  # Cleanup script (Windows)
+├── scripts/               # Build and utility scripts
+│   ├── generatePdf.sh     # Main build script (Linux/macOS)
+│   ├── generatePdf.bat    # Main build script (Windows)
+│   └── delete-obsolete-branches.{sh,py}  # Branch cleanup utilities
 │
-├── task_skripts/                # Task-specific automation scripts
-│   ├── bash/                    # Bash scripts
-│   └── perl/                    # Perl scripts (LaTeX tooling wrappers)
+├── cleanup/               # Cleanup scripts for LaTeX auxiliary files
+│   ├── Remove_Junk_Linux.sh
+│   └── Remove_Junk_Windows.bat
 │
-├── .github/                     # GitHub configuration
-│   ├── workflows/               # GitHub Actions CI/CD workflows
-│   ├── CODEOWNERS               # Code ownership definitions
-│   ├── pull_request_template.md # PR template
-│   └── dependabot.yml           # Automated dependency updates
+├── task_skripts/          # Task-specific helper scripts
+│   ├── bash/              # Bash utility scripts
+│   └── perl/              # Perl scripts (LaTeX utilities)
 │
-├── docs/                        # Project documentation
-│   ├── ARCHITECTURE.md          # This file
-│   ├── CHANGELOG.md             # Version history
-│   └── improvement/             # Improvement notes and proposals
+├── .github/               # GitHub-specific configurations
+│   ├── workflows/         # CI/CD automation
+│   │   ├── build-and-publish-pdfs.yml    # Main PDF build workflow
+│   │   ├── lint.yml                       # LaTeX linting
+│   │   ├── spellcheck.yml                 # Spell checking
+│   │   ├── bibcheck.yml                   # Bibliography validation
+│   │   ├── publish-wiki.yml               # Wiki synchronization
+│   │   ├── docker-image.yml               # Docker image building
+│   │   ├── codeql-analysis.yml            # Security scanning
+│   │   ├── greetings.yml                  # First-contributor greeting
+│   │   └── format.yml                     # Code formatting
+│   ├── ISSUE_TEMPLATE/    # Issue templates
+│   ├── dependabot.yml     # Automated dependency updates
+│   └── labeler.yml        # Automatic PR labeling
 │
-├── Dockerfile                   # Docker image for containerized LaTeX builds
-├── .dockerignore                # Docker build context exclusions
-├── VERSION                      # Current version number
-├── .gitattributes               # Git line ending and language configuration
-├── .gitignore                   # Files/directories excluded from Git
-├── .editorconfig                # Editor configuration
-├── cspell.json                  # Spell checker configuration
-├── README.md                    # Main documentation
-├── CONTRIBUTING.md              # Contributor guidelines
-└── SECURITY.md                  # Security policy
+├── wiki/                  # Wiki documentation (auto-synced to GitHub Wiki)
+├── archive/               # Historical branch documentation
+├── branch_cleanup/        # Branch deletion guides and checklists
+├── legacy/                # Deprecated/archived files
+├── docs/                  # Additional documentation (ARCHITECTURE, CHANGELOG, etc.)
+├── latex_install/         # LaTeX installation guides (English and German)
+├── lua-5.5.0/             # Lua 5.5.0 source code (compiled from source in CI)
+├── review/                # Review summaries
+│
+├── Dockerfile             # Container definition for LaTeX builds
+├── .dockerignore          # Docker build context exclusions
+├── .editorconfig          # Editor configuration for consistency
+├── .gitignore             # Git exclusions (LaTeX aux entries are commented out)
+├── .gitattributes         # Git attributes
+├── cspell.json            # Spell checker configuration
+│
+├── README.md              # Main project documentation
+├── CONTRIBUTING.md        # Contribution guidelines
+├── SECURITY.md            # Security policy
+├── DISCLAIMER.txt         # Legal disclaimer
+├── CHANGELOG.md           # Version history
+├── VERSION                # Current version number
+└── LICENSE                # MIT License
+
 ```
 
 ---
 
-## Modular Header System
+## Core Components
 
-The header system was refactored from a single monolithic `header.tex` into three files per document type:
+### 1. LaTeX Documents
 
-### Vortrag/ (Beamer Presentation)
+#### Ausarbeitung (Written Elaboration)
+- **Type:** Article-class LaTeX document (KOMA-Script)
+- **Content:** Customizable academic paper template with full bibliography support
+- **Key Sections (template defaults):**
+  1. Einleitung und Motivation
+  2. Hauptteil (customizable content sections)
+  3. Zusammenfassung und Fazit
 
-| File | Purpose |
-|------|---------|
-| `header.tex` | Dispatcher – loads `header-common` then `header-beamer`, plus metadata |
-| `header-common.tex` | Packages shared with Ausarbeitung (math, graphics, listings, etc.) |
-| `header-beamer.tex` | Beamer theme, `\trennfolie` command, list templates |
+#### Vortrag (Presentation)
+- **Type:** Beamer presentation template
+- **Content:** Customizable slide deck with consistent academic styling
+- **Features:**
+  - Professional academic theme
+  - Mathematical formula support
+  - Progressive disclosure of concepts (configurable `\pause` switches)
+  - Bibliography integration
+  - **`Vortrag-Druckversion.pdf`**: Print version compiled without `\pause` overlays
+- **Subdirectories:**
+  - `img/` — Directory for images embedded in slides
 
-### Ausarbeitung/ (Written Elaboration)
+### 2. Header Files
 
-| File | Purpose |
-|------|---------|
-| `header.tex` | Dispatcher – loads `header-common` then `header-article`, plus metadata |
-| `header-common.tex` | Packages shared with Vortrag (identical file) |
-| `header-article.tex` | Page geometry, `adjustbox`, `csquotes` |
+Both documents use modular `header.tex` files that define:
+- Document class and options
+- Package imports (amsmath, biblatex, hyperref, etc.)
+- Custom commands and environments
+- Typography settings (German language support)
+- Bibliography style configuration
+- Color schemes and formatting
 
-### Why Modular?
+### 3. Bibliography System
 
-- **Single source of truth**: common packages are defined once in `header-common.tex`
-- **Easier maintenance**: add a package to one place, affects both document types
-- **Clear separation**: document-class-specific config is isolated
+- **Format:** BibLaTeX
+- **Backend:** Biber (`backend=biber` in `\usepackage[backend=biber, style=alphabetic]{biblatex}`)
+- **Style:** Alphabetic citation style
+- **Integration:** Citations throughout both documents
 
 ---
 
 ## Build System
 
-### Engines
+### Multi-Engine Support
 
-The build scripts support two LaTeX engines:
+The project supports multiple LaTeX engines:
 
-| Engine | Command | Notes |
-|--------|---------|-------|
-| `pdflatex` | `./scripts/generatePdf.sh` | Default; fastest |
-| `lualatex` | `./scripts/generatePdf.sh --engine lualatex` | Full Unicode; required for some packages |
+1. **pdflatex** (default)
+   - Traditional LaTeX engine
+   - Fastest compilation
+   - Wide compatibility
 
-The engine can also be set via the `LATEX_ENGINE` environment variable:
+2. **lualatex** (optional)
+   - Modern LaTeX engine
+   - Better Unicode support
+   - Advanced font handling
+   - Lua scripting capabilities
 
-```bash
-export LATEX_ENGINE=lualatex
-./scripts/generatePdf.sh
+### Build Process
+
+The standard LaTeX multi-pass compilation:
+
+```
+1. LaTeX engine (pdflatex/lualatex) → .aux, .log, .toc files
+2. Biber → .bbl, .blg files (bibliography processing)
+3. LaTeX engine → Integrate bibliography references
+4. LaTeX engine → Resolve cross-references
 ```
 
-### Docker
+### Build Scripts
 
-The `Dockerfile` provides a fully reproducible build environment:
+#### `scripts/generatePdf.sh` (Linux/macOS)
+- Configurable LaTeX engine via `LATEX_ENGINE` environment variable
+- Automatic working directory detection
+- Multi-pass compilation with Biber
+- Error handling and validation
 
-- Base: Ubuntu 22.04
-- TeX Live with LuaLaTeX, XeLaTeX, biber, latexmk
-- Lua 5.5.0 (compiled from source)
-- Perl with latexindent dependencies
-- Python 3 + PyGithub
+#### `scripts/generatePdf.bat` (Windows)
+- Windows batch equivalent
+- Same functionality as shell script
+- CRLF line endings for Windows compatibility
 
-```bash
-docker build -t latex-template .
-docker run --rm -v $(pwd):/workspace latex-template
-docker run --rm -v $(pwd):/workspace latex-template --engine lualatex
-```
+### Cleanup
+
+Temporary LaTeX files (.aux, .log, .toc, .synctex.gz, etc.) are removed by:
+- `cleanup/Remove_Junk_Linux.sh` (Linux/macOS)
+- `cleanup/Remove_Junk_Windows.bat` (Windows)
 
 ---
 
-## CI/CD Workflows
+## CI/CD Pipeline
 
-| Workflow | Trigger | Purpose |
-|----------|---------|---------|
-| `build-and-publish-pdfs.yml` | Push to `main`, manual | Compile PDFs and upload as artifacts |
-| `docker-image.yml` | Push to `main`, manual | Build and push Docker image |
-| `lint.yml` | Push, PR | Run chktex on `.tex` files |
-| `spellcheck.yml` | Push, PR | Run cspell on text files |
-| `bibcheck.yml` | Push, PR | Check bibliography files for duplicates |
-| `format.yml` | Manual | Validate code formatting |
-| `stale.yml` | Scheduled | Mark and close stale issues/PRs |
+### GitHub Actions Workflows
+
+#### 1. Build and Publish PDFs (`build-and-publish-pdfs.yml`)
+- **Trigger:** Push to main/master, manual dispatch
+- **Engine Selection:** pdflatex (default) or lualatex (manual dispatch)
+- **Two Build Jobs:**
+  - `build-latex`: pdflatex (default) using `xu-cheng/latex-action@v4` with Docker image `ghcr.io/xu-cheng/texlive-full`
+  - `build-latex-lualatex`: lualatex (always runs) using the same action and image
+- **Process:**
+  1. Checkout repository
+  2. Build Ausarbeitung.pdf using `xu-cheng/latex-action@v4`
+  3. Build Vortrag.pdf and Vortrag-Druckversion.pdf using `xu-cheng/latex-action@v4`
+  4. Build Lua 5.5.0 from source (`lua-5.5.0/` directory)
+  5. Upload all PDFs as artifacts (90-day retention)
+- **Artifacts:** Available in Actions tab → workflow run → latex-pdfs
+- **Note:** PDFs are also committed directly to the repository alongside LaTeX sources
+
+#### 2. LaTeX Linting (`lint.yml`)
+- **Tool:** chktex
+- **Purpose:** Detect common LaTeX errors and style issues
+- **Scope:** All .tex files in Ausarbeitung/ and Vortrag/
+
+#### 3. Spell Checking (`spellcheck.yml`)
+- **Tool:** cspell
+- **Configuration:** cspell.json with custom dictionary
+- **Scope:** .tex and .md files
+- **Languages:** German (de) and English (en)
+
+#### 4. Bibliography Check (`bibcheck.yml`)
+- **Purpose:** Detect duplicate bibliography entries
+- **Scope:** .bib files
+
+#### 5. Wiki Publishing (`publish-wiki.yml`)
+- **Trigger:** Changes to wiki/ directory
+- **Process:** Syncs markdown files from wiki/ to GitHub Wiki
+- **Technology:** GitHub API integration
+
+#### 6. Docker Image (`docker-image.yml`)
+- **Purpose:** Build and optionally publish Docker image
+- **Base:** Ubuntu 20.04 with texlive-full
+
+### Automation Features
+
+- **Dependabot:** Automatically updates GitHub Actions weekly
+- **Auto-labeling:** Applies labels to PRs based on file changes
+- **Stale issue management:** Marks inactive issues as stale
+- **Greeting bot:** Welcome message for first-time contributors
+
+---
+
+## Development Workflow
+
+### Local Development
+
+1. **Clone repository**
+   ```bash
+   git clone https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen.git
+   cd LaTeX-Template-Beamer-und-Ausarbeitungen
+   ```
+
+2. **Install prerequisites**
+   - TeX Live or MiKTeX (LaTeX distribution)
+   - Optional: Docker, chktex, cspell
+
+3. **Build PDFs**
+   ```bash
+   # Using build script
+   ./scripts/generatePdf.sh
+   
+   # Using latexmk directly
+   cd Ausarbeitung && latexmk -pdf Ausarbeitung.tex
+   
+   # Using Docker
+   docker build -t latex-template .
+   docker run --rm -v $(pwd):/app latex-template
+   ```
+
+4. **Clean up**
+   ```bash
+   ./cleanup/Remove_Junk_Linux.sh
+   ```
+
+### Contribution Workflow
+
+1. **Fork** and create a feature branch
+2. **Make changes** to LaTeX files
+3. **Test locally** - build PDFs and check output
+4. **Run quality checks** (optional: lint, spellcheck)
+5. **Clean** temporary files
+6. **Commit** with descriptive messages
+7. **Push** and open Pull Request
+8. **CI/CD** automatically validates changes
+
+### Docker Development
+
+The Dockerfile provides a reproducible build environment:
+
+```dockerfile
+# Multi-stage build
+Stage 1: Base image with TeX Live
+Stage 2: Application setup with non-root user
+
+# Features:
+- Ubuntu 20.04 base
+- texlive-full installation
+- Non-root user for security
+- Health checks
+- Volume support for live editing
+```
+
+**Benefits:**
+- Consistent build environment across systems
+- No need to install LaTeX locally
+- Isolated from host system
+- Reproducible builds
+
+---
+
+## Technology Stack
+
+### Core Technologies
+- **LaTeX:** Document typesetting
+- **BibTeX/BibLaTeX:** Bibliography management
+- **Beamer:** Presentation framework
+- **KOMA-Script:** Enhanced document classes
+
+### LaTeX Packages
+- `amsmath`, `amssymb`, `amsthm` - Mathematics
+- `babel[ngerman]` - German language support
+- `biblatex` - Bibliography management
+- `csquotes` - Quotation marks
+- `hyperref` - Hyperlinks and PDF metadata
+- `graphicx` - Image inclusion
+- `tikz` - Graphics and diagrams
+- `listings` - Code listings
+
+### Build Tools
+- **latexmk:** Automated LaTeX building with dependency tracking
+- **pdflatex:** Standard LaTeX to PDF compiler
+- **lualatex:** Modern LaTeX compiler with extended features
+- **biber:** Bibliography processor
+
+### CI/CD Tools
+- **GitHub Actions:** Workflow automation
+- **xu-cheng/latex-action:** Reliable LaTeX building in CI
+- **chktex:** LaTeX linter
+- **cspell:** Spell checker
+- **Docker:** Containerization
+
+### Development Tools
+- **Git:** Version control
+- **EditorConfig:** Consistent coding style
+- **Dependabot:** Automated dependency updates
+
+---
+
+## Configuration Files
+
+### `.editorconfig`
+Ensures consistent coding style across editors:
+- LaTeX: 4 spaces (tabs), UTF-8, LF line endings
+- Markdown: 2 spaces, UTF-8, LF line endings
+- Shell scripts: 4 spaces, UTF-8, LF line endings
+- Batch files: 4 spaces, UTF-8, CRLF line endings
+- YAML/JSON: 2 spaces, UTF-8, LF line endings
+
+### `cspell.json`
+Spell checker configuration:
+- Languages: German (de), English (en)
+- Custom dictionary with 260+ project-specific terms
+- Ignores: LaTeX commands, math mode, citations
+- Patterns for markdown code blocks, LaTeX math
+
+### `.gitignore`
+Excludes from version control:
+- Build artifacts (build/, out/, dist/)
+- Editor files (.vscode/, .idea/)
+- OS files (.DS_Store, Thumbs.db)
+- Python cache (__pycache__/)
+- **Note:** LaTeX auxiliary file patterns (*.aux, *.log, *.bbl, etc.) are listed but **commented out** — these files ARE tracked in this repository.
+
+### `.dockerignore`
+Excludes from Docker build context:
+- .git/
+- Auxiliary LaTeX files
+- Documentation (markdown files)
+- CI/CD configuration
+
+---
+
+## Quality Assurance
+
+### Pre-commit Checks (Manual)
+1. Build both PDFs successfully
+2. Run LaTeX linter (chktex)
+3. Run spell checker (cspell)
+4. Visual inspection of PDF output
+5. Clean temporary files
+
+### Automated CI Checks
+1. LaTeX compilation (pdflatex)
+2. Linting (chktex)
+3. Spell checking (cspell)
+4. Bibliography validation
+
+### Code Review
+- Pull requests require review
+- CODEOWNERS automatically requests review from maintainers
+- PR template ensures completeness
+
+---
+
+## Best Practices
+
+### LaTeX
+- Use semantic commands (`\emph{}` not `\textit{}`)
+- Comment complex macros
+- Keep line length under 120 characters
+- Use `\enquote{}` for quotations (German)
+- Cite sources properly with BibTeX
+
+### Git
+- Clear, descriptive commit messages
+- Feature branches for changes
+- Keep commits atomic and focused
+- Clean up temporary files before committing
+
+### Documentation
+- Update README when adding features
+- Document script parameters
+- Add inline comments for complex logic
+- Update CHANGELOG for notable changes
+
+---
+
+## Security Considerations
+
+### Build Security
+- LaTeX runs in isolated CI/CD environments
+- Docker provides containerization
+- No shell escape features (`\write18`) used
+- All builds run with `-interaction=nonstopmode`
+
+### Supply Chain Security
+- GitHub Actions pinned to specific versions
+- Dependabot monitors for updates
+- Limited use of third-party actions
+- CI builds use `xu-cheng/latex-action@v4` with Docker image `ghcr.io/xu-cheng/texlive-full`
+
+### Access Control
+- Branch protection on main branch
+- Code review required for PRs
+- CODEOWNERS defines ownership
+- Secrets scoped appropriately
+
+See [SECURITY.md](../SECURITY.md) for full security policy.
+
+---
+
+## Future Enhancements
+
+Potential areas for expansion:
+- Automated release generation
+- Additional LaTeX engines (XeLaTeX)
+- Enhanced visualization scripts
+- Automated code quality metrics
+- Integration with LaTeX language servers
+- PDF diff visualization for changes
+
+---
+
+## References
+
+- [LaTeX Project](https://www.latex-project.org/)
+- [KOMA-Script Documentation](https://www.ctan.org/pkg/koma-script)
+- [Beamer User Guide](https://www.ctan.org/pkg/beamer)
+- [BibLaTeX Documentation](https://www.ctan.org/pkg/biblatex)
+- [GitHub Actions Documentation](https://docs.github.com/en/actions)
+- [Docker Best Practices](https://docs.docker.com/develop/dev-best-practices/)
+
+---
+
+*Last Updated: March 2026*
+*Version: 1.1.0*

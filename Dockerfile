@@ -1,6 +1,6 @@
 # =============================================================================
 # Multi-stage Dockerfile for LaTeX PDF Generation
-# Optimized for: LaTeX Template - Beamer und Ausarbeitungen
+# Optimized for: LaTeX Template (Beamer + Ausarbeitungen)
 #
 # Build stages overview
 # ---------------------
@@ -82,8 +82,9 @@ RUN cd /lua-src && \
 FROM ubuntu:20.04 AS base
 
 # Metadata following OCI image spec
-LABEL org.opencontainers.image.title="LaTeX PDF Generator"
-LABEL org.opencontainers.image.description="Containerized LaTeX environment for generating PDFs"
+LABEL org.opencontainers.image.title="LaTeX Template PDF Generator"
+LABEL org.opencontainers.image.description="Containerized LaTeX environment for generating PDFs from the LaTeX-Template-Beamer-und-Ausarbeitungen template"
+LABEL org.opencontainers.image.authors="Yavuzâlp Dal"
 LABEL org.opencontainers.image.source="https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen"
 LABEL org.opencontainers.image.licenses="MIT"
 LABEL org.opencontainers.image.version="2.0"

@@ -61,6 +61,8 @@ jobs:
             | sort -u)
 
           # Collect all \cite{...} variants from all .tex files
+          # Collect all \cite{...}, \citep{...}, \citet{...}, \textcite{...}, \parencite{...}
+          # and multi-key variants \cite{key1,key2}
           cited_keys=$(grep -roh \
               -e '\\cite{[^}]*}' \
               -e '\\citep{[^}]*}' \

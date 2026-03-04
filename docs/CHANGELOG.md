@@ -8,137 +8,77 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- CI smoke-test workflow (`.github/workflows/ci-smoke-tests.yml`) using Docker
-  Buildx (no QEMU) with layer caching, a minimal LuaLaTeX compilation test, a
-  seminar-content scan, and an optional `generatePdf.sh` run.
-- `docs/CHANGELOG.md` – this file.
-- `RELEASE_NOTES_TEMPLATE.md` – template for future release notes.
-
-[Unreleased]: https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen/commits/main
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
-
----
-
-## [Unreleased]
-
-### Added
-- CI smoke-test workflow (`.github/workflows/ci-smoke-tests.yml`) that compiles
-  the Ausarbeitung and Vortrag templates on every push and pull request.
-- `docs/CHANGELOG.md` – this file.
-- `RELEASE_NOTES_TEMPLATE.md` – template for future release announcements.
-
----
-
-## [1.0.0] – 2025-01-01
-
-### Added
-- Initial LaTeX template for Beamer presentations (`Vortrag/`).
-- Initial LaTeX template for written elaborations (`Ausarbeitung/`).
-- Meeting/discussion template (`Besprechung/`).
-- PDF generation scripts (`scripts/generatePdf.sh`, `scripts/generatePdf.bat`).
-- Cleanup scripts (`cleanup/`).
-- Docker support (`Dockerfile`).
-- GitHub Actions workflows for building, linting, spell-checking, and
-  publishing PDFs and wiki documentation.
-- Contributing guidelines (`CONTRIBUTING.md`).
-- Security policy (`SECURITY.md`).
-- LaTeX installation guides (`latex_install/`).
-
----
-
-[Unreleased]: https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen/compare/v1.0.0...HEAD
-[1.0.0]: https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen/releases/tag/v1.0.0
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
-
-## [Unreleased]
-
-### Added
-- CI smoke-test workflow (`.github/workflows/ci-smoke-tests.yml`): builds the
-  Docker image with `docker/setup-buildx-action@v2` and
-  `docker/build-push-action@v4` (host platform only – no QEMU), caches layers
-  via `actions/cache`, compiles a minimal LuaLaTeX document with two passes,
-  uploads the resulting PDF as a workflow artefact, and performs a seminar-
-  content scan that fails the job when seminar-specific strings are found.
-- `docs/CHANGELOG.md` – this file, following the Keep a Changelog format.
-- `RELEASE_NOTES_TEMPLATE.md` – a reusable Markdown template for release notes.
-
-[Unreleased]: https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen/commits/main
-- CI smoke-test workflow (`.github/workflows/ci-smoke-tests.yml`) using Docker Buildx
-  (without QEMU) to build the image, compile a minimal LuaLaTeX document, and run a
-  seminar-content scan.
-- Minimal LuaLaTeX test document (`test/minimal.tex`) compiled in CI and published
-  as a build artefact.
-- `RELEASE_NOTES_TEMPLATE.md` – template for writing structured release notes.
-- This `CHANGELOG.md` file.
-- CI smoke tests workflow (`.github/workflows/ci-smoke-tests.yml`): Docker build without QEMU, LuaLaTeX smoke test, seminar content check, and optional `generatePdf.sh` integration test.
-- `docs/CHANGELOG.md`: This changelog file following Keep a Changelog conventions.
-- `RELEASE_NOTES_TEMPLATE.md`: Reusable template for GitHub release notes.
-
-### Changed
-
-### Deprecated
-
-### Removed
+- `scripts/word-count.lua` — Lua script that strips LaTeX markup and counts body words in `.tex` files
+- `scripts/check-bib.lua` — Lua script that validates required BibTeX fields per entry type, reporting errors with file name and line number
+- `docs/README.md` — Central documentation index linking all docs across the repository
+- `docs/scripts/LUA-SCRIPTS.md` — Reference documentation for the two new Lua scripts
+- `docs/improvement/IMPROVEMENT_SUMMARY_3.0.md` — Full record of v3.0 infrastructure fixes
+- `lua` label added to `.github/labels.yml` and `.github/labeler.yml` for Lua-related PRs
+- `contents: read` permission added to `sync-labels.yml` so `actions/checkout@v4` succeeds
+- `bibcheck.yml` now builds Lua from source and validates `.bib` required fields in CI
+- `spellcheck.yml` extended to also check `.sh`, `.py`, and `.lua` files
+- `lua-5.5.0/src/**` and `lua-5.5.0/doc/**` added to `cspell.json` ignore paths
+- 40+ German/statistical/LaTeX domain terms added to `cspell.json` wordlist
 
 ### Fixed
-
-### Security
-
-[Unreleased]: https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen/compare/main...HEAD
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
-
----
-
-## [2.0.0] – 2026-03-01
-
-### Added
-
-- **Modular header system**: Split monolithic `header.tex` into three files per document type:
-  - `header-common.tex` – packages shared between Beamer and Article
-  - `header-beamer.tex` – Beamer-specific configuration
-  - `header-article.tex` – Article/scrartcl-specific configuration
-  - `header.tex` – thin dispatcher that loads the above
-- **LuaLaTeX support** in `scripts/generatePdf.sh` via `--engine lualatex` flag
-- **LuaLaTeX support** in `scripts/generatePdf.bat` via `--engine lualatex` flag
-- `LATEX_ENGINE` environment variable support in build scripts
-- `biber` auto-detection in build scripts (falls back to `bibtex`)
-- Comprehensive **Dockerfile** with Ubuntu 22.04, full TeX Live, LuaLaTeX, Perl, Python
-- `.dockerignore` to minimize Docker build context
-- `.github/CODEOWNERS` for automatic PR review assignment
-- `.github/pull_request_template.md` for structured PR descriptions
-- `VERSION` file tracking template version
-- `docs/` directory with architecture documentation and changelog
+- **Spellchecker silently passed all files**: two `ignoreRegExpList` patterns were applied case-insensitively by cspell, matching every word; fixed by wrapping in `/pattern/` for case-sensitive matching
+- **Documentation inconsistency**: several wiki/docs files incorrectly documented `backend=bibtex`; all corrected to `backend=biber` (matching actual `.tex` and `.latexmkrc` files)
+- Seminar-specific repository URLs replaced with template repository URLs across wiki, docs, and scripts
+- Dockerfile OCI metadata labels updated to reference this template repository
+- CHANGELOG and ARCHITECTURE trimmed of seminar-specific content
 
 ### Changed
+- CHANGELOG.md for version tracking
+- Pull request template for consistent contributions
+- CODEOWNERS file for ownership tracking
+- Architecture documentation expanded with full build-system and CI/CD details
 
-- **Dockerfile**: upgraded from Ubuntu 20.04 minimal image to Ubuntu 22.04 with full TeX Live
-- **`scripts/generatePdf.sh`**: added engine selection, `--help` flag, biber/bibtex auto-detection, and refactored to use a `compile_document` helper function
-- **`scripts/generatePdf.bat`**: added engine selection and structured output
-- **`scripts/delete-obsolete-branches.py`**: made template-generic (removed seminar-specific branch list)
-- **`scripts/delete-obsolete-branches.sh`**: made template-generic (uses configurable array)
-- **`cleanup/Remove_Junk_Linux.sh`**: added `--quiet` flag, added more file extensions (`fdb_latexmk`, `fls`, `idx`, `ind`, `ilg`, `dvi`, `run.xml`)
-- **`cleanup/Remove_Junk_Windows.bat`**: added `/Q` quiet flag, improved output messages
-- **`.gitattributes`**: massively expanded with explicit line ending rules for all file types, binary declarations, and Linguist overrides
-- **`.gitignore`**: reorganized and extended
-- **`cspell.json`**: cleaned up word list (removed seminar-specific terminology), added LaTeX tooling terms
-- **`CONTRIBUTING.md`**: updated to be template-generic (removed seminar-specific references)
-- **`README.md`**: updated with new modular header system documentation, LuaLaTeX instructions
-
-### Deprecated
-
-- Old monolithic `header.tex` files are preserved as `header.tex.old` in each directory
-
----
-
-## [1.0.0] – 2025-01-01
+## [1.0.0] - 2026-02-12
 
 ### Added
+- Initial LaTeX project structure for Applied Statistics seminar
+- Ausarbeitung (written elaboration) LaTeX sources
+- Vortrag (Beamer presentation) LaTeX sources
+- Comprehensive README with build instructions
+- Contributing guidelines (CONTRIBUTING.md)
+- Security policy (SECURITY.md)
+- Disclaimer (DISCLAIMER.txt)
+- Docker support for containerized PDF generation
+- GitHub Actions CI/CD workflows:
+  - Automated PDF building with pdflatex and lualatex support
+  - LaTeX linting with chktex
+  - Spell checking with cspell
+  - Bibliography validation
+  - Wiki publishing automation
+- Build and cleanup scripts for Windows, Linux, and macOS
+- Comprehensive bibliography with 15+ academic references
+- German language support with proper typography
+- MIT License
 
-- Initial template with Beamer presentation (`Vortrag/`) and written elaboration (`Ausarbeitung/`)
-- Basic `Dockerfile` for containerized builds
-- `scripts/generatePdf.sh` and `scripts/generatePdf.bat` for PDF generation
-- `cleanup/` scripts for removing LaTeX auxiliary files
-- GitHub Actions workflows for building, linting, and spell checking
-- Wiki documentation
+### Fixed
+- Grammatical errors in Ausarbeitung
+- Duplicate slide in Vortrag presentation
+- Unprofessional formatting (pink colorbox replaced with proper LaTeX)
+- Bibliography warnings and csquotes integration
+- Duplicate package declarations in headers
+
+### Changed
+- Enhanced bibliography from 1 to 15 comprehensive academic references
+- Improved citation style throughout both documents
+- Professional academic formatting standards applied
+- Updated documentation structure and organization
+
+## Project Information
+
+- **Author:** Yavuzâlp Dal
+- **Repository:** https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen
+
+## Versioning Notes
+
+- Version numbers follow Semantic Versioning (MAJOR.MINOR.PATCH)
+- MAJOR: Incompatible structural changes
+- MINOR: Backward-compatible functionality additions
+- PATCH: Backward-compatible bug fixes
+
+[Unreleased]: https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen/compare/main...HEAD
+[1.0.0]: https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen/releases/tag/v1.0.0
