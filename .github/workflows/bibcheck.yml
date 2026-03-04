@@ -9,14 +9,83 @@ on:
 jobs:
   bibcheck:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v6
 
-      - name: Check .bib files for duplicates
+      - name: Build Lua interpreter
+        run: |
+          cd lua-5.5.0
+          make linux -j$(nproc)
+          echo "Lua $(./src/lua -v 2>&1) built successfully"
+
+      - name: Check .bib files for duplicate keys
         run: |
           shopt -s globstar
-          if grep -i "duplicate" **/*.bib; then
-            echo "⚠️ Mögliche doppelte Einträge gefunden"
-          else
+          found_dups=false
+          for bibfile in **/*.bib; do
+            # Skip generated biblatex auxiliary files
+            [[ "$bibfile" == *-blx.bib ]] && continue
+            dups=$(grep -i "^@" "$bibfile" 2>/dev/null \
+              | grep -iv "^@comment" \
+              | sed 's/^@[^{]*{\([^,]*\),.*/\1/' \
+              | tr '[:upper:]' '[:lower:]' \
+              | sort | uniq -d)
+            if [ -n "$dups" ]; then
+              echo "⚠️ Doppelte Einträge in $bibfile:"
+              echo "$dups"
+              found_dups=true
+            fi
+          done
+          if [ "$found_dups" = false ]; then
             echo "✅ Keine doppelten Einträge"
+          else
+            exit 1
+          fi
+
+      - name: Validate required .bib fields (Lua)
+        run: |
+          lua-5.5.0/src/lua scripts/check-bib.lua \
+            Ausarbeitung/Ausarbeitung.bib \
+            Vortrag/Vortrag.bib
+
+      - name: Cross-reference check (cited keys exist in .bib)
+        run: |
+          # Collect all defined keys from all .bib files (excluding -blx.bib)
+          bib_keys=$(find Ausarbeitung Vortrag -name "*.bib" ! -name "*-blx.bib" \
+            -exec grep -ih "^@" {} \; \
+            | grep -iv "^@comment\|^@string\|^@preamble" \
+            | sed 's/^@[^{]*{\([^,}]*\).*/\1/' \
+            | tr '[:upper:]' '[:lower:]' \
+            | sort -u)
+
+          # Collect all \cite{...} variants from all .tex files
+          cited_keys=$(grep -roh \
+              -e '\\cite{[^}]*}' \
+              -e '\\citep{[^}]*}' \
+              -e '\\citet{[^}]*}' \
+              -e '\\textcite{[^}]*}' \
+              -e '\\parencite{[^}]*}' \
+              -e '\\autocite{[^}]*}' \
+              Ausarbeitung/ Vortrag/ \
+            | sed 's/^[^{]*{//;s/}//' \
+            | tr ',' '\n' \
+            | tr -d ' ' \
+            | tr '[:upper:]' '[:lower:]' \
+            | sort -u)
+
+          missing=false
+          while IFS= read -r key; do
+            [ -z "$key" ] && continue
+            if ! echo "$bib_keys" | grep -qx "$key"; then
+              echo "❌ Cited key not found in .bib: $key"
+              missing=true
+            fi
+          done <<< "$cited_keys"
+
+          if [ "$missing" = false ]; then
+            echo "✅ All cited keys found in .bib"
+          else
+            exit 1
           fi

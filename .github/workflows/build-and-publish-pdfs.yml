@@ -1,11 +1,34 @@
 name: Kompiliere die LateX-Ausarbeitung und den Beamer-Vortrag
 
+# Trigger policy
+# --------------
+# push to main/master : Runs both build-latex (pdflatex) and
+#                       build-latex-lualatex (LuaLaTeX) automatically on
+#                       every commit so that both engines are always verified.
+# workflow_dispatch   : Allows manually selecting the engine via GitHub UI for
+#                       ad-hoc rebuilds or debugging.
 on:
   push:
     branches: [main, master]
   workflow_dispatch:
+    inputs:
+      latex_engine:
+        description: 'LaTeX engine to use (pdflatex or lualatex)'
+        required: false
+        default: 'pdflatex'
+        type: choice
+        options:
+          - pdflatex
+          - lualatex
+
+# Minimal permissions (principle of least privilege)
+permissions:
+  contents: read
 
 jobs:
+  # ---------------------------------------------------------------------------
+  # Job 1: build-latex (pdflatex)
+  # ---------------------------------------------------------------------------
   build-latex:
     runs-on: ubuntu-latest
 
@@ -13,12 +36,22 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6
 
+      - name: Build Lua 5.5.0 from local source
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends build-essential libreadline-dev
+          cd lua-5.5.0
+          make linux
+          sudo make install
+          lua -v
+
       - name: Build Ausarbeitung
         uses: xu-cheng/latex-action@v4
         with:
           root_file: Ausarbeitung.tex
           working_directory: Ausarbeitung
           args: -pdf
+          latexmk_use_lualatex: ${{ github.event.inputs.latex_engine == 'lualatex' }}
 
       - name: Build Vortrag
         uses: xu-cheng/latex-action@v4
@@ -26,6 +59,7 @@ jobs:
           root_file: Vortrag.tex
           working_directory: Vortrag
           args: -pdf
+          latexmk_use_lualatex: ${{ github.event.inputs.latex_engine == 'lualatex' }}
 
       - name: List generated PDFs
         run: |
@@ -35,9 +69,59 @@ jobs:
           ls -lh Vortrag/*.pdf || true
 
       - name: Upload PDFs
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v4
         with:
           name: latex-pdfs
+          path: |
+            Ausarbeitung/*.pdf
+            Vortrag/*.pdf
+
+  # ---------------------------------------------------------------------------
+  # Job 2: build-latex-lualatex (LuaLaTeX)
+  # ---------------------------------------------------------------------------
+  build-latex-lualatex:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Build Lua 5.5.0 from local source
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends build-essential libreadline-dev
+          cd lua-5.5.0
+          make linux
+          sudo make install
+          lua -v
+
+      - name: Build Ausarbeitung with LuaLaTeX
+        uses: xu-cheng/latex-action@v4
+        with:
+          root_file: Ausarbeitung.tex
+          working_directory: Ausarbeitung
+          args: -pdf
+          latexmk_use_lualatex: true
+
+      - name: Build Vortrag with LuaLaTeX
+        uses: xu-cheng/latex-action@v4
+        with:
+          root_file: Vortrag.tex
+          working_directory: Vortrag
+          args: -pdf
+          latexmk_use_lualatex: true
+
+      - name: List generated PDFs
+        run: |
+          echo "Ausarbeitung:"
+          ls -lh Ausarbeitung/*.pdf || true
+          echo "Vortrag:"
+          ls -lh Vortrag/*.pdf || true
+
+      - name: Upload PDFs (LuaLaTeX)
+        uses: actions/upload-artifact@v4
+        with:
+          name: latex-pdfs-lualatex
           path: |
             Ausarbeitung/*.pdf
             Vortrag/*.pdf
