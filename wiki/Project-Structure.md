@@ -5,7 +5,7 @@ This document provides a comprehensive overview of the repository organization.
 ## Directory Structure
 
 ```
-Seminar-Angewandte-Statistik-2025/
+LaTeX-Template-Beamer-und-Ausarbeitungen/
 ├── .github/                    # GitHub configuration and workflows
 │   ├── ISSUE_TEMPLATE/        # Issue templates
 │   ├── workflows/             # GitHub Actions CI/CD workflows
