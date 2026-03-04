@@ -28,9 +28,17 @@ permissions:
 jobs:
   # ---------------------------------------------------------------------------
   # Job 1: build-latex (pdflatex)
+  #
+  # Runs on every push to main/master.
+  # On workflow_dispatch: runs only when latex_engine is 'pdflatex' (default).
   # ---------------------------------------------------------------------------
   build-latex:
     runs-on: ubuntu-latest
+    if: >
+      github.event_name == 'push' ||
+      (github.event_name == 'workflow_dispatch' &&
+       (github.event.inputs.latex_engine == '' ||
+        github.event.inputs.latex_engine == 'pdflatex'))
 
     steps:
       - name: Checkout repository
@@ -51,7 +59,6 @@ jobs:
           root_file: Ausarbeitung.tex
           working_directory: Ausarbeitung
           args: -pdf
-          latexmk_use_lualatex: ${{ github.event.inputs.latex_engine == 'lualatex' }}
 
       - name: Build Vortrag
         uses: xu-cheng/latex-action@v4
@@ -59,7 +66,6 @@ jobs:
           root_file: Vortrag.tex
           working_directory: Vortrag
           args: -pdf
-          latexmk_use_lualatex: ${{ github.event.inputs.latex_engine == 'lualatex' }}
 
       - name: List generated PDFs
         run: |
@@ -78,9 +84,16 @@ jobs:
 
   # ---------------------------------------------------------------------------
   # Job 2: build-latex-lualatex (LuaLaTeX)
+  #
+  # Runs on every push to main/master.
+  # On workflow_dispatch: runs only when latex_engine is 'lualatex'.
   # ---------------------------------------------------------------------------
   build-latex-lualatex:
     runs-on: ubuntu-latest
+    if: >
+      github.event_name == 'push' ||
+      (github.event_name == 'workflow_dispatch' &&
+       github.event.inputs.latex_engine == 'lualatex')
 
     steps:
       - name: Checkout repository

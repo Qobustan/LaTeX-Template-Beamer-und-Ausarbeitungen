@@ -63,18 +63,20 @@ local function parse_bib(content)
     end
 
     -- Iterate over @TYPE{KEY, ...} blocks
-    for entry_type, rest_start in content:gmatch("@(%a+)%s*[{(]()") do
+    -- Capture the opening delimiter to correctly match the closing one.
+    for entry_type, open_delim, rest_start in content:gmatch("@(%a+)%s*([{(])()") do
         local etype = entry_type:lower()
+        local close_delim = open_delim == "{" and "}" or ")"
         if etype ~= "comment" and etype ~= "preamble" and etype ~= "string" then
-            -- Find matching closing brace by counting depth
+            -- Find matching closing delimiter by counting depth
             local depth = 1
             local i = rest_start
             local entry_body = {}
             while i <= #content and depth > 0 do
                 local ch = content:sub(i, i)
-                if ch == "{" then
+                if ch == open_delim then
                     depth = depth + 1
-                elseif ch == "}" then
+                elseif ch == close_delim then
                     depth = depth - 1
                     if depth == 0 then break end
                 end
@@ -144,8 +146,14 @@ local function check_entries(entries, path)
             end
         end
 
-        -- Missing year (not required for misc/online but still useful to flag)
-        if entry.type ~= "misc" and entry.type ~= "online" and not entry.fields["year"] then
+        -- Missing year: only warn when year is NOT already a required field for
+        -- this entry type (to avoid duplicating the required-field error above).
+        local year_is_required = required and (function()
+            for _, f in ipairs(required) do if f == "year" then return true end end
+            return false
+        end)()
+        if not year_is_required and entry.type ~= "misc" and entry.type ~= "online"
+            and not entry.fields["year"] then
             io.write(string.format("[WARN]  %s: missing 'year' field\n", loc))
             warnings = warnings + 1
         end
