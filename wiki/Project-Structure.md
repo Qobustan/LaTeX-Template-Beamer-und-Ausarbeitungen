@@ -103,20 +103,20 @@ LaTeX-Template-Beamer-und-Ausarbeitungen/
 #### `Ausarbeitung/` - Written Elaboration
 
 Contains the main LaTeX sources for the written paper:
-- **Purpose**: 17-page academic paper on Nichtparametrische Statistik (KDE, nichtparametrische Regression, robuste lineare Regression)
+- **Purpose**: Generic academic paper template (article class) with bibliography support
 - **Main file**: `Ausarbeitung.tex`
 - **Header files**: `header.tex`, `header-article.tex`, `header-common.tex`
 - **Bibliography backend**: Biber (`backend=biber`)
-- **Build output**: `Ausarbeitung.pdf` (committed directly to this directory)
+- **Build output**: `Ausarbeitung.pdf`
 
 #### `Vortrag/` - Presentation
 
 Contains LaTeX Beamer sources for presentation slides:
-- **Purpose**: Beamer presentation for the seminar talk
+- **Purpose**: Generic Beamer presentation template with bibliography support
 - **Main file**: `Vortrag.tex`
 - **Header files**: `header.tex`, `header-beamer.tex`, `header-common.tex`
-- **Build outputs**: `Vortrag.pdf` (68 pages with pauses) and `Vortrag-Druckversion.pdf` (51 pages, print version without pauses) — both committed directly to this directory
-- **`img/`**: Images embedded in slides (e.g., spectrophotometric measurement plots for the Itter case study)
+- **Build outputs**: `Vortrag.pdf` (with pause overlays) and `Vortrag-Druckversion.pdf` (print version without pauses)
+- **`img/`**: Placeholder directory for images embedded in slides
 
 #### `Besprechung/` - Meeting Notes
 

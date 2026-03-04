@@ -1,6 +1,6 @@
 # Project Architecture
 
-This document provides an architectural overview of the Seminar: Angewandte Statistik 2025 project.
+This document provides an architectural overview of the LaTeX-Template-Beamer-und-Ausarbeitungen project.
 
 ## Table of Contents
 
@@ -15,10 +15,10 @@ This document provides an architectural overview of the Seminar: Angewandte Stat
 
 ## Overview
 
-This is a LaTeX-based academic project repository for a seminar on Applied Statistics (Angewandte Statistik). The project consists of two main LaTeX documents:
+This is a generic LaTeX template repository for academic papers and Beamer presentations. The project provides two ready-to-use document templates:
 
-1. **Ausarbeitung** - A comprehensive written elaboration on nonparametric statistics
-2. **Vortrag** - A Beamer presentation covering the same topics
+1. **Ausarbeitung** - A written elaboration template (article class, KOMA-Script)
+2. **Vortrag** - A Beamer presentation template
 
 The repository is designed for:
 - Automated PDF generation via GitHub Actions
@@ -114,29 +114,23 @@ The repository is designed for:
 
 #### Ausarbeitung (Written Elaboration)
 - **Type:** Article-class LaTeX document (KOMA-Script)
-- **Content:** Comprehensive 17-page coverage of nonparametric statistics topics
-- **Key Sections:**
-  1. Einleitung und Motivation (with Ausgangssituation subsection)
-  2. Fallbeispiel: Gewässermessungen der Itter
-  3. Der Schätzer von Rosenblatt (with Empirische Verteilungsfunktion subsection)
-  4. Das Histogramm (Der Klassiker)
-  5. Kerndichteschätzung (KDE) — with O-Notation, Bias-Varianz-Tradeoff, Faltungsperspektive, Vorteile
-  6. Nichtparametrische Regression — Nadaraya-Watson, NW als Quotient von KDE, Bias-Problem an Datengrenzen
-  7. Robuste Lineare Regression (Theil-Schätzer)
-  8. Zusammenfassung und Fazit
+- **Content:** Customizable academic paper template with full bibliography support
+- **Key Sections (template defaults):**
+  1. Einleitung und Motivation
+  2. Hauptteil (customizable content sections)
+  3. Zusammenfassung und Fazit
 
 #### Vortrag (Presentation)
-- **Type:** Beamer presentation (68 pages with pause overlays; 51-page print version)
-- **Content:** Condensed presentation format of Ausarbeitung topics
+- **Type:** Beamer presentation template
+- **Content:** Customizable slide deck with consistent academic styling
 - **Features:**
   - Professional academic theme
-  - Mathematical formulas and visualizations
-  - Case study slide with real-world measurement data (Itter)
+  - Mathematical formula support
   - Progressive disclosure of concepts (configurable `\pause` switches)
   - Bibliography integration
-  - **`Vortrag-Druckversion.pdf`**: 51-page print version compiled without `\pause` overlays
+  - **`Vortrag-Druckversion.pdf`**: Print version compiled without `\pause` overlays
 - **Subdirectories:**
-  - `img/` — Images embedded in slides (e.g., spectrophotometric measurement plots)
+  - `img/` — Directory for images embedded in slides
 
 ### 2. Header Files
 
@@ -153,7 +147,6 @@ Both documents use modular `header.tex` files that define:
 - **Format:** BibLaTeX
 - **Backend:** Biber (`backend=biber` in `\usepackage[backend=biber, style=alphabetic]{biblatex}`)
 - **Style:** Alphabetic citation style
-- **Content:** 3 references (`BüningTrenkler+1994`, `DalItter2026`, `DalItter2021`)
 - **Integration:** Citations throughout both documents
 
 ---
@@ -282,8 +275,8 @@ Temporary LaTeX files (.aux, .log, .toc, .synctex.gz, etc.) are removed by:
    cd Ausarbeitung && latexmk -pdf Ausarbeitung.tex
    
    # Using Docker
-   docker build -t latex-seminar .
-   docker run --rm -v $(pwd):/app latex-seminar
+   docker build -t latex-template .
+   docker run --rm -v $(pwd):/app latex-template
    ```
 
 4. **Clean up**

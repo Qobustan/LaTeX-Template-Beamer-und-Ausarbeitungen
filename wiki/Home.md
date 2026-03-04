@@ -15,18 +15,13 @@ Welcome to the project wiki for the LaTeX Template for Beamer Presentations and 
 
 ## About This Project
 
-This repository contains materials for the "Angewandte Statistik" seminar (2025), including:
+This repository is a generic LaTeX template for academic papers and Beamer presentations, including:
 
-- LaTeX sources for written elaboration (`Ausarbeitung/`) — topic: Nichtparametrische Statistik (KDE, nichtparametrische Regression, robuste lineare Regression)
-- LaTeX sources for presentation slides (`Vortrag/`)
-- Meeting notes and discussions (`Besprechung/`)
-- Automated CI/CD pipelines for PDF generation
-- Comprehensive documentation and archived historical branches
-
-The compiled PDFs are committed directly to the repository:
-- `Ausarbeitung/Ausarbeitung.pdf` — 17-page written paper
-- `Vortrag/Vortrag.pdf` — 68-page Beamer presentation (with pause overlays)
-- `Vortrag/Vortrag-Druckversion.pdf` — 51-page print version (without pauses)
+- LaTeX sources for written elaborations / academic papers (`Ausarbeitung/`) — ready-to-use article template with bibliography support
+- LaTeX sources for Beamer presentation slides (`Vortrag/`) — ready-to-use Beamer template
+- Meeting notes template (`Besprechung/`)
+- Automated CI/CD pipelines for PDF generation (pdflatex + LuaLaTeX)
+- Comprehensive documentation, helper scripts, and archived historical branches
 
 ## Key Features
 

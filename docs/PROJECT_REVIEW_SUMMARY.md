@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document summarizes the comprehensive improvements made to the **Seminar: Angewandte Statistik 2025** repository following a thorough project review. All improvements were implemented with a focus on best practices, maintainability, and professional standards.
+This document summarizes the comprehensive improvements made to the **LaTeX-Template-Beamer-und-Ausarbeitungen** repository following a thorough project review. All improvements were implemented with a focus on best practices, maintainability, and professional standards.
 
 **Review Date:** February 15, 2026  
 **Reviewer:** GitHub Copilot Agent  

@@ -35,15 +35,33 @@ echo.
 echo Building Ausarbeitung...
 cd /d "%~dp0..\Ausarbeitung" || exit /b 1
 %LATEX_ENGINE% -interaction=nonstopmode Ausarbeitung.tex || exit /b 1
-biber Ausarbeitung 2>nul
+biber Ausarbeitung
+if errorlevel 1 (
+    echo Error: biber failed for Ausarbeitung. Check Ausarbeitung.blg for details.
+    exit /b 1
+)
 %LATEX_ENGINE% -interaction=nonstopmode Ausarbeitung.tex || exit /b 1
 %LATEX_ENGINE% -interaction=nonstopmode Ausarbeitung.tex || exit /b 1
+if not exist "Ausarbeitung.pdf" (
+    echo Error: Ausarbeitung.pdf was not generated.
+    exit /b 1
+)
+echo Ausarbeitung.pdf generated successfully.
 
 echo Building Vortrag...
 cd /d "%~dp0..\Vortrag" || exit /b 1
 %LATEX_ENGINE% -interaction=nonstopmode Vortrag.tex || exit /b 1
-biber Vortrag 2>nul
+biber Vortrag
+if errorlevel 1 (
+    echo Error: biber failed for Vortrag. Check Vortrag.blg for details.
+    exit /b 1
+)
 %LATEX_ENGINE% -interaction=nonstopmode Vortrag.tex || exit /b 1
 %LATEX_ENGINE% -interaction=nonstopmode Vortrag.tex || exit /b 1
+if not exist "Vortrag.pdf" (
+    echo Error: Vortrag.pdf was not generated.
+    exit /b 1
+)
+echo Vortrag.pdf generated successfully.
 
 echo PDFs generated successfully!
