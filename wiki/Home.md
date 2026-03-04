@@ -1,6 +1,6 @@
-# Seminar: Angewandte Statistik 2025 - Wiki
+# LaTeX-Template-Beamer-und-Ausarbeitungen - Wiki
 
-Welcome to the project wiki for the "Angewandte Statistik" seminar (2025).
+Welcome to the project wiki for the LaTeX Template for Beamer Presentations and Academic Papers.
 
 ## Quick Navigation
 
