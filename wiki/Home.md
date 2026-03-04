@@ -1,10 +1,10 @@
-# LaTeX Template: Beamer and Elaborations - Wiki
+# Seminar: Angewandte Statistik 2025 - Wiki
 
-Welcome to the project wiki for the LaTeX Template repository.
+Welcome to the project wiki for the "Angewandte Statistik" seminar (2025).
 
 ## Quick Navigation
 
-- **[Getting Started](Getting-Started.md)** - Quick start guide for using the templates
+- **[Getting Started](Getting-Started.md)** - Quick start guide for new contributors
 - **[Project Structure](Project-Structure.md)** - Detailed overview of the repository structure
 - **[Building PDFs](Building-PDFs.md)** - How to compile LaTeX documents locally and via CI/CD
 - **[CI/CD Workflows](CI-CD-Workflows.md)** - GitHub Actions automation documentation
@@ -15,22 +15,25 @@ Welcome to the project wiki for the LaTeX Template repository.
 
 ## About This Project
 
-This repository provides comprehensive LaTeX templates for creating professional presentations and written documents, including:
+This repository contains materials for the "Angewandte Statistik" seminar (2025), including:
 
-- LaTeX Beamer presentation template with example content (`Vortrag/`)
-- LaTeX article template for written elaborations with example content (`Ausarbeitung/`)
-- Additional template variants (`Besprechung/Material/`)
+- LaTeX sources for written elaboration (`Ausarbeitung/`) — topic: Nichtparametrische Statistik (KDE, nichtparametrische Regression, robuste lineare Regression)
+- LaTeX sources for presentation slides (`Vortrag/`)
+- Meeting notes and discussions (`Besprechung/`)
 - Automated CI/CD pipelines for PDF generation
-- Comprehensive documentation and build scripts
+- Comprehensive documentation and archived historical branches
+
+The compiled PDFs are committed directly to the repository:
+- `Ausarbeitung/Ausarbeitung.pdf` — 17-page written paper
+- `Vortrag/Vortrag.pdf` — 68-page Beamer presentation (with pause overlays)
+- `Vortrag/Vortrag-Druckversion.pdf` — 51-page print version (without pauses)
 
 ## Key Features
 
-- ✅ **Professional Templates**: Ready-to-use Beamer and KOMA-Script templates
-- ✅ **Example Content**: Complete examples showing best practices
 - ✅ **Automated PDF Building**: GitHub Actions workflows automatically build PDFs on every push
-- ✅ **Comprehensive Documentation**: Extensive guides for LaTeX installation, building, and customization
+- ✅ **Comprehensive Documentation**: Extensive guides for LaTeX installation, building, and contribution
+- ✅ **Branch Management**: Well-documented branch history and consolidation
 - ✅ **Quality Assurance**: Automated linting, spell-checking, and format validation
-- ✅ **Multi-Language Support**: Easy to switch between German and English
 
 ## Getting Help
 
@@ -46,4 +49,4 @@ We welcome contributions! Please read our [Contributing Guidelines](Contributing
 
 ---
 
-**Project Status**: [![Build all LaTeX projects](https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen/actions/workflows/build-and-publish-pdfs.yml/badge.svg)](https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen/actions/workflows/build-and-publish-pdfs.yml)
+**Project Status**: [![Build all LaTeX projects](https://github.com/Qobustan/Seminar-Angewandte-Statistik-2025/actions/workflows/build-and-publish-pdfs.yml/badge.svg)](https://github.com/Qobustan/Seminar-Angewandte-Statistik-2025/actions/workflows/build-and-publish-pdfs.yml)

@@ -1,6 +1,6 @@
 # =============================================================================
 # Multi-stage Dockerfile for LaTeX PDF Generation
-# Optimized for: LaTeX Template - Beamer und Ausarbeitungen
+# Optimized for: Seminar Angewandte Statistik 2025
 #
 # Build stages overview
 # ---------------------
@@ -82,9 +82,10 @@ RUN cd /lua-src && \
 FROM ubuntu:20.04 AS base
 
 # Metadata following OCI image spec
-LABEL org.opencontainers.image.title="LaTeX PDF Generator"
-LABEL org.opencontainers.image.description="Containerized LaTeX environment for generating PDFs"
-LABEL org.opencontainers.image.source="https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen"
+LABEL org.opencontainers.image.title="LaTeX Seminar PDF Generator"
+LABEL org.opencontainers.image.description="Containerized LaTeX environment for generating seminar PDFs"
+LABEL org.opencontainers.image.authors="Yavuzâlp Dal"
+LABEL org.opencontainers.image.source="https://github.com/Qobustan/Seminar-Angewandte-Statistik-2025"
 LABEL org.opencontainers.image.licenses="MIT"
 LABEL org.opencontainers.image.version="2.0"
 
@@ -204,19 +205,19 @@ VOLUME ["/app/Ausarbeitung", "/app/Vortrag"]
 # Usage Examples:
 # 
 # Build:
-#   docker build -t latex-template:latest .
-#   docker build --build-arg USER_ID=$(id -u) --build-arg GROUP_ID=$(id -g) -t latex-template:latest .
+#   docker build -t latex-seminar:latest .
+#   docker build --build-arg USER_ID=$(id -u) --build-arg GROUP_ID=$(id -g) -t latex-seminar:latest .
 #
 # Run (using current directory with default pdflatex):
-#   docker run --rm -v $(pwd):/app latex-template:latest
+#   docker run --rm -v $(pwd):/app latex-seminar:latest
 #
 # Run with LuaLaTeX:
-#   docker run --rm -e LATEX_ENGINE=lualatex -v $(pwd):/app latex-template:latest
+#   docker run --rm -e LATEX_ENGINE=lualatex -v $(pwd):/app latex-seminar:latest
 #
 # Run with custom user ID (avoids permission issues):
-#   docker run --rm --user $(id -u):$(id -g) -v $(pwd):/app latex-template:latest
+#   docker run --rm --user $(id -u):$(id -g) -v $(pwd):/app latex-seminar:latest
 #
 # Interactive shell for debugging:
-#   docker run --rm -it -v $(pwd):/app --entrypoint /bin/bash latex-template:latest
+#   docker run --rm -it -v $(pwd):/app --entrypoint /bin/bash latex-seminar:latest
 #
 # =============================================================================
