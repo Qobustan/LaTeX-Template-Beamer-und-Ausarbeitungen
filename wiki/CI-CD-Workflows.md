@@ -7,6 +7,7 @@ This repository uses GitHub Actions for continuous integration and deployment. T
 The project includes several automated workflows for:
 - 📦 Building and publishing PDFs
 - 📖 Publishing wiki documentation
+- 🔒 Security analysis (CodeQL)
 - ✅ Code quality checks (linting, formatting)
 - 🔤 Spell-checking
 - 📚 BibTeX validation
@@ -28,54 +29,26 @@ The project includes several automated workflows for:
 
 #### What It Does
 
-1. **Setup Environment**
-   - Installs minimal TeX Live
-   - Installs required LaTeX packages:
-     - pdflatex and core tools
-     - German language support
-     - Bibliography tools (biber)
-     - Common LaTeX packages
+1. **Build Documents** (two parallel jobs)
+   - `build-latex`: Compiles `Ausarbeitung/Ausarbeitung.tex` and `Vortrag/Vortrag.tex` using pdflatex (default) via `xu-cheng/latex-action@v4` with Docker image `ghcr.io/xu-cheng/texlive-full`
+   - `build-latex-lualatex`: Same documents compiled with lualatex (always runs)
+   - Also builds Lua 5.5.0 from source (`lua-5.5.0/` directory in repo)
 
-2. **Build Documents**
-   - Compiles `Ausarbeitung/Ausarbeitung.tex` → PDF
-   - Compiles `Vortrag/Vortrag.tex` → PDF
-   - Uses latexmk with PDFLaTeX
-   - Handles multiple passes automatically
+2. **Collect Artifacts**
+   - Gathers generated PDFs (`Ausarbeitung.pdf`, `Vortrag.pdf`, `Vortrag-Druckversion.pdf`)
+   - Uploads as GitHub Actions artifacts (90-day retention)
 
-3. **Collect Artifacts**
-   - Gathers generated PDFs
-   - Prepares for deployment
-
-4. **Publish to Branch**
-   - Pushes PDFs to `pdfs` branch
-   - Maintains history of builds
-   - Accessible via GitHub web interface
+3. **Note on PDFs in repo**
+   - The compiled PDFs are also committed directly to the repository (`Ausarbeitung/` and `Vortrag/` directories)
 
 #### Accessing Built PDFs
 
-```bash
-# Clone the pdfs branch
-git clone -b pdfs https://github.com/Qobustan/Seminar-Angewandte-Statistik-2025.git
+PDFs are available directly in the repository:
+- `Ausarbeitung/Ausarbeitung.pdf`
+- `Vortrag/Vortrag.pdf`
+- `Vortrag/Vortrag-Druckversion.pdf`
 
-# Or fetch specific PDF
-curl -O https://raw.githubusercontent.com/Qobustan/Seminar-Angewandte-Statistik-2025/pdfs/Ausarbeitung.pdf
-```
-
-#### Customizing the Workflow
-
-To add packages, edit the workflow file:
-
-```yaml
-- name: Install TeX Live packages
-  run: |
-    sudo apt-get update
-    sudo apt-get install -y \
-      texlive-latex-base \
-      texlive-latex-extra \
-      texlive-lang-german \
-      biber \
-      your-additional-package
-```
+Or download from the Actions tab after a workflow run.
 
 ### 2. Spell Check
 
@@ -365,29 +338,65 @@ updates:
 
 #### Triggers
 
-- Push to `main` or `master` branch (when wiki files change)
+- Push to `main` or `master` branch (when `wiki/**` files change)
 - Manual trigger (workflow_dispatch)
 
 #### What It Does
 
-1. **Checkout Repository**
-   - Checks out the repository with wiki content
+1. **Checkout Repository** — checks out the current branch including the `wiki/` directory.
+2. **Publish to GitHub Wiki** — uses a native `git push` approach:
+   - Clones the repository's GitHub Wiki (`<repo>.wiki.git`) using `GITHUB_TOKEN`.
+   - If the clone fails, it checks whether the wiki simply doesn't exist yet (using `git ls-remote`). If the wiki is not found, a fresh local repository is initialised. Any other failure (network, auth, permissions) causes the step to exit with an error so the problem remains visible.
+   - Synchronises the working tree by clearing all files except `.git` before copying, so deleted or renamed pages are removed from the wiki as well.
+   - Commits and pushes only when there are actual changes.
+   - The commit message includes the source branch name and `[skip ci]` to prevent re-triggering other workflows.
 
-2. **Publish to GitHub Wiki**
-   - Syncs markdown files from `wiki/` directory to the repository's GitHub Wiki
-   - Uses `github-wiki-publish-action` pinned to a specific commit SHA
-   - Avoids firewall-blocked API calls by using commit SHA instead of version tags
+#### Authentication
 
-#### Why Commit SHA?
-
-This workflow uses a pinned commit SHA for the `github-wiki-publish-action` instead of a version tag (e.g., `@v1`). This approach:
-- Prevents firewall-blocked API calls to GitHub releases/tags endpoints
-- Ensures reproducible builds with a specific action version
-- Improves security by using an immutable reference
+This workflow uses the **built-in `GITHUB_TOKEN`** — no personal access tokens or additional secrets are required.
 
 #### Accessing the Wiki
 
 Visit the repository's [Wiki tab](https://github.com/Qobustan/Seminar-Angewandte-Statistik-2025/wiki) to view the published documentation.
+
+---
+
+### 12. CodeQL Security Analysis
+
+**File**: `.github/workflows/codeql-analysis.yml`
+
+#### Triggers
+
+- Push to `main` or `master` branch
+- Pull requests targeting `main` or `master`
+- Weekly schedule (every Monday at 00:00 UTC)
+- Manual trigger (workflow_dispatch)
+
+#### What It Does
+
+1. **Initialize CodeQL** — sets up the CodeQL analysis engine for Python.
+2. **Autobuild** — automatically builds/indexes the codebase.
+3. **Perform CodeQL Analysis** — runs security queries against all Python scripts and saves results to a local SARIF file.
+4. **Upload SARIF as Artifact** — uploads the SARIF report as a downloadable workflow artifact (30-day retention) when results are generated. Uses `if-no-files-found: warn` so the step does not fail if the analysis step itself failed before producing output.
+5. **Report Outcome** — checks whether a SARIF file was produced and prints an appropriate workflow annotation:
+   - If SARIF results exist but the upload to Code Scanning failed: emits a warning and a notice pointing to the artifact.
+   - If no SARIF results were produced at all: emits a warning and directs to the step logs.
+
+#### Graceful Handling of Missing Code Scanning
+
+On private repositories without GitHub Advanced Security (GHAS) the SARIF upload step (`codeql-action/analyze`) fails with *"Code scanning is not enabled"*. This workflow handles that gracefully:
+- The `Perform CodeQL Analysis` step has `continue-on-error: true` so the **job always succeeds**.
+- A warning annotation is added to the workflow summary if the upload failed.
+- When the analysis succeeds, the SARIF file is available as the **`codeql-sarif-python`** artifact.
+
+When GitHub Advanced Security is later enabled for this repository, the SARIF upload will succeed automatically with no further changes required.
+
+#### Accessing Results
+
+1. Go to the [Actions tab](https://github.com/Qobustan/Seminar-Angewandte-Statistik-2025/actions)
+2. Select a CodeQL workflow run
+3. Download the `codeql-sarif-python` artifact under "Artifacts"
+4. Open the `.sarif` file with a SARIF viewer (e.g., the [VS Code SARIF extension](https://marketplace.visualstudio.com/items?itemName=MS-SarifVSCode.sarif-viewer))
 
 ## Workflow Status
 
@@ -428,7 +437,8 @@ npx cspell "**/*.tex" "**/*.md"
 
 **Validate locally**:
 ```bash
-biber --tool --validate-datamodel Ausarbeitung/Ausarbeitung.bib
+# Check for duplicate keys and syntax errors
+grep -E "^@" Ausarbeitung/Ausarbeitung.bib | sort | uniq -d
 ```
 
 **Fix**:

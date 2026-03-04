@@ -12,5 +12,11 @@ jobs:
     - uses: actions/first-interaction@v3
       with:
         repo-token: ${{ secrets.GITHUB_TOKEN }}
-        issue-message: "Message that will be displayed on users' first issue"
-        pr-message: "Message that will be displayed on users' first pull request"
+        issue-message: |
+          Danke für deinen ersten Issue! 🎉
+          Wir schauen uns dein Anliegen so bald wie möglich an.
+          Bitte stelle sicher, dass du die [Beitragsrichtlinien](CONTRIBUTING.md) gelesen hast.
+        pr-message: |
+          Danke für deinen ersten Pull Request! 🎉
+          Wir schauen uns deine Änderungen so bald wie möglich an.
+          Bitte stelle sicher, dass du die [Beitragsrichtlinien](CONTRIBUTING.md) gelesen hast.
