@@ -94,7 +94,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Semester:** Wintersemester 2025/26
 - **Topic:** Applied Statistics (Angewandte Statistik)
 - **Institution:** Referenced in seminar context
-- **Repository:** https://github.com/Qobustan/Seminar-Angewandte-Statistik-2025
+- **Repository:** https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen
 
 ## Versioning Notes
 
@@ -103,5 +103,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - MINOR: Backward-compatible functionality additions
 - PATCH: Backward-compatible bug fixes
 
-[Unreleased]: https://github.com/Qobustan/Seminar-Angewandte-Statistik-2025/compare/main...HEAD
-[1.0.0]: https://github.com/Qobustan/Seminar-Angewandte-Statistik-2025/releases/tag/v1.0.0
+[Unreleased]: https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen/compare/main...HEAD
+[1.0.0]: https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen/releases/tag/v1.0.0

@@ -10,7 +10,7 @@ set -e
 
 # Repository configuration
 REPO_OWNER="Qobustan"
-REPO_NAME="Seminar-Angewandte-Statistik-2025"
+REPO_NAME="LaTeX-Template-Beamer-und-Ausarbeitungen"
 REPO_FULL="${REPO_OWNER}/${REPO_NAME}"
 
 echo "=================================="

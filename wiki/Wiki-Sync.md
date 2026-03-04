@@ -2,7 +2,7 @@
 
 ## Overview
 
-This repository maintains its wiki documentation in the `wiki/` directory within the main repository. These files are automatically synchronized to the [GitHub Wiki](https://github.com/Qobustan/Seminar-Angewandte-Statistik-2025/wiki) through a GitHub Actions workflow.
+This repository maintains its wiki documentation in the `wiki/` directory within the main repository. These files are automatically synchronized to the [GitHub Wiki](https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen/wiki) through a GitHub Actions workflow.
 
 ## How It Works
 
@@ -30,8 +30,8 @@ To edit wiki content:
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/Qobustan/Seminar-Angewandte-Statistik-2025.git
-   cd Seminar-Angewandte-Statistik-2025
+   git clone https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen.git
+   cd LaTeX-Template-Beamer-und-Ausarbeitungen
    ```
 
 2. **Edit files in the `wiki/` directory:**
@@ -72,14 +72,14 @@ To create a new wiki page:
 
 The following pages are currently available:
 
-- **[Home](https://github.com/Qobustan/Seminar-Angewandte-Statistik-2025/wiki/Home)** - Wiki homepage and navigation
-- **[Getting Started](https://github.com/Qobustan/Seminar-Angewandte-Statistik-2025/wiki/Getting-Started)** - Quick start guide
-- **[Building PDFs](https://github.com/Qobustan/Seminar-Angewandte-Statistik-2025/wiki/Building-PDFs)** - PDF compilation guide
-- **[CI/CD Workflows](https://github.com/Qobustan/Seminar-Angewandte-Statistik-2025/wiki/CI-CD-Workflows)** - GitHub Actions documentation
-- **[Contributing](https://github.com/Qobustan/Seminar-Angewandte-Statistik-2025/wiki/Contributing)** - Contribution guidelines
-- **[FAQ](https://github.com/Qobustan/Seminar-Angewandte-Statistik-2025/wiki/FAQ)** - Frequently asked questions
-- **[Troubleshooting](https://github.com/Qobustan/Seminar-Angewandte-Statistik-2025/wiki/Troubleshooting)** - Common issues and solutions
-- **[Project Structure](https://github.com/Qobustan/Seminar-Angewandte-Statistik-2025/wiki/Project-Structure)** - Repository organization
+- **[Home](https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen/wiki/Home)** - Wiki homepage and navigation
+- **[Getting Started](https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen/wiki/Getting-Started)** - Quick start guide
+- **[Building PDFs](https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen/wiki/Building-PDFs)** - PDF compilation guide
+- **[CI/CD Workflows](https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen/wiki/CI-CD-Workflows)** - GitHub Actions documentation
+- **[Contributing](https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen/wiki/Contributing)** - Contribution guidelines
+- **[FAQ](https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen/wiki/FAQ)** - Frequently asked questions
+- **[Troubleshooting](https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen/wiki/Troubleshooting)** - Common issues and solutions
+- **[Project Structure](https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen/wiki/Project-Structure)** - Repository organization
 
 ## Benefits of This Approach
 

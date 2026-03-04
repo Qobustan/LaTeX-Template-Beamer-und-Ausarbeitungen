@@ -278,7 +278,7 @@ Or download from CI artifacts after a workflow run.
 
 Check the Actions tab on GitHub:
 
-1. Go to: https://github.com/Qobustan/Seminar-Angewandte-Statistik-2025/actions
+1. Go to: https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen/actions
 2. Click on "Build all LaTeX projects" workflow
 3. Select a specific run to view logs
 

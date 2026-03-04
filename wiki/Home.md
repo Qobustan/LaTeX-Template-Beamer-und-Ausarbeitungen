@@ -49,4 +49,4 @@ We welcome contributions! Please read our [Contributing Guidelines](Contributing
 
 ---
 
-**Project Status**: [![Build all LaTeX projects](https://github.com/Qobustan/Seminar-Angewandte-Statistik-2025/actions/workflows/build-and-publish-pdfs.yml/badge.svg)](https://github.com/Qobustan/Seminar-Angewandte-Statistik-2025/actions/workflows/build-and-publish-pdfs.yml)
+**Project Status**: [![Build all LaTeX projects](https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen/actions/workflows/build-and-publish-pdfs.yml/badge.svg)](https://github.com/Qobustan/LaTeX-Template-Beamer-und-Ausarbeitungen/actions/workflows/build-and-publish-pdfs.yml)
