@@ -471,7 +471,9 @@
     "**/.idea/**",
     "**/legacy/**",
     "**/archive/**",
-    "**/__pycache__/**"
+    "**/__pycache__/**",
+    "lua-5.5.0/src/**",
+    "lua-5.5.0/doc/**"
   ],
   "ignoreRegExpList": [
     "\\\\[a-zA-Z@*]+",
@@ -605,6 +607,7 @@
   "flagWords": [],
   "enableFiletypes": [
     "latex",
+    "lua",
     "markdown",
     "tex",
     "text",

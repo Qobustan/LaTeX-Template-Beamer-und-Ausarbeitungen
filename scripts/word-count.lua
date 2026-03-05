@@ -59,11 +59,11 @@ end
 local function count_words(text)
     local stripped = strip_latex(text)
     local n = 0
-    -- Count sequences of non-whitespace characters that contain at least one letter
-    for token in stripped:gmatch("%S+") do
-        if token:match("%a") then
-            n = n + 1
-        end
+    -- Count all non-whitespace tokens; post-strip content is body text so
+    -- every token is a word. This also correctly handles non-ASCII letters
+    -- such as German ä/ö/ü/ß that Lua's %a class does not recognise.
+    for _ in stripped:gmatch("%S+") do
+        n = n + 1
     end
     return n
 end

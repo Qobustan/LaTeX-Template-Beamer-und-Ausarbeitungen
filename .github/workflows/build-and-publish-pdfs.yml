@@ -34,6 +34,8 @@ jobs:
   # ---------------------------------------------------------------------------
   # Job 1: build-latex (pdflatex)
   #
+  # Runs on every push to main/master.
+  # On workflow_dispatch: runs only when latex_engine is 'pdflatex' (default).
   # Compiles both documents with pdflatex (the traditional LaTeX engine).
   # When triggered via workflow_dispatch with latex_engine=lualatex, this job
   # switches to LuaLaTeX for that run only; all automatic push-triggered runs
@@ -47,6 +49,11 @@ jobs:
   # ---------------------------------------------------------------------------
   build-latex:
     runs-on: ubuntu-latest
+    if: >
+      github.event_name == 'push' ||
+      (github.event_name == 'workflow_dispatch' &&
+       (github.event.inputs.latex_engine == '' ||
+        github.event.inputs.latex_engine == 'pdflatex'))
 
     steps:
       - name: Checkout repository
@@ -115,6 +122,15 @@ jobs:
   # ---------------------------------------------------------------------------
   # Job 2: build-latex-lualatex (LuaLaTeX)
   #
+  # Runs on every push to main/master.
+  # On workflow_dispatch: runs only when latex_engine is 'lualatex'.
+  # ---------------------------------------------------------------------------
+  build-latex-lualatex:
+    runs-on: ubuntu-latest
+    if: >
+      github.event_name == 'push' ||
+      (github.event_name == 'workflow_dispatch' &&
+       github.event.inputs.latex_engine == 'lualatex')
   # Compiles both documents with LuaLaTeX on every push to main/master.
   # Running this as a separate, always-on job (rather than a matrix variant)
   # means:

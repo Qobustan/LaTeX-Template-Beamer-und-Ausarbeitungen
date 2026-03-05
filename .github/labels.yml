@@ -5,7 +5,7 @@
 # These labels are used by:
 #   - Dependabot (dependabot.yml): "ci", "dependencies"
 #   - Labeler  (labeler.yml):      "documentation", "latex",
-#                                  "workflows", "docker", "scripts"
+#                                  "workflows", "docker", "scripts", "lua"
 #   - Stale    (stale.yml):        "no-issue-activity", "no-pr-activity"
 #   - Contributing docs:           "question"
 #

@@ -34,11 +34,11 @@ jobs:
         uses: github/codeql-action/init@v4
         with:
           languages: ${{ matrix.language }}
-          # Optionally specify queries to run
-          # queries: security-extended,security-and-quality
 
       - name: Autobuild
         uses: github/codeql-action/autobuild@v4
+        # Optionally specify queries to run
+        # queries: security-extended,security-and-quality
         # Note: For Python, autobuild typically doesn't need to do much
         # as CodeQL analyzes the source code directly
 

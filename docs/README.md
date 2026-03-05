@@ -33,6 +33,7 @@ Everything is kept in its original location — this index only links to it.
 - [`docs/CHANGELOG.md`](CHANGELOG.md) — Keep-a-Changelog formatted version history
 
 ### Improvement Summaries (chronological)
+- [`docs/improvement/IMPROVEMENTS.md`](improvement/IMPROVEMENTS.md) — Improvement notes and open tasks
 - [`docs/improvement/IMPROVEMENTS_SUMMARY_1.0.md`](improvement/IMPROVEMENTS_SUMMARY_1.0.md) — v1.0 improvements (minimal-loss pass)
 - [`docs/improvement/IMPROVEMENT_SUMMARY_2.0.md`](improvement/IMPROVEMENT_SUMMARY_2.0.md) — v2.0 improvements (critical review pass)
 - [`docs/improvement/IMPROVEMENT_SUMMARY_3.0.md`](improvement/IMPROVEMENT_SUMMARY_3.0.md) — v3.0 improvements (spellcheck, biber, Lua, labels)
@@ -88,6 +89,8 @@ The files under `wiki/` are the authoritative source for the GitHub Wiki pages.
 
 | Workflow | File | Trigger |
 |---|---|---|
+| Build & Publish PDFs | [`.github/workflows/build-and-publish-pdfs.yml`](../.github/workflows/build-and-publish-pdfs.yml) | push to main / workflow_dispatch |
+| CI Smoke Tests | [`.github/workflows/ci-smoke-tests.yml`](../.github/workflows/ci-smoke-tests.yml) | push / PR |
 | Build & Publish PDFs | [`.github/workflows/build-and-publish-pdfs.yml`](../.github/workflows/build-and-publish-pdfs.yml) | push / PR |
 | LaTeX Lint | [`.github/workflows/lint.yml`](../.github/workflows/lint.yml) | push / PR |
 | Spellcheck | [`.github/workflows/spellcheck.yml`](../.github/workflows/spellcheck.yml) | push / PR |
