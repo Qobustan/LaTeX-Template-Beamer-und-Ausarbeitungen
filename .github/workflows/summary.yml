@@ -30,7 +30,7 @@ jobs:
           # PREVENT INJECTION ATTACKS!
           # (With passing through an parameter unchecked input is always
           # considered as text and NEVER as CODE even and especially if it
-          # is VALID code!
+          # is VALID code!)
           PARAMETER: ${{ steps.inference.outputs.response }}
           gh issue comment $ISSUE_NUMBER --body '"$PARAMETER"'
         env:
