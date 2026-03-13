@@ -1,5 +1,6 @@
+% !TeX TXS-program:bibliography = txs:///biber
 % Vorlage für das Dokument laden:
-%   - scrartl  -> Artikel
+%   - scrartcl  -> Artikel
 %   - scrreprt -> Bericht
 %   - scrbook  -> Buch
 
@@ -7,11 +8,24 @@
 
 % Hier befinden sich alle Metadaten; Pakete, Einstellungen und die sonstigen Ressourcen
 \input{header.tex}
-\usepackage[utf8]{inputenc}
+
+% LuaLaTeX verarbeitet UTF-8 nativ – inputenc ist hier nicht erforderlich und
+% kann zu Konflikten führen. fontspec liefert volle Unicode-Unterstützung.
+% pdflatex benötigt inputenc, um UTF-8-kodierte Quelldateien korrekt zu verarbeiten.
+\usepackage{iftex}
+\ifluatex
+  \usepackage{fontspec}
+  \setmainfont{Latin Modern Roman}
+  \setsansfont{Latin Modern Sans}
+  \setmonofont{Latin Modern Mono}
+\else
+  \usepackage[utf8]{inputenc}
+  \usepackage[T1]{fontenc}
+\fi
 
 % ANLEITUNG: Passen Sie die Sprache an Ihre Bedürfnisse an (z.B. english statt ngerman)
 \usepackage[ngerman]{babel}
-\usepackage[backend=bibtex, style=alphabetic]{biblatex}
+\usepackage[backend=biber, style=alphabetic]{biblatex}
 \addbibresource{Ausarbeitung.bib}
 
 % Definiere eine Bedingung, die steuert, ob der Text angezeigt wird oder nicht
@@ -19,11 +33,10 @@
 % Setze die Bedingung auf "wahr" (Text wird standardmäßig angezeigt)
 \showtexttrue
 
+% TikZ-Bibliotheken
+\usetikzlibrary{arrows.meta,shapes,positioning,calc}
+
 \begin{document}
-	
-% TikZ - Bibliothek
-\usetikzlibrary{arrows.meta}
-\usetikzlibrary{shapes,arrows.meta,positioning}
 
 \maketitle
 
