@@ -4,16 +4,18 @@
 % Common packages for presentation and paper
 %
 % ARCHITEKTUR-HINWEIS / ARCHITECTURE NOTE:
-%   Diese Datei enthält ausschließlich \usepackage-Aufrufe, die sowohl mit dem
+%   Diese Datei enthält primär \usepackage-Aufrufe, die sowohl mit dem
 %   Beamer-Dokumentenstil (Vortrag/) als auch mit scrartcl (Ausarbeitung/) sicher
-%   kompatibel sind.
+%   kompatibel sind, sowie ggf. eine kleine Menge bewusst ausgewählter,
+%   klassenunabhängiger Konfiguration (z.B. \usetikzlibrary, \pgfplotsset).
 %
-%   Konfigurationsbefehle (\definecolor, \hypersetup, \setlist, \newtheorem,
-%   \tikzset, \newcommand, \lstset usw.) dürfen NICHT hier stehen, weil Beamer
-%   viele davon intern bereits setzt; doppelte Definitionen erzeugen Konflikte
-%   oder überschreiben das Beamer-Theme stillschweigend.
+%   Umfangreiche oder klassen-/theme-spezifische Konfigurationsbefehle
+%   (\definecolor, \hypersetup, \setlist, \newtheorem, \tikzset, \newcommand,
+%   \lstset usw.) dürfen NICHT hier stehen, weil Beamer viele davon intern
+%   bereits setzt; doppelte Definitionen erzeugen Konflikte oder überschreiben
+%   das Beamer-Theme stillschweigend.
 %   → Solche Befehle gehören in header-article.tex (Ausarbeitung) bzw. in das
-%     Beamer-Theme (Vortrag).
+%     Beamer-Theme / header-beamer.tex (Vortrag).
 %
 % BEWUSST NICHT IN DIESER DATEI / INTENTIONALLY ABSENT:
 %
