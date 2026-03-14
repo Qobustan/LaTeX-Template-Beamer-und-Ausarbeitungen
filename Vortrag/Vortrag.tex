@@ -11,6 +11,15 @@
 
 % ANLEITUNG: Passen Sie die Sprache an Ihre Bedürfnisse an (z.B. english statt ngerman)
 \usepackage[ngerman]{babel}
+
+% ANLEITUNG: Literaturverwaltung mit biblatex/biber
+% Diese Vorlage verwendet biblatex mit backend=biber. Kompilieren Sie daher NICHT mit bibtex,
+% sondern mit biber, z.B. in der Kommandozeile:
+%   lualatex Vortrag
+%   biber Vortrag
+%   lualatex Vortrag
+%   lualatex Vortrag
+% (Bei Verwendung von pdflatex/latex entsprechend anpassen.)
 \usepackage[backend=biber, style=alphabetic]{biblatex}
 \addbibresource{Vortrag.bib}
 
