@@ -1,11 +1,33 @@
-% Article-spezifische Konfiguration
+% ==============================================================================
+% header-article.tex
+% Article-spezifische Konfiguration (scrartcl / scrreprt / scrbook)
 % Article-specific configuration
+%
+% Diese Datei enthält alles, was NICHT in header-common.tex stehen darf, weil
+% es entweder mit Beamer inkompatibel ist oder nur für Ausarbeitungen sinnvoll:
+%   - amsthm       → Beamer definiert eigene Theorem-Umgebungen; ein zweites
+%                    amsthm-Load würde diese überschreiben bzw. zu Konflikten führen
+%   - changepage / adjustbox  → Beamer-inkompatibel
+%   - \definecolor / \hypersetup → Beamer hat ein eigenes Farbsystem; Definitionen
+%                    müssen im Beamer-Theme gesetzt werden, nicht global
+%   - \setlist     → Beamer setzt Listenabstände intern; globale Überschreibung
+%                    würde Folien-Layout zerstören
+%   - \newtheorem  → Wie amsthm (s.o.)
+%   - \tikzset     → TikZ-Styles können mit Beamers Overlay-Mechanismus kollidieren
+%   - \newcommand  → Mathematische Makros und Hilfsbefehle, nur für Ausarbeitungen
+%   - \lstset / \lstdefinelanguage → Code-Listing-Konfiguration; Beamer nutzt
+%                    üblicherweise eigene Blöcke (verbatim-Umgebungen)
+%   - Unicode-Fixes (\newunicodechar) → Nur für pdfLaTeX-basierte Ausarbeitungen
+%   - \subsubsubsection → Gliederungstiefe 4 nur für lange Ausarbeitungen relevant
+%
+% ==============================================================================
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Article-spezifische Pakete die NICHT mit Beamer kompatibel sind
 
-% Erweiterung: Umgebungen für Definitionen etc
+% Erweiterung: Theorem-Umgebungen (amsthm darf NICHT in header-common.tex stehen,
+% da Beamer ein eigenes Theorem-System mitbringt und amsthm dort zu Konflikten führt)
 \usepackage{amsthm}
 
 % Optimierung von Grafiken (nicht kompatibel mit Beamer)

@@ -1,10 +1,31 @@
+% ==============================================================================
+% header-common.tex
 % Gemeinsame Pakete für Vortrag und Ausarbeitung
 % Common packages for presentation and paper
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% HINWEIS: natbib wird nicht verwendet, da wir biblatex nutzen (siehe Hauptdokument)
-% natbib ist inkompatibel mit biblatex
+%
+% ARCHITEKTUR-HINWEIS: Diese Datei enthält NUR \usepackage-Aufrufe, die sowohl
+% mit dem Beamer-Dokumentenstil (Vortrag) als auch mit scrartcl (Ausarbeitung)
+% kompatibel sind. Konfigurationsbefehle (\definecolor, \hypersetup, \setlist,
+% \newtheorem, \tikzset, \newcommand usw.) stehen in den dokumenttyp-spezifischen
+% Headern (header-article.tex, header-beamer.tex), weil Beamer viele dieser
+% Befehle intern bereits setzt und Dopplungen zu Konflikten führen.
+%
+% BEWUSST NICHT IN DIESER DATEI:
+%   - inputenc / fontenc  → Engine-spezifisch; in Ausarbeitung.tex / Vortrag.tex
+%                           per \ifluatex-Konditional gesetzt
+%   - babel               → Sprachauswahl ist dokumentspezifisch; in
+%                           Ausarbeitung.tex / Vortrag.tex mit Hinweis zur
+%                           Konfiguration (z.B. ngerman → english)
+%   - amsthm              → Inkompatibel mit Beamers eigenem Theorem-System;
+%                           nur in header-article.tex geladen
+%   - tipa                → Wurde entfernt: Das Paket liefert phonetische IPA-
+%                           Symbole und definiert viele Text-Befehle um, was zu
+%                           Konflikten mit anderen Schriftpaketen führt. In
+%                           diesem Template wird tipa an keiner Stelle verwendet.
+%   - natbib / cite       → Inkompatibel mit biblatex (dem hier genutzten
+%                           Literaturpaket); war auskommentierter Altcode
+%
+% ==============================================================================
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
