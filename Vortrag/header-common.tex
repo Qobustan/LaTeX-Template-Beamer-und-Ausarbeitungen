@@ -156,6 +156,9 @@
 
 % Textsymbole der TS1-Kodierung: \textbullet, \texttimes, \textdegree, Pfeile
 % im Textmodus. Wird von vielen anderen Paketen implizit vorausgesetzt.
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+\fi
 \usepackage{textcomp}
 
 % ──────────────────────────────────────────────────────────────────────────────
