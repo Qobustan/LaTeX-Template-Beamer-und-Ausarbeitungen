@@ -6,9 +6,6 @@
 
 \documentclass[a4paper, 11pt]{scrartcl}
 
-% Hier befinden sich alle Metadaten; Pakete, Einstellungen und die sonstigen Ressourcen
-\input{header.tex}
-
 % LuaLaTeX verarbeitet UTF-8 nativ – inputenc ist hier nicht erforderlich und
 % kann zu Konflikten führen. fontspec liefert volle Unicode-Unterstützung.
 % pdflatex benötigt inputenc, um UTF-8-kodierte Quelldateien korrekt zu verarbeiten.
@@ -22,6 +19,9 @@
   \usepackage[utf8]{inputenc}
   \usepackage[T1]{fontenc}
 \fi
+
+% Hier befinden sich alle Metadaten; Pakete, Einstellungen und die sonstigen Ressourcen
+\input{header.tex}
 
 % ANLEITUNG: Passen Sie die Sprache an Ihre Bedürfnisse an (z.B. english statt ngerman)
 \usepackage[ngerman]{babel}
