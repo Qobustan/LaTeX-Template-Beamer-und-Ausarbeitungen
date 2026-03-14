@@ -1,3 +1,30 @@
+% ==============================================================================
+% header.tex  (Besprechung/Material/Ausarbeitung)
+% Standalone-Header für Besprechungsmaterial (kein Split-Aufbau)
+%
+% BEREINIGUNGSPROTOKOLL (Überarbeitung 2026):
+%   - natbib         → Entfernt: war nur auskommentiert und ist inkompatibel
+%                      mit biblatex (dem hier genutzten Literaturpaket)
+%   - ucs            → Entfernt: \usepackage[mathletters]{ucs} war auskommentiert
+%                      und ist inkompatibel mit biblatex
+%   - cite           → Entfernt: war auskommentiert und ist inkompatibel mit biblatex
+%   - bibtex         → Entfernt: \usepackage{bibtex} existiert nicht als Paket;
+%                      war auskommentierter Tippfehler (bibtex ist ein Programm)
+%   - \bibliographystyle → Entfernt: Gilt nur für bibtex-Workflow; dieses Template
+%                          nutzt biblatex mit \printbibliography
+%   - tipa           → Entfernt: Das Paket liefert phonetische IPA-Symbole und
+%                      definiert viele Text-Befehle um, was zu Konflikten mit
+%                      anderen Schriftpaketen (lmodern, fontspec) führt.
+%                      tipa wird in diesem Template nirgends verwendet.
+%   - amssymb (2×)   → Dedupliziert: Doppeltes \usepackage{amssymb} ist
+%                      harmlos, aber verwirrend; zweiten Aufruf entfernt
+%   - xcolor (2×)    → Dedupliziert: wie amssymb
+%   - amsthm (2×)    → Dedupliziert: wie amssymb
+%   - hyperref (2×)  → Dedupliziert: wie amssymb; doppeltes hyperref kann
+%                      außerdem Warnungen erzeugen
+%
+% ==============================================================================
+
 % Pakete laden
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
