@@ -3,123 +3,236 @@
 % Gemeinsame Pakete für Vortrag und Ausarbeitung
 % Common packages for presentation and paper
 %
-% ARCHITEKTUR-HINWEIS: Diese Datei enthält NUR \usepackage-Aufrufe, die sowohl
-% mit dem Beamer-Dokumentenstil (Vortrag) als auch mit scrartcl (Ausarbeitung)
-% kompatibel sind. Konfigurationsbefehle (\definecolor, \hypersetup, \setlist,
-% \newtheorem, \tikzset, \newcommand usw.) stehen in den dokumenttyp-spezifischen
-% Headern (header-article.tex, header-beamer.tex), weil Beamer viele dieser
-% Befehle intern bereits setzt und Dopplungen zu Konflikten führen.
+% ARCHITEKTUR-HINWEIS / ARCHITECTURE NOTE:
+%   Diese Datei enthält ausschließlich \usepackage-Aufrufe, die sowohl mit dem
+%   Beamer-Dokumentenstil (Vortrag/) als auch mit scrartcl (Ausarbeitung/) sicher
+%   kompatibel sind.
 %
-% BEWUSST NICHT IN DIESER DATEI:
-%   - inputenc / fontenc  → Engine-spezifisch; in Ausarbeitung.tex / Vortrag.tex
-%                           per \ifluatex-Konditional gesetzt
-%   - babel               → Sprachauswahl ist dokumentspezifisch; in
-%                           Ausarbeitung.tex / Vortrag.tex mit Hinweis zur
-%                           Konfiguration (z.B. ngerman → english)
-%   - amsthm              → Inkompatibel mit Beamers eigenem Theorem-System;
-%                           nur in header-article.tex geladen
-%   - tipa                → Wurde entfernt: Das Paket liefert phonetische IPA-
-%                           Symbole und definiert viele Text-Befehle um, was zu
-%                           Konflikten mit anderen Schriftpaketen führt. In
-%                           diesem Template wird tipa an keiner Stelle verwendet.
-%   - natbib / cite       → Inkompatibel mit biblatex (dem hier genutzten
-%                           Literaturpaket); war auskommentierter Altcode
+%   Konfigurationsbefehle (\definecolor, \hypersetup, \setlist, \newtheorem,
+%   \tikzset, \newcommand, \lstset usw.) dürfen NICHT hier stehen, weil Beamer
+%   viele davon intern bereits setzt; doppelte Definitionen erzeugen Konflikte
+%   oder überschreiben das Beamer-Theme stillschweigend.
+%   → Solche Befehle gehören in header-article.tex (Ausarbeitung) bzw. in das
+%     Beamer-Theme (Vortrag).
+%
+% BEWUSST NICHT IN DIESER DATEI / INTENTIONALLY ABSENT:
+%
+%   inputenc / fontenc
+%       Engine-spezifisch: LuaLaTeX verarbeitet UTF-8 nativ und benötigt diese
+%       Pakete nicht (fontspec übernimmt die Aufgabe). pdfLaTeX braucht sie.
+%       → Werden per \ifluatex-Konditional in Ausarbeitung.tex / Vortrag.tex
+%         gesetzt, damit die Engine frei wählbar bleibt.
+%
+%   babel
+%       Die Dokumentsprache ist projektspezifisch (ngerman, english, …) und
+%       gehört daher ins Hauptdokument, wo sie für Nutzer leicht zu finden und
+%       zu ändern ist.
+%       → Ausarbeitung.tex / Vortrag.tex mit erklärendem Kommentar.
+%
+%   amsthm
+%       Beamer definiert intern eine eigene Theorem-Infrastruktur. Wird amsthm
+%       davor geladen, überschreibt es diese, was zu \newtheorem-Kollisionen und
+%       stilistischem Bruch mit dem Beamer-Theme führt.
+%       → Nur in header-article.tex (Ausarbeitung) geladen.
+%
+%   tipa
+%       Stellt phonetische IPA-Symbole bereit, definiert dafür aber viele
+%       Textbefehle um (\textprimstress, \textscripta usw.) und ist bekannt für
+%       Konflikte mit lmodern und fontspec. Das Template verwendet tipa an keiner
+%       Stelle – das Paket wurde daher vollständig entfernt.
+%
+%   natbib / cite / \usepackage{bibtex}
+%       Alle drei waren bereits auskommentierter Altcode und sind inkompatibel
+%       mit biblatex (dem aktuellen Literaturpaket). „bibtex" ist zudem kein
+%       LaTeX-Paket, sondern ein externes Programm.
+%       → Entfernt; biblatex + biber ersetzen den gesamten bibtex-Workflow.
 %
 % ==============================================================================
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ──────────────────────────────────────────────────────────────────────────────
+% Engine-Erkennung
+% ──────────────────────────────────────────────────────────────────────────────
 
-% Für LuaLaTeX/pdfLaTeX Unterscheidung
+% Stellt \ifluatex, \ifpdftex usw. bereit, mit denen engine-spezifische Pakete
+% bedingt geladen werden können (z.B. inconsolata und lmodern nur unter pdfLaTeX).
 \usepackage{iftex}
 
-% Bildoptionen
-\usepackage{pict2e}
+% ──────────────────────────────────────────────────────────────────────────────
+% Schriften / Fonts
+% ──────────────────────────────────────────────────────────────────────────────
 
-% Latex-Symbole
-\usepackage{latexsym}
-
-% Zusätzliche Kodierungen (nur für pdflatex; LuaLaTeX nutzt fontspec)
+% Inconsolata: gut lesbare Festbreitenschrift für Code-Listings.
+% Wird unter LuaLaTeX übersprungen, weil dort fontspec + \setmonofont verwendet
+% werden (gesetzt in Ausarbeitung.tex / Vortrag.tex).
 \ifluatex\else
   \usepackage{inconsolata}
 \fi
 
-% Nicht-umbrechbare Leerzeichen
-\usepackage{newunicodechar}
-
-% Abbildungen
-\usepackage{tikz}
-\usepackage{pgfplots}
-\pgfplotsset{compat=1.18}
-
-% Weitere TikZ-Erweiterungen
-\usetikzlibrary{chains,shapes.multipart}
-
-% Erweiterungen für die Abbildungen mit TikZ
-\usetikzlibrary{shapes,arrows,positioning}
-
-% Abbildungen nebeneinander stellen und Text anordnen
-\usepackage{subcaption}
-
-% Mathematische Symbole: dsfont (Doppelstrich-Schrift), amssymb (zusätzliche Symbole)
-\usepackage{dsfont}
-\usepackage{amssymb}
-
-% Schöner Aufzählungspunkt; und andere schöne Textelemente
-\usepackage{textcomp}
-
-% Pfeiloptimierung; und ähnliches
-\usepackage{stmaryrd}
-
-% Blindtext (zur Hilfe beim Schreiben)
-\usepackage{blindtext}
-
-% Text-Boxen
-\usepackage{tcolorbox}
-
-% Grafiken
-\usepackage{graphicx}
-
-% Für korrekte Anführungszeichen mit biblatex (behebt Warning)
-\usepackage{csquotes}
-
-% Farbiger Text
-\usepackage{xcolor}
-\usepackage{colortbl}
-
-% Erweiterungen für den Mathemodus
-\usepackage{amsmath}
-
-% Erweiterung: Mathefonts
-\usepackage{amsfonts}
-
-% Noch mehr Mathe
-\usepackage[centerdots]{mathtools}
-
-% Für Code/Pseudocode
-\usepackage{listings}
-
-% Eventuell erforderlich
-\usepackage{array}
-
-% Klickbare Verweise
-\usepackage{hyperref}
-
-% Schönere Schriftart (nur für pdflatex; LuaLaTeX nutzt fontspec)
+% Latin Modern: Erweiterter Zeichenvorrat gegenüber Computer Modern, korrekte
+% Silbentrennung für Sonderzeichen. Wird unter LuaLaTeX übersprungen (fontspec
+% übernimmt die Aufgabe vollständig).
 \ifluatex\else
   \usepackage{lmodern}
 \fi
 
-% Tabellen ausrichten
-\usepackage{float}
+% ──────────────────────────────────────────────────────────────────────────────
+% Unicode und Sonderzeichen
+% ──────────────────────────────────────────────────────────────────────────────
 
-% Um schönere Brüche darstellen zu können
+% Erlaubt die Definition benutzerdefinierter Unicode-Zeichen-Mappings mit
+% \newunicodechar{<Zeichen>}{<LaTeX-Befehl>}.
+% Wird in header-article.tex z.B. für den schmalen Leerabstand U+202F genutzt.
+\usepackage{newunicodechar}
+
+% ──────────────────────────────────────────────────────────────────────────────
+% Grafiken und Abbildungen
+% ──────────────────────────────────────────────────────────────────────────────
+
+% Einbinden externer Bilddateien (\includegraphics, \resizebox usw.)
+\usepackage{graphicx}
+
+% Erweiterung des picture-Environments: ermöglicht Kreise, Kurven und Linien
+% mit beliebiger Steigung ohne externe Pakete.
+\usepackage{pict2e}
+
+% TikZ: mächtige Beschreibungssprache für Vektorgrafiken direkt in LaTeX
+\usepackage{tikz}
+
+% TikZ-Bibliothek: verkettete Listen, Kettendiagramme und mehrteilige Knoten
+\usetikzlibrary{chains,shapes.multipart}
+
+% TikZ-Bibliothek: Flowchart-Formen (Rauten, Ellipsen), Pfeilspitzen, relative
+% Positionierung von Knoten
+\usetikzlibrary{shapes,arrows,positioning}
+
+% PGFPlots: Datenvisualisierung (Funktions- und Datengraphen) auf TikZ-Basis
+\usepackage{pgfplots}
+% compat=1.18 stellt sicher, dass neue Achsenskalierung und Tick-Formatierung
+% aktiv sind; verhindert Kompatibilitätswarnungen bei neueren TeX-Installationen.
+\pgfplotsset{compat=1.18}
+
+% Mehrere Unterabbildungen nebeneinander mit individuellen Beschriftungen
+% (\subcaption, \subfigure-Umgebung); kompatibel mit Beamer.
+\usepackage{subcaption}
+
+% ──────────────────────────────────────────────────────────────────────────────
+% Mathematik
+% ──────────────────────────────────────────────────────────────────────────────
+
+% Kern-AMS-Mathematik: equation, align, gather, cases, Operatoren, \text, …
+% Muss vor mathtools geladen werden.
+\usepackage{amsmath}
+
+% AMS-Mathematikschriften: \mathbb (Doppelstrich), \mathfrak (Fraktur), …
+\usepackage{amsfonts}
+
+% Zusätzliche AMS-Symbole: \leqslant, \varnothing, \mathbb{R}, Pfeile, …
+\usepackage{amssymb}
+
+% Doppelstrich-Schrift für Mengensymbole: \mathds{N}, \mathds{1} (Indikatorfunktion)
+% Ergänzt \mathbb aus amsfonts um serifenlose Varianten.
+\usepackage{dsfont}
+
+% Erweiterungen zu amsmath: \coloneqq, \shortintertext, Matrizenabstände,
+% centerdots-Option sorgt für zentrierte Multiplikationspunkte (·).
+\usepackage[centerdots]{mathtools}
+
+% Schöne Inline-Brüche im Textsatz: \nicefrac{1}{2} → ½-Darstellung
 \usepackage{nicefrac}
 
-% Todo-Anmerkungen einfügen
-\usepackage{todonotes}
-\usepackage{enumitem}
+% St-Mary-Road-Symbole: Semantik-Klammern ⟦⟧ (\llbracket, \rrbracket),
+% Blitz-Pfeil, weitere Logik-/Typentheorie-Symbole
+\usepackage{stmaryrd}
+
+% ──────────────────────────────────────────────────────────────────────────────
+% Textsymbole
+% ──────────────────────────────────────────────────────────────────────────────
+
+% Klassische LaTeX-Symbole: \lhd, \rhd, \Box, \Diamond u.a., die weder in
+% amssymb noch in base-LaTeX definiert sind.
+\usepackage{latexsym}
+
+% Textsymbole der TS1-Kodierung: \textbullet, \texttimes, \textdegree, Pfeile
+% im Textmodus. Wird von vielen anderen Paketen implizit vorausgesetzt.
+\usepackage{textcomp}
+
+% ──────────────────────────────────────────────────────────────────────────────
+% Farben und Tabellen
+% ──────────────────────────────────────────────────────────────────────────────
+
+% Farbnamen, Farbmischung und Farbräume (rgb, cmyk, HTML-Hex).
+% Lädt das Paket colortbl automatisch mit, daher steht colortbl danach.
+\usepackage{xcolor}
+
+% Farbige Tabellenzellen und -zeilen (\cellcolor, \rowcolor, \columncolor)
+\usepackage{colortbl}
+
+% Professionelle Tabellenlinien: \toprule, \midrule, \bottomrule (kein \hline)
 \usepackage{booktabs}
 
+% Erweiterte Spaltentypen für tabular: >{…}, <{…}, m{}, p{}, b{}
+\usepackage{array}
+
+% Float-Positionierung: H-Positionsparameter (genau hier, kein Verschieben)
+\usepackage{float}
+
+% ──────────────────────────────────────────────────────────────────────────────
+% Code-Listings
+% ──────────────────────────────────────────────────────────────────────────────
+
+% Syntax-hervorgehobene Quelltextdarstellung; Konfiguration (\lstset,
+% \lstdefinelanguage) steht in header-article.tex, da Beamer eigene
+% verbatim-Blöcke verwendet und die globale lstset-Konfiguration dort stört.
+\usepackage{listings}
+
+% ──────────────────────────────────────────────────────────────────────────────
 % Algorithmen in Pseudocode
+% ──────────────────────────────────────────────────────────────────────────────
+
+% algorithm: Float-Umgebung für Algorithmen (wie figure/table, mit Beschriftung)
 \usepackage{algorithm}
+
+% algpseudocode: konkrete Pseudocode-Syntax auf Basis des algorithmicx-Pakets
+% (\Procedure, \If, \For, \State, \Return usw.)
 \usepackage{algpseudocode}
+
+% ──────────────────────────────────────────────────────────────────────────────
+% Listen und Aufzählungen
+% ──────────────────────────────────────────────────────────────────────────────
+
+% Vollständige Kontrolle über itemize/enumerate/description: Abstände, Labels,
+% Einzüge. Konkrete Stilvorgaben (\setlist) stehen in header-article.tex,
+% da Beamer Listenabstände intern für Folien optimiert.
+\usepackage{enumitem}
+
+% ──────────────────────────────────────────────────────────────────────────────
+% Textboxen und Hilfsmittel
+% ──────────────────────────────────────────────────────────────────────────────
+
+% Farbige Rahmenboxen mit Titel, Hintergrundfarbe und vielen Stilen
+% (tcolorbox, tcblisting usw.); kompatibel mit Beamer-Blöcken.
+\usepackage{tcolorbox}
+
+% Blindtext für Layout-Tests: \blindtext, \Blindtext, \blinddocument
+% Kann nach Fertigstellung der Ausarbeitung entfernt werden.
+\usepackage{blindtext}
+
+% Randnotizen und farbige Inline-Hinweise während des Schreibens:
+% \todo{...}, \missingfigure{...}. Pakete dieser Art werden typischerweise
+% vor der Abgabe entfernt oder per \usepackage[disable]{todonotes} deaktiviert.
+\usepackage{todonotes}
+
+% ──────────────────────────────────────────────────────────────────────────────
+% Bibliographie und Hyperlinks
+% ──────────────────────────────────────────────────────────────────────────────
+
+% Korrekte kontextsensitive Anführungszeichen (\enquote{...}); von biblatex
+% explizit als Voraussetzung gefordert – ohne csquotes gibt biblatex eine
+% Warnung aus.
+\usepackage{csquotes}
+
+% Klickbare Verweise, Sprünge im PDF und PDF-Metadaten.
+% Muss möglichst spät geladen werden (nach fast allen anderen Paketen), damit
+% die Link-Makros korrekt greifen. Farbkonfiguration (\hypersetup) folgt in
+% header-article.tex, da Beamer die Link-Farben über das Theme steuert.
+\usepackage{hyperref}
