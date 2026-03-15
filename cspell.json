@@ -5,10 +5,16 @@
   "dictionaries": [
     "de-de",
     "en-us",
+    "en-gb",
     "latex",
     "companies",
     "softwareTerms",
-    "misc"
+    "misc",
+    "data-science",
+    "data-science-models",
+    "data-science-tools",
+    "fonts",
+    "r"
   ],
   "words": [
     "Abbildung",
