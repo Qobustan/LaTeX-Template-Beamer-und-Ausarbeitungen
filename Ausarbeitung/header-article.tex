@@ -115,7 +115,14 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% Definiere Sprache 'pseudocode' für Codelistings
+% Listings-Konfiguration (VERSCHOBEN aus header-common.tex).
+% Grund: \lstset{keywordstyle=\bfseries\color{codeblue}} referenziert die
+% Farbe codeblue, die weiter oben in diesem Header per \definecolor definiert
+% wird. Würde \lstset in header-common.tex stehen, wäre codeblue dort noch
+% unbekannt → „Undefined color `codeblue'" beim Compilieren.
+% (Gleiches gilt für header-beamer.tex im Vortrag-Kontext.)
+
+% Pseudocode-Sprachdefinition für Listings
 \lstdefinelanguage{pseudocode}{
 	keywords={
 		struct,
@@ -148,7 +155,7 @@
 	comment=[l][commentstyle]{\#}
 }
 
-% Generelle Einstellungen für Listings
+% Globale Listing-Einstellungen (VERSCHOBEN aus header-common.tex, s. Hinweis oben)
 \lstset{%
 	frame=single,
 	framesep=0mm,

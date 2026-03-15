@@ -87,8 +87,18 @@ label node/.style={font=\small, align=center}
 % =================================================
 % Listings / Code
 % =================================================
+% listings lädt das Paket (in header-common.tex); die Konfiguration muss hier
+% stehen (nicht in header-common.tex), weil:
+%   1. \lstset{keywordstyle=\bfseries\color{codeblue}} referenziert die Farbe
+%      codeblue, die erst weiter oben in diesem Header per \definecolor
+%      definiert wird. In header-common.tex wäre codeblue noch unbekannt.
+%   2. header-common.tex wird vor diesem Header eingelesen; ein dort stehendes
+%      \lstset würde Beamer ggf. früher als erwartet in den Verbatim-Modus
+%      versetzen und kann theme-interne verbatim-Blöcke stören.
 \usepackage{listings}
 
+% Pseudocode-Sprachdefinition für Listings (VERSCHOBEN aus header-common.tex,
+% Grund: s.o. – muss nach \definecolor{codeblue} stehen)
 \lstdefinelanguage{pseudocode}{
 keywords={struct,null,function,error,nil,if,then,else,for,while,do,in,True,False,Array,set,repeat,break,continue,Eingabe,Ausgabe,return,print,exit},
 sensitive=false,
@@ -96,6 +106,7 @@ delim=[l][keywordstyle]{:},
 comment=[l][commentstyle]{\#}
 }
 
+% Globale Listing-Einstellungen (VERSCHOBEN aus header-common.tex, s. Hinweis oben)
 \lstset{
 frame=single,
 framesep=0mm,
