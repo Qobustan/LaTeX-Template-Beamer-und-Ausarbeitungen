@@ -132,15 +132,24 @@ inputencoding=utf8
 
 % =================================================
 % Beamer-Theoremumgebungen
+% Hinweis: Beamer definiert intern bereits theorem, lemma, definition,
+% corollary, example. Diese dürfen NICHT neu definiert werden.
+% korollar ist NICHT dasselbe wie corollary — es ist eine neue
+% deutschsprachige Umgebung, keine Neudefinition des Beamer-Builtins.
+% Alle Umgebungen werden hier gesetzt, um Abwärtskompatibilität
+% mit bestehenden Präsentationen zu gewährleisten.
 % =================================================
 \newtheorem{satz}{Satz}
 \newtheorem{fundamentalsatz}{Fundamentalsatz}
+\newtheorem{korollar}{Korollar}
 \newtheorem{intuition}{Intuition}
 \newtheorem{intuitionUndBeispiel}{Intuition und Beispiel}
+\newtheorem{intuitionUndDefinition}{Intuition und Definition}
+\newtheorem{intuitionDefinitionUndSatz}{Intuition, Definition und Satz}
 \newtheorem{beispiel}{Beispiel}
-\newtheorem{korollar}{Korollar}
 \newtheorem{bemerkung}{Bemerkung}
 \newtheorem{vorbemerkung}{Vorbemerkung}
+\newtheorem{amortisierteAnalyse}{Amortisierte Analyse}
 
 % Beweisumgebung
 \newenvironment{beweis}[1][\textbf{Beweis}]{%
@@ -148,6 +157,20 @@ inputencoding=utf8
 }{%
 \end{proof}
 }
+
+% =================================================
+% Mathematische Abkürzungen / Math shortcuts
+% (waren ursprünglich in header-common.tex; hier für Beamer-Kompatibilität)
+% =================================================
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Zp}{\Z_{\geq 0}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Qp}{\Q_{\geq 0}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Rp}{\R_{\geq 0}}
+\newcommand{\Rmn}{\R^{m\times n}}
+\newcommand{\eps}{\varepsilon}
 
 % =================================================
 % Trennfolie
