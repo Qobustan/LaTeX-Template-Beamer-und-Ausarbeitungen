@@ -185,9 +185,15 @@
 % Code-Listings
 % ──────────────────────────────────────────────────────────────────────────────
 
-% Syntax-hervorgehobene Quelltextdarstellung; Konfiguration (\lstset,
-% \lstdefinelanguage) steht in header-article.tex, da Beamer eigene
-% verbatim-Blöcke verwendet und die globale lstset-Konfiguration dort stört.
+% Syntax-hervorgehobene Quelltextdarstellung. Nur das \usepackage steht hier;
+% die Konfiguration (\lstset, \lstdefinelanguage{pseudocode}) steht in
+% header-beamer.tex (Vortrag-Kontext).
+%
+% Grund: \lstset verwendet \color{codeblue} für keywordstyle. Die Farbe
+% codeblue wird erst in header-beamer.tex per \definecolor definiert.
+% Würde \lstset hier stehen, käme es zu einem „Undefined color `codeblue'"
+% -Fehler, weil header-common.tex vor header-beamer.tex eingelesen wird.
+% (Analoges gilt für header-article.tex im Ausarbeitung-Kontext.)
 \usepackage{listings}
 
 % ──────────────────────────────────────────────────────────────────────────────
