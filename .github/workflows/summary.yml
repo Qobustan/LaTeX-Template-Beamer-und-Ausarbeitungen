@@ -32,7 +32,7 @@ jobs:
           # considered as text and NEVER as CODE even and especially if it
           # is VALID code!)
           PARAMETER: ${{ steps.inference.outputs.response }}
-          gh issue comment $ISSUE_NUMBER --body '"$PARAMETER"'
+          gh issue comment $ISSUE_NUMBER --body '"$RESPONSE"'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
